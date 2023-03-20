@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <map>
+#include <unordered_map>
 #include <set>
 #include "Template.h"
 
@@ -25,9 +26,9 @@ private:
 	sf::Font* font;
 
 public:
-	Node(double _x, double _y, int _value,
-		double _radius, double _outlineSize,
-		sf::Color _fillColor, sf::Color _outlineColor, 
+	Node(double _x = 0, double _y = 0, int _value = 0,
+		double _radius = 0, double _outlineSize = 0,
+		sf::Color _fillColor = WhiteColor, sf::Color _outlineColor = BlackColor, 
 		sf::Font* _font = nullptr);
 	void setValue(int newValue);
 	void setX(double newX);
@@ -60,20 +61,23 @@ private:
 	double thickness;
 	EdgeType type;
 public:
-	Edge(double x1, double y1, double x2, double y2, double thickness, sf::Color _color, double shorten = 0, EdgeType _type = Undirected);
+	Edge(double x1 = 0, double y1 = 0, double x2 = 0, double y2 = 0, double thickness = 0, sf::Color _color = BlackColor, double shorten = 0, EdgeType _type = Undirected);
 	void draw(sf::RenderWindow& window);
 };
 
 struct Graph {
 private: 
-	std::vector <Node> listNode;
-	std::vector <std::vector<std::pair<int, sf::Color> > > adj;
+	struct cmp {
+		bool operator() (const std::pair<int, sf::Color>& a, const std::pair <int, sf::Color>& b) const;
+	};
+	std::map <int, Node> listNode;
+	std::map <int, std::set <std::pair<int, sf::Color>, cmp > > adj;
 	Node defaultNode;
 	double lineThickness;
 	EdgeType edgeType;
 public:
-	Graph(double radius, double outlineSize, double _lineThickness,
-		sf::Color fillColor, sf::Color outlineColor,
+	Graph(double radius = 0, double outlineSize = 0, double _lineThickness = 0,
+		sf::Color fillColor = WhiteColor, sf::Color outlineColor = RedColor,
 		EdgeType _edgeType = Undirected, sf::Font* font = nullptr);
 	void setFont(sf::Font* newFont);
 	void draw(sf::RenderWindow& window);

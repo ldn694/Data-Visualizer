@@ -10,7 +10,7 @@ sf::Font* Game::font(fontType id) {
 }
 
 Game::Game(sf::ContextSettings settings)
-	: window(sf::VideoMode(1080, 720), "SFML Application", sf::Style::Close, settings), graph(20, 3, 3, WhiteColor, BlackColor, EdgeType::DoublyDirected)
+	: window(sf::VideoMode(1080, 720), "SFML Application", sf::Style::Close, settings), graph(20, 3, 4, WhiteColor, BlackColor, EdgeType::DoublyDirected)
 {
 	listFont.resize(numFont);
 	for (int i = 0; i < numFont; i++) {
@@ -19,18 +19,20 @@ Game::Game(sf::ContextSettings settings)
 		}
 	}
 	graph.setFont(font(fontType::Arial));
-	graph.addNode(0, 200, 100, 100);
+	graph.addNode(5, 185, 400, 200);
+	graph.addNode(4, 69, 300, 300);
 	graph.addNode(1, 50, 300, 100);
 	graph.addNode(2, 70, 200, 150);
+	graph.addNode(0, 200, 100, 100);
 	graph.addNode(3, 18, 100, 300);
-	graph.addNode(4, 69, 300, 300);
-	graph.addNode(5, 185, 400, 200);
+	graph.addNode(69, 200, 400, 150);
 	graph.addEdge(0, 1, BlackColor);
 	graph.addEdge(1, 2, BlackColor);
 	graph.addEdge(2, 0, BlackColor);
 	graph.addEdge(3, 0, RedColor);
 	graph.addEdge(4, 1, GreenColor);
 	graph.addEdge(5, 3, BlueColor);
+	graph.addEdge(69, 1, BlackColor);
 }
 
 

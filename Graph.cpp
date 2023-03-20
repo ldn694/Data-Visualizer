@@ -142,6 +142,22 @@ void Edge::draw(sf::RenderWindow& window) {
 //-------------------------------------------------------
 //Graph
 
+bool Graph::cmp::operator() (const std::pair<int, sf::Color>& a, const std::pair <int, sf::Color>& b) const {
+	if (a.first != b.first) {
+		return a.first < b.first;
+	}
+	if (a.second.r != b.second.r) {
+		return a.second.r < b.second.r;
+	}
+	if (a.second.g != b.second.g) {
+		return a.second.g < b.second.g;
+	}
+	if (a.second.b != b.second.b) {
+		return a.second.b < b.second.b;
+	}
+	return a.second.a < b.second.a;
+}
+
 Graph::Graph(double radius, double outlineSize, double _lineThickness,
 		sf::Color fillColor, sf::Color outlineColor,
 		EdgeType _idEdgeType, sf::Font* font) :
@@ -177,13 +193,12 @@ void Graph::addNode(int pos, int value, double x, double y) {
 	newNode.setValue(value);
 	newNode.setXY(x, y);
 	std::cout << newNode.getX() << " " << newNode.getY() << "\n";
-	listNode.insert(listNode.begin() + pos, newNode);
-	std::vector<std::pair<int, sf::Color> > tmp;
-	adj.push_back(tmp);
+	listNode[pos] = newNode;
+	std::cout << "Done add node " << pos << "\n";
 }
 
 void Graph::addEdge(int u, int v, sf::Color lineColor) {
-	adj[u].push_back(std::make_pair(v, lineColor));
+	adj[u].insert(std::make_pair(v, lineColor));
 }
 
 //-------------------------------------------------------
