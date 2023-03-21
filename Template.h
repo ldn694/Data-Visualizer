@@ -11,6 +11,7 @@ const sf::Color WhiteColor(255, 255, 255);
 const double pointCountCircle = 50;
 const sf::Time epsilonTime = sf::seconds(1.f / 10000.f);
 const sf::Time timePerFrame = sf::seconds(1.f / 60.f);
+const sf::Time infTime = sf::seconds(1000000.f);
 
 enum EdgeType {
 	Undirected, SinglyDirected, DoublyDirected
@@ -20,3 +21,6 @@ std::string intToString(int a);
 int stringToInt(std::string& a);
 
 double dist2p(double x1, double y1, double x2, double y2);
+
+sf::Time min(const sf::Time& a, const sf::Time& b);
+sf::Time max(const sf::Time& a, const sf::Time& b);

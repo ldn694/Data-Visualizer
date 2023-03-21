@@ -33,6 +33,31 @@ void Node::updateMovement(sf::Time deltaT) {
 	}
 }
 
+Node::NodeZooming::NodeZooming(double _goalRadius, double _goalOutline, sf::Time _remainTime) :
+	goalRadius(_goalRadius), goalOutline(_goalOutline), remainTime(_remainTime) {}
+
+void Node::addZooming(double goalRadius, double goalOutline, sf::Time time) {
+	zoomingQueue.push_back(NodeZooming(goalRadius, goalOutline, time));
+}
+
+void Node::updateZooming(sf::Time deltaT) {
+	while (!zoomingQueue.empty()) {
+		NodeZooming cur = zoomingQueue.front();
+		zoomingQueue.pop_front();
+		sf::Time elapsedTime = (cur.remainTime < deltaT ? cur.remainTime : deltaT);
+		double dRadius = elapsedTime / cur.remainTime * (cur.goalRadius - radius);
+		double dOutline = elapsedTime / cur.remainTime * (cur.goalRadius - outlineSize);
+		setRadius(radius + dRadius);
+		setOutline(outlineSize + dOutline);
+		cur.remainTime -= elapsedTime;
+		deltaT -= elapsedTime;
+		if (cur.remainTime >= epsilonTime) {
+			zoomingQueue.push_front(cur);
+		}
+		if (deltaT < epsilonTime) break;
+	}
+}
+
 Node::Node(double _x, double _y, int _value,
 	double _radius, double _outlineSize,
 	sf::Color _fillColor, sf::Color _outlineColor,
@@ -81,6 +106,14 @@ void Node::setFont(sf::Font* newFont) {
 	font = newFont;
 }
 
+void Node::setRadius(double newRadius) {
+	radius = newRadius;
+}
+
+void Node::setOutline(double newOutline) {
+	outlineSize = newOutline;
+}
+
 double Node::getX() {
 	return x;
 }
@@ -127,12 +160,13 @@ void MovePoint(double &x1, double &y1, double x2, double y2, double dist) {
 	y1 += dy;
 }
 
-TrianglePointer::TrianglePointer(double x1, double y1, double x2, double y2, double thickness, sf::Color _color, double shorten) : color(_color) {
-	//first move (x1,y1) and (x2,y2) closer, each move a distance of 'shorten'
-	MovePoint(x1, y1, x2, y2, shorten);
-	MovePoint(x2, y2, x1, y1, shorten);
+TrianglePointer::TrianglePointer(double x1, double y1, double x2, double y2, double thickness, 
+	sf::Color _color, double shortenStart, double shortenGoal) : color(_color) {
+	//first move (x1,y1) and (x2,y2) closer
+	MovePoint(x1, y1, x2, y2, shortenStart);
+	MovePoint(x2, y2, x1, y1, shortenGoal);
 	double x3 = x2, y3 = y2;
-	//now move (x3, y3) a distance of thickness, (x3, y3) is the midpoint of the hypotenius of the triangle
+	//now move (x3, y3) a distance of 2 * thickness, (x3, y3) is the midpoint of the hypotenuse of the triangle
 	MovePoint(x3, y3, x1, y1, 2 * thickness);
 	double hypo = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	double dx = ((y2 - y1) * thickness / hypo);
@@ -149,12 +183,14 @@ void TrianglePointer::draw(sf::RenderWindow& window) {
 //-------------------------------------------------------
 //Edge
 
-Edge::Edge(double x1, double y1, double x2, double y2, double thickness, sf::Color _color, double shorten, EdgeType _type): 
+Edge::Edge(double x1, double y1, double x2, double y2, double thickness, 
+	sf::Color _color, EdgeType _type, 
+	double shortenStart, double shortenGoal): 
 	color(_color), type(_type),
-	forwardPointer(x1, y1, x2, y2, thickness, color, shorten),
-	backwardPointer(x2, y2, x1, y1, thickness, color, shorten) {
-	MovePoint(x1, y1, x2, y2, shorten);
-	MovePoint(x2, y2, x1, y1, shorten);
+	forwardPointer(x1, y1, x2, y2, thickness, color, shortenStart, shortenGoal),
+	backwardPointer(x2, y2, x1, y1, thickness, color, shortenStart, shortenGoal) {
+	MovePoint(x1, y1, x2, y2, shortenStart);
+	MovePoint(x2, y2, x1, y1, shortenGoal);
 	if (type == EdgeType::SinglyDirected) {
 		MovePoint(x2, y2, x1, y1, thickness * 0.5);
 	}
@@ -184,21 +220,31 @@ void Edge::draw(sf::RenderWindow& window) {
 //-------------------------------------------------------
 //Graph
 
-bool Graph::cmp::operator() (const std::pair<int, sf::Color>& a, const std::pair <int, sf::Color>& b) const {
-	if (a.first != b.first) {
-		return a.first < b.first;
+bool Graph::cmp:: operator() (const EdgeInfo& a, const EdgeInfo& b) const {
+	if (a.remainTime != b.remainTime) {
+		return a.remainTime > b.remainTime;
 	}
-	if (a.second.r != b.second.r) {
-		return a.second.r < b.second.r;
+	if (a.v != b.v) {
+		return a.v < b.v;
 	}
-	if (a.second.g != b.second.g) {
-		return a.second.g < b.second.g;
+	if (a.color.r != b.color.r) {
+		return a.color.r < b.color.r;
 	}
-	if (a.second.b != b.second.b) {
-		return a.second.b < b.second.b;
+	if (a.color.g != b.color.g) {
+		return a.color.g < b.color.g;
 	}
-	return a.second.a < b.second.a;
+	if (a.color.b != b.color.b) {
+		return a.color.b < b.color.b;
+	}
+	if (a.color.a != b.color.a) {
+		return a.color.a < b.color.a;
+	}
+	return a.totalTime < b.totalTime;
 }
+Graph::EdgeInfo::EdgeInfo(int _v, sf::Color _color, 
+	sf::Time _totalTime, sf::Time _remainTime):
+	v(_v), color(_color), totalTime(_totalTime), remainTime(_remainTime) {}
+
 
 Graph::Graph(double radius, double outlineSize, double _lineThickness,
 		sf::Color fillColor, sf::Color outlineColor,
@@ -217,13 +263,18 @@ void Graph::draw(sf::RenderWindow& window) {
 		uComp.second.draw(window);
 		int u = uComp.first;
 		for (auto &vComp : adj[u]) {
-			int v = vComp.first;
-			sf::Color lineColor = vComp.second;
+			int v = vComp.v;
+			sf::Color lineColor = vComp.color;
 			double x1 = listNode[u].getX();
 			double y1 = listNode[u].getY();
 			double x2 = listNode[v].getX();
 			double y2 = listNode[v].getY();
-			Edge edge(x1, y1, x2, y2, lineThickness, lineColor, defaultNode.getRadius() + defaultNode.getOutlineSize(), edgeType);
+			double shorten = defaultNode.getRadius() + defaultNode.getOutlineSize();
+			double hypo = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) - 2 * shorten;
+			if (vComp.remainTime > epsilonTime) {
+				MovePoint(x2, y2, x1, y1, hypo * (max(vComp.remainTime, epsilonTime) / vComp.totalTime));
+			}
+			Edge edge(x1, y1, x2, y2, lineThickness, lineColor, edgeType, shorten, shorten);
 			edge.draw(window);
 		}
 	}
@@ -231,10 +282,13 @@ void Graph::draw(sf::RenderWindow& window) {
 
 void Graph::addNode(int pos, int value, double x, double y) {
 	Node newNode = defaultNode;
+	newNode.setRadius(0.f);
+	newNode.setOutline(0.f);
 	newNode.setValue(value);
 	newNode.setXY(x, y);
 	std::cout << newNode.getX() << " " << newNode.getY() << "\n";
 	listNode[pos] = newNode;
+	listNode[pos].addZooming(defaultNode.getRadius(), defaultNode.getOutlineSize(), sf::seconds(0.2f));
 	std::cout << "added pos = " << pos << " size = " << (int)listNode.size() << "\n";
 }
 
@@ -244,8 +298,14 @@ void Graph::deleteNode(int pos) {
 	for (auto& uComp : listNode) {
 		int u = uComp.first;
 		while (true) {
-			auto here = adj[u].lower_bound(std::make_pair(pos, sf::Color(0, 0, 0, 0)));
-			if (here != adj[u].end() && here->first == pos) {
+			auto here = adj[u].end();
+			for (auto cur = adj[u].begin(); cur != adj[u].end(); cur++) {
+				if (cur->v == pos) {
+					here = cur;
+					break;
+				}
+			}
+			if (here != adj[u].end() && here->v == pos) {
 				adj[u].erase(here);
 			}
 			else {
@@ -260,15 +320,35 @@ void Graph::moveNode(int pos, double x, double y, sf::Time time) {
 	listNode[pos].addMovement(x, y, time);
 }
 
-void Graph::updateMovement(sf::Time deltaT) {
+void Graph::updateNodeAnimation(sf::Time deltaT) {
 	for (auto& uComp : listNode) {
 		int u = uComp.first;
 		listNode[u].updateMovement(deltaT);
+		listNode[u].updateZooming(deltaT);
+		std::set <EdgeInfo, cmp> tmpSet;
+		while (true) {
+			auto here = adj[u].lower_bound(EdgeInfo(0, BlackColor, infTime, infTime));
+			if (here == adj[u].end()) {
+				break;
+			}
+			EdgeInfo tmp = *here;
+			if (tmp.remainTime < epsilonTime) {
+				//tmp.remainTime = sf::seconds(0.f);
+				break;
+			}
+			adj[u].erase(here);
+			sf::Time elapsedTime = min(tmp.remainTime, deltaT);
+			tmp.remainTime -= elapsedTime;
+			tmpSet.insert(tmp);
+		}
+		for (auto& here : tmpSet) {
+			adj[u].insert(here);
+		}
 	}
 }
 
 void Graph::addEdge(int u, int v, sf::Color lineColor) {
-	adj[u].insert(std::make_pair(v, lineColor));
+	adj[u].insert(EdgeInfo(v, lineColor, sf::seconds(1.0f), sf::seconds(1.0f)));
 }
 
 //-------------------------------------------------------

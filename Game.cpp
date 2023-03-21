@@ -59,6 +59,8 @@ void Game::processEvents()
 				if (event.mouseButton.button == sf::Mouse::Left) {
 					graph.addNode(3, 18, 100, 300);
 					graph.addEdge(3, 1, BlackColor);
+					graph.addEdge(3, 2, BlackColor);
+					graph.addEdge(3, 4, BlackColor);
 				}
 				if (event.mouseButton.button == sf::Mouse::Right) {
 					graph.addNode(0, 200, 100, 100);
@@ -77,22 +79,13 @@ void Game::processEvents()
 
 void Game::update(sf::Time deltaT)
 {
-	graph.updateMovement(deltaT);
+	graph.updateNodeAnimation(deltaT);
 }
 
 void Game::render()
 {
 	window.clear(WhiteColor);
 	graph.draw(window);
-	/*sf::Font tmpFont;
-	tmpFont.loadFromFile("arial.ttf");
-	sf::Text text;
-	text.setFont(tmpFont);
-	text.setString("DCMQ");
-	text.setCharacterSize(10);
-	text.setFillColor(RedColor);
-	text.setPosition(400, 400);
-	window.draw(text);*/
 	window.display();
 }
 
