@@ -2,8 +2,7 @@
 #include <iostream>
 #include <cassert>
 #include "Game.h"
-
-const sf::Time timePerFrame = sf::seconds(1.f / 60.f);
+#include "Template.h"
 
 sf::Font* Game::font(fontType id) {
 	return &listFont[id];
@@ -59,18 +58,26 @@ void Game::processEvents()
 			case sf::Event::MouseButtonReleased:
 				if (event.mouseButton.button == sf::Mouse::Left) {
 					graph.addNode(3, 18, 100, 300);
+					graph.addEdge(3, 1, BlackColor);
 				}
 				if (event.mouseButton.button == sf::Mouse::Right) {
 					graph.addNode(0, 200, 100, 100);
 				}
 				break;
+			case sf::Event::KeyPressed:
+				if (event.key.code == sf::Keyboard::W) {
+					graph.moveNode(3, 150, 250, sf::seconds(1));
+				}
+				if (event.key.code == sf::Keyboard::S) {
+					graph.moveNode(3, 50, 450, sf::seconds(1));
+				}
 		}
 	}
 }
 
 void Game::update(sf::Time deltaT)
 {
-
+	graph.updateMovement(deltaT);
 }
 
 void Game::render()

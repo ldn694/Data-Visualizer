@@ -1,11 +1,37 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <math.h>
 #include "Game.h"
 #include "Graph.h"
 #include "Template.h"
 
 //-------------------------------------------------------
 //Node
+
+Node::NodeMovement::NodeMovement(double _goalX, double _goalY, sf::Time _remainTime) :
+	goalX(_goalX), goalY(_goalY), remainTime(_remainTime) {}
+
+void Node::addMovement(double goalX, double goalY, sf::Time time) {
+	movementQueue.push_back(NodeMovement(goalX, goalY, time));
+}
+
+void Node::updateMovement(sf::Time deltaT) {
+	while (!movementQueue.empty()) {
+		NodeMovement cur = movementQueue.front();
+		movementQueue.pop_front();
+		sf::Time elapsedTime = (cur.remainTime < deltaT ? cur.remainTime : deltaT); 
+		double dx = elapsedTime / cur.remainTime * (cur.goalX - x);
+		double dy = elapsedTime / cur.remainTime * (cur.goalY - y);
+		moveX(dx);
+		moveY(dy);
+		cur.remainTime -= elapsedTime;
+		deltaT -= elapsedTime;
+		if (cur.remainTime >= epsilonTime) {
+			movementQueue.push_front(cur);
+		}
+		if (deltaT < epsilonTime) break;
+	}
+}
 
 Node::Node(double _x, double _y, int _value,
 	double _radius, double _outlineSize,
@@ -42,6 +68,15 @@ void Node::setXY(double newX, double newY) {
 	shape.setPosition(x, y);
 }
 
+void Node::moveX(double dx) {
+	x += dx;
+	shape.setPosition(x, y);
+}
+void Node::moveY(double dy) {
+	y += dy;
+	shape.setPosition(x, y);
+}
+
 void Node::setFont(sf::Font* newFont) {
 	font = newFont;
 }
@@ -53,6 +88,7 @@ double Node::getX() {
 double Node::getY() {
 	return y;
 }
+
 
 double Node::getRadius() {
 	return radius;
@@ -178,6 +214,7 @@ void Graph::setFont(sf::Font* newFont) {
 
 void Graph::draw(sf::RenderWindow& window) {
 	for (auto &uComp: listNode) {
+		uComp.second.draw(window);
 		int u = uComp.first;
 		for (auto &vComp : adj[u]) {
 			int v = vComp.first;
@@ -189,10 +226,6 @@ void Graph::draw(sf::RenderWindow& window) {
 			Edge edge(x1, y1, x2, y2, lineThickness, lineColor, defaultNode.getRadius() + defaultNode.getOutlineSize(), edgeType);
 			edge.draw(window);
 		}
-		std::cout << "\n";
-	}
-	for (auto& uComp : listNode) {
-		uComp.second.draw(window);
 	}
 }
 
@@ -219,6 +252,18 @@ void Graph::deleteNode(int pos) {
 				break;
 			}
 		}
+	}
+	std::cout << "deleted pos = " << pos << " size = " << (int)listNode.size() << "\n";
+}
+
+void Graph::moveNode(int pos, double x, double y, sf::Time time) {
+	listNode[pos].addMovement(x, y, time);
+}
+
+void Graph::updateMovement(sf::Time deltaT) {
+	for (auto& uComp : listNode) {
+		int u = uComp.first;
+		listNode[u].updateMovement(deltaT);
 	}
 }
 

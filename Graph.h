@@ -5,16 +5,9 @@
 #include <map>
 #include <unordered_map>
 #include <set>
+#include <queue>
+#include <deque>
 #include "Template.h"
-
-const sf::Color GreyColor(211, 211, 211);
-const sf::Color RedColor(255, 0, 0);
-const sf::Color GreenColor(0, 255, 0);
-const sf::Color BlueColor(0, 0, 255);
-const sf::Color BlackColor(0, 0, 0);
-const sf::Color WhiteColor(255, 255, 255);
-
-const double pointCountCircle = 50;
 
 struct Node {
 private:
@@ -24,7 +17,12 @@ private:
 	sf::Color fillColor, outlineColor;
 	sf::CircleShape shape;
 	sf::Font* font;
-
+	struct NodeMovement{
+		double goalX, goalY;
+		sf::Time remainTime;
+		NodeMovement(double _goalX = 0.f, double _goalY = 0.f, sf::Time _remainTime = sf::seconds(0.f));
+	};
+	std::deque <NodeMovement> movementQueue;
 public:
 	Node(double _x = 0, double _y = 0, int _value = 0,
 		double _radius = 0, double _outlineSize = 0,
@@ -34,12 +32,16 @@ public:
 	void setX(double newX);
 	void setY(double newY);
 	void setXY(double newX, double newY);
+	void moveX(double dx);
+	void moveY(double dy);
 	void setFont(sf::Font* newFont);
 	double getX();
 	double getY();
 	double getRadius();
 	double getOutlineSize();
 	sf::CircleShape& getShape();
+	void addMovement(double goalX, double goalY, sf::Time time);
+	void updateMovement(sf::Time deltaT);
 	void draw(sf::RenderWindow& window);
 };
 
@@ -83,5 +85,7 @@ public:
 	void draw(sf::RenderWindow& window);
 	void addNode(int pos, int value, double x, double y);
 	void deleteNode(int pos);
+	void moveNode(int pos, double x, double y, sf::Time time);
+	void updateMovement(sf::Time deltaT);
 	void addEdge(int u, int v, sf::Color lineColor = BlackColor);
 };
