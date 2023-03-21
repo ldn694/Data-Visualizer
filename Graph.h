@@ -82,5 +82,6 @@ public:
 	void setFont(sf::Font* newFont);
 	void draw(sf::RenderWindow& window);
 	void addNode(int pos, int value, double x, double y);
+	void deleteNode(int pos);
 	void addEdge(int u, int v, sf::Color lineColor = BlackColor);
 };

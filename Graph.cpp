@@ -118,11 +118,17 @@ Edge::Edge(double x1, double y1, double x2, double y2, double thickness, sf::Col
 	forwardPointer(x1, y1, x2, y2, thickness, color, shorten),
 	backwardPointer(x2, y2, x1, y1, thickness, color, shorten) {
 	MovePoint(x1, y1, x2, y2, shorten);
+	MovePoint(x2, y2, x1, y1, shorten);
+	if (type == EdgeType::SinglyDirected) {
+		MovePoint(x2, y2, x1, y1, thickness * 0.5);
+	}
+	if (type == EdgeType::DoublyDirected) {
+		MovePoint(x2, y2, x1, y1, thickness * 0.5);
+		MovePoint(x1, y1, x2, y2, thickness * 0.5);
+	}
 	double hypo = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-	double dx = ((x2 - x1) * (thickness / 2.0) / hypo);
-	double dy = ((y2 - y1) * (thickness / 2.0) / hypo);
-	if (dx == 0) dx = thickness / 2.0;
-	if (dy == 0) dy = thickness / 2.0;
+	double dx = ((y2 - y1) * (thickness / 2.0) / hypo);
+	double dy = ((x2 - x1) * (thickness / 2.0) / hypo);
 	points[0] = sf::Vertex(sf::Vector2f(x1 - dx, y1 + dy), color);
 	points[1] = sf::Vertex(sf::Vector2f(x2 - dx, y2 + dy), color);
 	points[2] = sf::Vertex(sf::Vector2f(x2 + dx, y2 - dy), color);
@@ -171,8 +177,9 @@ void Graph::setFont(sf::Font* newFont) {
 }
 
 void Graph::draw(sf::RenderWindow& window) {
-	for (int u = 0; u < (int)listNode.size(); u++) {
-		for (auto vComp : adj[u]) {
+	for (auto &uComp: listNode) {
+		int u = uComp.first;
+		for (auto &vComp : adj[u]) {
 			int v = vComp.first;
 			sf::Color lineColor = vComp.second;
 			double x1 = listNode[u].getX();
@@ -182,9 +189,10 @@ void Graph::draw(sf::RenderWindow& window) {
 			Edge edge(x1, y1, x2, y2, lineThickness, lineColor, defaultNode.getRadius() + defaultNode.getOutlineSize(), edgeType);
 			edge.draw(window);
 		}
+		std::cout << "\n";
 	}
-	for (int u = 0; u < (int)listNode.size(); u++) {
-		listNode[u].draw(window);
+	for (auto& uComp : listNode) {
+		uComp.second.draw(window);
 	}
 }
 
@@ -194,7 +202,24 @@ void Graph::addNode(int pos, int value, double x, double y) {
 	newNode.setXY(x, y);
 	std::cout << newNode.getX() << " " << newNode.getY() << "\n";
 	listNode[pos] = newNode;
-	std::cout << "Done add node " << pos << "\n";
+	std::cout << "added pos = " << pos << " size = " << (int)listNode.size() << "\n";
+}
+
+void Graph::deleteNode(int pos) {
+	listNode.erase(pos);
+	adj.erase(pos);
+	for (auto& uComp : listNode) {
+		int u = uComp.first;
+		while (true) {
+			auto here = adj[u].lower_bound(std::make_pair(pos, sf::Color(0, 0, 0, 0)));
+			if (here != adj[u].end() && here->first == pos) {
+				adj[u].erase(here);
+			}
+			else {
+				break;
+			}
+		}
+	}
 }
 
 void Graph::addEdge(int u, int v, sf::Color lineColor) {

@@ -10,7 +10,7 @@ sf::Font* Game::font(fontType id) {
 }
 
 Game::Game(sf::ContextSettings settings)
-	: window(sf::VideoMode(1080, 720), "SFML Application", sf::Style::Close, settings), graph(20, 3, 4, WhiteColor, BlackColor, EdgeType::DoublyDirected)
+	: window(sf::VideoMode(1080, 720), "SFML Application", sf::Style::Close, settings), graph(20, 3, 4, WhiteColor, BlackColor, EdgeType::SinglyDirected)
 {
 	listFont.resize(numFont);
 	for (int i = 0; i < numFont; i++) {
@@ -25,8 +25,10 @@ Game::Game(sf::ContextSettings settings)
 	graph.addNode(2, 70, 200, 150);
 	graph.addNode(0, 200, 100, 100);
 	graph.addNode(3, 18, 100, 300);
-	graph.addNode(69, 200, 400, 150);
+	graph.addNode(69, 180, 400, 150);
 	graph.addEdge(0, 1, BlackColor);
+	graph.addEdge(0, 3, BlackColor);
+	graph.addEdge(0, 5, BlackColor);
 	graph.addEdge(1, 2, BlackColor);
 	graph.addEdge(2, 0, BlackColor);
 	graph.addEdge(3, 0, RedColor);
@@ -45,6 +47,22 @@ void Game::processEvents()
 			case sf::Event::Closed:
 				window.close();
 				return;
+				break;
+			case sf::Event::MouseButtonPressed:
+				if (event.mouseButton.button == sf::Mouse::Left) {
+					graph.deleteNode(3);
+				}
+				if (event.mouseButton.button == sf::Mouse::Right) {
+					graph.deleteNode(0);
+				}
+				break;
+			case sf::Event::MouseButtonReleased:
+				if (event.mouseButton.button == sf::Mouse::Left) {
+					graph.addNode(3, 18, 100, 300);
+				}
+				if (event.mouseButton.button == sf::Mouse::Right) {
+					graph.addNode(0, 200, 100, 100);
+				}
 				break;
 		}
 	}
