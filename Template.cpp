@@ -30,3 +30,11 @@ sf::Time min(const sf::Time& a, const sf::Time& b) {
 sf::Time max(const sf::Time& a, const sf::Time& b) {
 	return a > b ? a : b;
 }
+
+void MovePoint(double& x1, double& y1, double x2, double y2, double dist) {
+	double hypo = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+	double dx = (x2 - x1) * dist / hypo;
+	double dy = (y2 - y1) * dist / hypo;
+	x1 += dx;
+	y1 += dy;
+}
