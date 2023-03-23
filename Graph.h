@@ -35,6 +35,8 @@ public:
 	void addNode(int pos, int value, double x, double y);
 	void deleteNode(int pos);
 	void moveNode(int pos, double x, double y, sf::Time time);
+	void updateNodeFillColor(int pos, sf::Color color, sf::Time time);
+	void updateNodeOutlineColor(int pos, sf::Color color, sf::Time time);
 	void updateNodeAnimation(sf::Time deltaT);
 	void addEdge(int u, int v, sf::Color lineColor = BlackColor);
 };

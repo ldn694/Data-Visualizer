@@ -73,6 +73,13 @@ void Game::processEvents()
 				if (event.key.code == sf::Keyboard::S) {
 					graph.moveNode(3, 50, 450, sf::seconds(1));
 				}
+				if (event.key.code == sf::Keyboard::R) {
+					graph.updateNodeOutlineColor(4, OrangeColor, sf::seconds(1.0f));
+				}
+				if (event.key.code == sf::Keyboard::T) {
+					graph.updateNodeOutlineColor(4, BlackColor, sf::seconds(1.0f));
+				}
+				break;
 		}
 	}
 }

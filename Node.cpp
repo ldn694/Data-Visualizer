@@ -71,11 +71,91 @@ Node::NodeChangingColor::NodeChangingColor(sf::Color _goalColor, sf::Time _remai
 
 sf::Color Node::NodeChangingColor::getRealColor() {
 	sf::Color res;
-	res.r = goalColor.r;
-	res.g = goalColor.g;
-	res.b = goalColor.b;
-	res.a = goalColor.a;
+	res.r = fakeColor[0];
+	res.g = fakeColor[1];
+	res.b = fakeColor[2];
+	res.a = fakeColor[3];
 	return res;
+}
+
+void Node::addFillColor(sf::Color goalColor, sf::Time time) {
+	std::vector <double> tmp;
+	tmp.resize(4);
+	sf::Color prevColor;
+	if (fillColorQueue.empty()) {
+		prevColor = fillColor;
+	}
+	else {
+		prevColor = fillColorQueue.back().goalColor;
+	}
+	tmp[0] = prevColor.r;
+	tmp[1] = prevColor.g;
+	tmp[2] = prevColor.b;
+	tmp[3] = prevColor.a;
+	fillColorQueue.push_back(NodeChangingColor(goalColor, time, tmp));
+}
+
+void Node::updateFillColor(sf::Time deltaT) {
+	while (!fillColorQueue.empty()) {
+		NodeChangingColor cur = fillColorQueue.front();
+		fillColorQueue.pop_front();
+		sf::Time elapsedTime = (cur.remainTime < deltaT ? cur.remainTime : deltaT);
+		double dr = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.r - cur.fakeColor[0]);
+		double dg = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.g - cur.fakeColor[1]);
+		double db = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.b - cur.fakeColor[2]);
+		double da = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.a - cur.fakeColor[3]);
+		cur.fakeColor[0] += dr;
+		cur.fakeColor[1] += dg;
+		cur.fakeColor[2] += db;
+		cur.fakeColor[3] += da;
+		cur.remainTime -= elapsedTime;
+		setFillColor(cur.getRealColor());
+		deltaT -= elapsedTime;
+		if (cur.remainTime >= epsilonTime) {
+			fillColorQueue.push_front(cur);
+		}
+		if (deltaT < epsilonTime) break;
+	}
+}
+
+void Node::addOutlineColor(sf::Color goalColor, sf::Time time) {
+	std::vector <double> tmp;
+	tmp.resize(4);
+	sf::Color prevColor;
+	if (outlineColorQueue.empty()) {
+		prevColor = outlineColor;
+	}
+	else {
+		prevColor = outlineColorQueue.back().goalColor;
+	}
+	tmp[0] = prevColor.r;
+	tmp[1] = prevColor.g;
+	tmp[2] = prevColor.b;
+	tmp[3] = prevColor.a;
+	outlineColorQueue.push_back(NodeChangingColor(goalColor, time, tmp));
+}
+
+void Node::updateOutlineColor(sf::Time deltaT) {
+	while (!outlineColorQueue.empty()) {
+		NodeChangingColor cur = outlineColorQueue.front();
+		outlineColorQueue.pop_front();
+		sf::Time elapsedTime = (cur.remainTime < deltaT ? cur.remainTime : deltaT);
+		double dr = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.r - cur.fakeColor[0]);
+		double dg = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.g - cur.fakeColor[1]);
+		double db = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.b - cur.fakeColor[2]);
+		double da = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.a - cur.fakeColor[3]);
+		cur.fakeColor[0] += dr;
+		cur.fakeColor[1] += dg;
+		cur.fakeColor[2] += db;
+		cur.fakeColor[3] += da;
+		cur.remainTime -= elapsedTime;
+		setOutlineColor(cur.getRealColor());
+		deltaT -= elapsedTime;
+		if (cur.remainTime >= epsilonTime) {
+			outlineColorQueue.push_front(cur);
+		}
+		if (deltaT < epsilonTime) break;
+	}
 }
 
 Node::Node(double _x, double _y, int _value,
@@ -136,10 +216,12 @@ void Node::setOutline(double newOutline) {
 
 void Node::setFillColor(sf::Color newColor) {
 	fillColor = newColor;
+	shape.setFillColor(fillColor);
 }
 
 void Node::setOutlineColor(sf::Color newColor) {
 	outlineColor = newColor;
+	shape.setOutlineColor(outlineColor);
 }
 
 double Node::getX() {
@@ -161,6 +243,13 @@ double Node::getOutlineSize() {
 
 sf::CircleShape& Node::getShape() {
 	return shape;
+}
+
+void Node::updateAnimation(sf::Time deltaT) {
+	updateMovement(deltaT);
+	updateZooming(deltaT);
+	updateFillColor(deltaT);
+	updateOutlineColor(deltaT);
 }
 
 void Node::draw(sf::RenderWindow& window) {

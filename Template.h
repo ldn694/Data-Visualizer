@@ -7,10 +7,11 @@ const sf::Color GreenColor(0, 255, 0);
 const sf::Color BlueColor(0, 0, 255);
 const sf::Color BlackColor(0, 0, 0);
 const sf::Color WhiteColor(255, 255, 255);
+const sf::Color OrangeColor(255, 128, 0);
 
 const int pointCountCircle = 50;
-const double epsilonDouble = 1.f / 10000.f;
-const sf::Time epsilonTime = sf::seconds(1.f / 10000.f);
+const double epsilonDouble = 1.f / 1000000.f;
+const sf::Time epsilonTime = sf::seconds(1.f / 1000000.f);
 const sf::Time timePerFrame = sf::seconds(1.f / 60.f);
 const sf::Time infTime = sf::seconds(1000000.f);
 

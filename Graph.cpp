@@ -110,11 +110,18 @@ void Graph::moveNode(int pos, double x, double y, sf::Time time) {
 	listNode[pos].addMovement(x, y, time);
 }
 
+void Graph::updateNodeFillColor(int pos, sf::Color color, sf::Time time) {
+	listNode[pos].addFillColor(color, time);
+}
+
+void Graph::updateNodeOutlineColor(int pos, sf::Color color, sf::Time time) {
+	listNode[pos].addOutlineColor(color, time);
+}
+
 void Graph::updateNodeAnimation(sf::Time deltaT) {
 	for (auto& uComp : listNode) {
 		int u = uComp.first;
-		listNode[u].updateMovement(deltaT);
-		listNode[u].updateZooming(deltaT);
+		listNode[u].updateAnimation(deltaT);
 		std::set <EdgeInfo, cmp> tmpSet;
 		while (true) {
 			auto here = adj[u].lower_bound(EdgeInfo(0, BlackColor, infTime, infTime));

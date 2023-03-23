@@ -36,6 +36,7 @@ private:
 	};
 	std::deque <NodeMovement> movementQueue;
 	std::deque <NodeZooming> zoomingQueue;
+	std::deque <NodeChangingColor> fillColorQueue, outlineColorQueue;
 public:
 	Node(double _x = 0, double _y = 0, int _value = 0,
 		double _radius = 0, double _outlineSize = 0,
@@ -61,5 +62,10 @@ public:
 	void updateMovement(sf::Time deltaT);
 	void addZooming(double goalRadius, double goalOutline, sf::Time time);
 	void updateZooming(sf::Time deltaT);
+	void addFillColor(sf::Color goalColor, sf::Time time);
+	void updateFillColor(sf::Time deltaT);
+	void addOutlineColor(sf::Color goalColor, sf::Time time);
+	void updateOutlineColor(sf::Time deltaT);
+	void updateAnimation(sf::Time deltaT);
 	void draw(sf::RenderWindow& window);
 };
