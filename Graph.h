@@ -28,7 +28,7 @@ private:
 	EdgeType edgeType;
 public:
 	Graph(double radius = 0, double outlineSize = 0, double _lineThickness = 0,
-		sf::Color fillColor = WhiteColor, sf::Color outlineColor = RedColor,
+		sf::Color fillColor = WhiteColor, sf::Color outlineColor = BlackColor, sf::Color valueColor = BlackColor, 
 		EdgeType _edgeType = Undirected, sf::Font* font = nullptr);
 	void setFont(sf::Font* newFont);
 	void draw(sf::RenderWindow& window);
@@ -37,6 +37,7 @@ public:
 	void moveNode(int pos, double x, double y, sf::Time time);
 	void updateNodeFillColor(int pos, sf::Color color, sf::Time time);
 	void updateNodeOutlineColor(int pos, sf::Color color, sf::Time time);
+	void updateNodeValueColor(int pos, sf::Color color, sf::Time time);
 	void updateNodeAnimation(sf::Time deltaT);
 	void addEdge(int u, int v, sf::Color lineColor = BlackColor);
 };

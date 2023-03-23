@@ -9,7 +9,7 @@ sf::Font* Game::font(fontType id) {
 }
 
 Game::Game(sf::ContextSettings settings)
-	: window(sf::VideoMode(1080, 720), "SFML Application", sf::Style::Close, settings), graph(20, 3, 4, WhiteColor, BlackColor, EdgeType::SinglyDirected)
+	: window(sf::VideoMode(1080, 720), "SFML Application", sf::Style::Close, settings), graph(20, 3, 4, WhiteColor, BlackColor, BlackColor, EdgeType::SinglyDirected)
 {
 	listFont.resize(numFont);
 	for (int i = 0; i < numFont; i++) {
@@ -74,10 +74,19 @@ void Game::processEvents()
 					graph.moveNode(3, 50, 450, sf::seconds(1));
 				}
 				if (event.key.code == sf::Keyboard::R) {
-					graph.updateNodeOutlineColor(4, OrangeColor, sf::seconds(1.0f));
+					graph.updateNodeValueColor(4, WhiteColor, sf::seconds(0.3f));
+					graph.updateNodeFillColor(4, OrangeColor, sf::seconds(0.3f));
+					graph.updateNodeOutlineColor(4, OrangeColor, sf::seconds(0.3f));
 				}
 				if (event.key.code == sf::Keyboard::T) {
-					graph.updateNodeOutlineColor(4, BlackColor, sf::seconds(1.0f));
+					graph.updateNodeValueColor(4, OrangeColor, sf::seconds(0.3f));
+					graph.updateNodeFillColor(4, WhiteColor, sf::seconds(0.3f));
+					graph.updateNodeOutlineColor(4, OrangeColor, sf::seconds(0.3f));
+				}
+				if (event.key.code == sf::Keyboard::Y) {
+					graph.updateNodeValueColor(4, BlackColor, sf::seconds(0.3f));
+					graph.updateNodeFillColor(4, WhiteColor, sf::seconds(0.3f));
+					graph.updateNodeOutlineColor(4, BlackColor, sf::seconds(0.3f));
 				}
 				break;
 		}

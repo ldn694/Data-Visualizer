@@ -158,11 +158,52 @@ void Node::updateOutlineColor(sf::Time deltaT) {
 	}
 }
 
+void Node::addValueColor(sf::Color goalColor, sf::Time time) {
+	std::vector <double> tmp;
+	tmp.resize(4);
+	sf::Color prevColor;
+	if (outlineColorQueue.empty()) {
+		prevColor = valueColor;
+	}
+	else {
+		prevColor = valueColorQueue.back().goalColor;
+	}
+	tmp[0] = prevColor.r;
+	tmp[1] = prevColor.g;
+	tmp[2] = prevColor.b;
+	tmp[3] = prevColor.a;
+	valueColorQueue.push_back(NodeChangingColor(goalColor, time, tmp));
+}
+
+void Node::updateValueColor(sf::Time deltaT) {
+	while (!valueColorQueue.empty()) {
+		NodeChangingColor cur = valueColorQueue.front();
+		valueColorQueue.pop_front();
+		sf::Time elapsedTime = (cur.remainTime < deltaT ? cur.remainTime : deltaT);
+		double dr = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.r - cur.fakeColor[0]);
+		double dg = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.g - cur.fakeColor[1]);
+		double db = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.b - cur.fakeColor[2]);
+		double da = elapsedTime / cur.remainTime * (1.0 * cur.goalColor.a - cur.fakeColor[3]);
+		cur.fakeColor[0] += dr;
+		cur.fakeColor[1] += dg;
+		cur.fakeColor[2] += db;
+		cur.fakeColor[3] += da;
+		cur.remainTime -= elapsedTime;
+		setValueColor(cur.getRealColor());
+		deltaT -= elapsedTime;
+		if (cur.remainTime >= epsilonTime) {
+			valueColorQueue.push_front(cur);
+		}
+		if (deltaT < epsilonTime) break;
+	}
+}
+
 Node::Node(double _x, double _y, int _value,
 	double _radius, double _outlineSize,
-	sf::Color _fillColor, sf::Color _outlineColor,
+	sf::Color _fillColor, sf::Color _outlineColor, sf::Color _valueColor,
 	sf::Font* _font) :
-	x(_x), y(_y), value(_value), radius(_radius), outlineSize(_outlineSize), fillColor(_fillColor), outlineColor(_outlineColor), font(_font)
+	x(_x), y(_y), value(_value), radius(_radius), outlineSize(_outlineSize), 
+	fillColor(_fillColor), outlineColor(_outlineColor), valueColor(_valueColor), font(_font)
 {
 	shape = sf::CircleShape(radius);
 	shape.setFillColor(fillColor);
@@ -224,6 +265,10 @@ void Node::setOutlineColor(sf::Color newColor) {
 	shape.setOutlineColor(outlineColor);
 }
 
+void Node::setValueColor(sf::Color newColor) {
+	valueColor = newColor;
+}
+
 double Node::getX() {
 	return x;
 }
@@ -250,6 +295,7 @@ void Node::updateAnimation(sf::Time deltaT) {
 	updateZooming(deltaT);
 	updateFillColor(deltaT);
 	updateOutlineColor(deltaT);
+	updateValueColor(deltaT);
 }
 
 void Node::draw(sf::RenderWindow& window) {
@@ -258,7 +304,7 @@ void Node::draw(sf::RenderWindow& window) {
 	textValue.setFont(*font);
 	textValue.setString(intToString(value));
 	textValue.setCharacterSize(radius);
-	textValue.setFillColor(outlineColor);
+	textValue.setFillColor(valueColor);
 	sf::FloatRect textRect = textValue.getLocalBounds();
 	textValue.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
 	textValue.setPosition(getX(), getY());

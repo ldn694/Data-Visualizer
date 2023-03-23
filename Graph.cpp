@@ -37,9 +37,9 @@ Graph::EdgeInfo::EdgeInfo(int _v, sf::Color _color,
 
 
 Graph::Graph(double radius, double outlineSize, double _lineThickness,
-		sf::Color fillColor, sf::Color outlineColor,
+		sf::Color fillColor, sf::Color outlineColor, sf::Color valueColor,
 		EdgeType _idEdgeType, sf::Font* font) :
-	defaultNode(0, 0, 0, radius, outlineSize, fillColor, outlineColor, font), edgeType(_idEdgeType)
+	defaultNode(0, 0, 0, radius, outlineSize, fillColor, outlineColor, valueColor, font), edgeType(_idEdgeType)
 {
 	lineThickness = _lineThickness;
 }
@@ -116,6 +116,10 @@ void Graph::updateNodeFillColor(int pos, sf::Color color, sf::Time time) {
 
 void Graph::updateNodeOutlineColor(int pos, sf::Color color, sf::Time time) {
 	listNode[pos].addOutlineColor(color, time);
+}
+
+void Graph::updateNodeValueColor(int pos, sf::Color color, sf::Time time) {
+	listNode[pos].addValueColor(color, time);
 }
 
 void Graph::updateNodeAnimation(sf::Time deltaT) {
