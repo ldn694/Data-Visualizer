@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <math.h>
+#include <cassert>
 #include "Game.h"
 #include "Graph.h"
 #include "Template.h"
@@ -52,6 +53,7 @@ void Graph::draw(sf::RenderWindow& window) {
 	for (auto &uComp: listNode) {
 		uComp.second.draw(window);
 		int u = uComp.first;
+		// permanent edge
 		for (auto &vComp : adj[u]) {
 			int v = vComp.v;
 			sf::Color lineColor = vComp.color;
@@ -65,6 +67,22 @@ void Graph::draw(sf::RenderWindow& window) {
 				MovePoint(x2, y2, x1, y1, hypo * (max(vComp.remainTime, epsilonTime) / vComp.totalTime));
 			}
 			Edge edge(x1, y1, x2, y2, lineThickness, lineColor, edgeType, shorten, shorten);
+			edge.draw(window);
+		}
+		// temporary edge
+		for (auto& vComp : tmpAdj[u]) {
+			int v = vComp.v;
+			sf::Color lineColor = vComp.color;
+			double x1 = listNode[u].getX();
+			double y1 = listNode[u].getY();
+			double x2 = listNode[v].getX();
+			double y2 = listNode[v].getY();
+			double shorten = defaultNode.getRadius() + defaultNode.getOutlineSize();
+			double hypo = sqrt((x2 - x1) * (x2 - x1) + (y2 - y1) * (y2 - y1)) - 2 * shorten;
+			if (vComp.remainTime > epsilonTime) {
+				MovePoint(x2, y2, x1, y1, hypo * (max(vComp.remainTime, epsilonTime) / vComp.totalTime));
+			}
+			Edge edge(x1, y1, x2, y2, lineThickness, lineColor, EdgeType::Undirected, shorten, shorten);
 			edge.draw(window);
 		}
 	}
@@ -126,6 +144,7 @@ void Graph::updateNodeAnimation(sf::Time deltaT) {
 	for (auto& uComp : listNode) {
 		int u = uComp.first;
 		listNode[u].updateAnimation(deltaT);
+		// permanent edge
 		std::set <EdgeInfo, cmp> tmpSet;
 		while (true) {
 			auto here = adj[u].lower_bound(EdgeInfo(0, BlackColor, infTime, infTime));
@@ -145,11 +164,78 @@ void Graph::updateNodeAnimation(sf::Time deltaT) {
 		for (auto& here : tmpSet) {
 			adj[u].insert(here);
 		}
+		// temporary edge
+		tmpSet.clear();
+		while (true) {
+			auto here = tmpAdj[u].lower_bound(EdgeInfo(0, BlackColor, infTime, infTime));
+			if (here == tmpAdj[u].end()) {
+				break;
+			}
+			EdgeInfo tmp = *here;
+			tmpAdj[u].erase(here);
+			if (tmp.remainTime < epsilonTime) {
+				auto here = adj[u].end();
+				for (auto cur = adj[u].begin(); cur != adj[u].end(); cur++) {
+					if (cur->v == tmp.v) {
+						here = cur;
+						break;
+					}
+				}
+				if (here == adj[u].end()) {
+					assert(false);
+				}
+				EdgeInfo tmp2 = *here;
+				adj[u].erase(tmp2);
+				tmp2.color = tmp.color;
+				adj[u].insert(tmp2);
+				break;
+			}
+			sf::Time elapsedTime = min(tmp.remainTime, deltaT);
+			tmp.remainTime -= elapsedTime;
+			tmpSet.insert(tmp);
+		}
+		for (auto& here : tmpSet) {
+			tmpAdj[u].insert(here);
+		}
 	}
 }
 
-void Graph::addEdge(int u, int v, sf::Color lineColor) {
-	adj[u].insert(EdgeInfo(v, lineColor, sf::seconds(1.0f), sf::seconds(1.0f)));
+void Graph::addEdge(int u, int v, sf::Color lineColor, sf::Time time) {
+	adj[u].insert(EdgeInfo(v, lineColor, time, time));
+}
+
+void Graph::addTmpEdge(int u, int v, sf::Color lineColor, sf::Time time) {
+	tmpAdj[u].insert(EdgeInfo(v, lineColor, time, time));
+}
+
+void Graph::deleteEdge(int u, int v) {
+	while (true) {
+		auto here = adj[u].end();
+		for (auto cur = adj[u].begin(); cur != adj[u].end(); cur++) {
+			if (cur->v == v) {
+				here = cur;
+				break;
+			}
+		}
+		if (here == adj[u].end()) {
+			break;
+		}
+		adj[u].erase(here);
+	}
+}
+
+void Graph::updateEdgeColor(int u, int v, sf::Color lineColor, sf::Time time) {
+	auto here = adj[u].end();
+	for (auto cur = adj[u].begin(); cur != adj[u].end(); cur++) {
+		if (cur->v == v) {
+			here = cur;
+			break;
+		}
+	}
+	if (here == adj[u].end()) {
+		return;
+	}
+	addTmpEdge(u, v, lineColor, time);
 }
 
 //-------------------------------------------------------

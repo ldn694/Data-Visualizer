@@ -74,19 +74,25 @@ void Game::processEvents()
 					graph.moveNode(3, 50, 450, sf::seconds(1));
 				}
 				if (event.key.code == sf::Keyboard::R) {
-					graph.updateNodeValueColor(4, WhiteColor, sf::seconds(0.3f));
-					graph.updateNodeFillColor(4, OrangeColor, sf::seconds(0.3f));
-					graph.updateNodeOutlineColor(4, OrangeColor, sf::seconds(0.3f));
+					graph.updateNodeValueColor(2, WhiteColor, sf::seconds(0.3f));
+					graph.updateNodeFillColor(2, OrangeColor, sf::seconds(0.3f));
+					graph.updateNodeOutlineColor(2, OrangeColor, sf::seconds(0.3f));
 				}
 				if (event.key.code == sf::Keyboard::T) {
-					graph.updateNodeValueColor(4, OrangeColor, sf::seconds(0.3f));
-					graph.updateNodeFillColor(4, WhiteColor, sf::seconds(0.3f));
-					graph.updateNodeOutlineColor(4, OrangeColor, sf::seconds(0.3f));
+					graph.updateNodeValueColor(2, OrangeColor, sf::seconds(0.3f));
+					graph.updateNodeFillColor(2, WhiteColor, sf::seconds(0.3f));
+					graph.updateNodeOutlineColor(2, OrangeColor, sf::seconds(0.3f));
 				}
 				if (event.key.code == sf::Keyboard::Y) {
-					graph.updateNodeValueColor(4, BlackColor, sf::seconds(0.3f));
-					graph.updateNodeFillColor(4, WhiteColor, sf::seconds(0.3f));
-					graph.updateNodeOutlineColor(4, BlackColor, sf::seconds(0.3f));
+					graph.updateNodeValueColor(2, BlackColor, sf::seconds(0.3f));
+					graph.updateNodeFillColor(2, WhiteColor, sf::seconds(0.3f));
+					graph.updateNodeOutlineColor(2, BlackColor, sf::seconds(0.3f));
+				}
+				if (event.key.code == sf::Keyboard::Q) {
+					graph.updateEdgeColor(3, 2, OrangeColor, sf::seconds(0.3f));
+				}
+				if (event.key.code == sf::Keyboard::Delete) {
+					graph.deleteEdge(3, 2);
 				}
 				break;
 		}

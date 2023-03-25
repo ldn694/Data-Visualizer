@@ -22,7 +22,7 @@ private:
 		bool operator() (const EdgeInfo& a, const EdgeInfo& b) const;
 	};
 	std::map <int, Node> listNode;
-	std::map <int, std::set <EdgeInfo, cmp > > adj;
+	std::map <int, std::set <EdgeInfo, cmp > > adj, tmpAdj;
 	Node defaultNode;
 	double lineThickness;
 	EdgeType edgeType;
@@ -39,5 +39,8 @@ public:
 	void updateNodeOutlineColor(int pos, sf::Color color, sf::Time time);
 	void updateNodeValueColor(int pos, sf::Color color, sf::Time time);
 	void updateNodeAnimation(sf::Time deltaT);
-	void addEdge(int u, int v, sf::Color lineColor = BlackColor);
+	void addEdge(int u, int v, sf::Color lineColor = BlackColor, sf::Time time = sf::seconds(1.0f));
+	void addTmpEdge(int u, int v, sf::Color lineColor, sf::Time time);
+	void deleteEdge(int u, int v);
+	void updateEdgeColor(int u, int v, sf::Color lineColor, sf::Time time);
 };
