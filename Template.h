@@ -9,6 +9,9 @@ const sf::Color BlackColor(0, 0, 0);
 const sf::Color WhiteColor(255, 255, 255);
 const sf::Color OrangeColor(255, 128, 0);
 
+const bool ADD_EDGE = true;
+const bool ERASE_EDGE = false;
+
 const int pointCountCircle = 50;
 const double epsilonDouble = 1.f / 1000000.f;
 const sf::Time epsilonTime = sf::seconds(1.f / 1000000.f);

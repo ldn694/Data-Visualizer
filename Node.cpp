@@ -46,7 +46,7 @@ void Node::updateZooming(sf::Time deltaT) {
 		zoomingQueue.pop_front();
 		sf::Time elapsedTime = (cur.remainTime < deltaT ? cur.remainTime : deltaT);
 		double dRadius = elapsedTime / cur.remainTime * (cur.goalRadius - radius);
-		double dOutline = elapsedTime / cur.remainTime * (cur.goalRadius - outlineSize);
+		double dOutline = elapsedTime / cur.remainTime * (cur.goalOutline - outlineSize);
 		setRadius(radius + dRadius);
 		setOutline(outlineSize + dOutline);
 		cur.remainTime -= elapsedTime;
@@ -249,10 +249,13 @@ void Node::setFont(sf::Font* newFont) {
 
 void Node::setRadius(double newRadius) {
 	radius = newRadius;
+	shape.setRadius(radius);
+	shape.setOrigin(radius, radius);
 }
 
 void Node::setOutline(double newOutline) {
 	outlineSize = newOutline;
+	shape.setOutlineThickness(newOutline);
 }
 
 void Node::setFillColor(sf::Color newColor) {

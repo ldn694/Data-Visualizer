@@ -16,6 +16,9 @@ std::string intToString(int a) {
 		a /= 10;
 	}
 	reverse(res.begin(), res.end());
+	if (res.empty()) {
+		res.push_back('0');
+	}
 	return res;
 }
 
