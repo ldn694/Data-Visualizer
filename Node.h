@@ -17,6 +17,7 @@ private:
 	sf::Color fillColor, outlineColor, valueColor;
 	sf::CircleShape shape;
 	sf::Font* font;
+	bool display;
 	struct NodeMovement {
 		double goalX, goalY;
 		sf::Time remainTime;
@@ -41,13 +42,14 @@ public:
 	Node(double _x = 0, double _y = 0, int _value = 0,
 		double _radius = 0, double _outlineSize = 0,
 		sf::Color _fillColor = WhiteColor, sf::Color _outlineColor = BlackColor, sf::Color _valueColor = BlackColor,
-		sf::Font* _font = nullptr);
+		sf::Font* _font = nullptr, bool display = true);
 	void setValue(int newValue);
 	void setX(double newX);
 	void setY(double newY);
 	void setXY(double newX, double newY);
 	void moveX(double dx);
 	void moveY(double dy);
+	void setDisplay(bool display);
 	void setFont(sf::Font* newFont);
 	void setRadius(double newRadius);
 	void setOutline(double newOutline);
@@ -58,6 +60,8 @@ public:
 	double getY();
 	double getRadius();
 	double getOutlineSize();
+	bool getDisplay();
+	int getValue();
 	sf::CircleShape& getShape();
 	void addMovement(double goalX, double goalY, sf::Time time);
 	void updateMovement(sf::Time deltaT);
@@ -70,5 +74,6 @@ public:
 	void addValueColor(sf::Color goalColor, sf::Time time);
 	void updateValueColor(sf::Time deltaT);
 	void updateAnimation(sf::Time deltaT);
+	void stopAnimation();
 	void draw(sf::RenderWindow& window);
 };

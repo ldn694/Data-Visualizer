@@ -12,6 +12,7 @@ const sf::Color OrangeColor(255, 128, 0);
 const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;
 
+const int maxID = int(1e9);
 const int pointCountCircle = 50;
 const double epsilonDouble = 1.f / 1000000.f;
 const sf::Time epsilonTime = sf::seconds(1.f / 1000000.f);

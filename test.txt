@@ -1,0 +1,68 @@
+switch (event.type) {
+			case sf::Event::Closed:
+				window.close();
+				return;
+				break;
+			case sf::Event::MouseButtonPressed:
+				if (event.mouseButton.button == sf::Mouse::Left) {
+					graph.deleteNode(3, sf::seconds(0.3f));
+				}
+				if (event.mouseButton.button == sf::Mouse::Right) {
+					graph.deleteNode(0, sf::seconds(0.3f));
+				}
+				if (event.mouseButton.button == sf::Mouse::Middle) {
+					graph.deleteNodes({ 1, 2, 4 }, sf::seconds(0.3f));
+				}
+				break;
+			case sf::Event::MouseButtonReleased:
+				if (event.mouseButton.button == sf::Mouse::Left) {
+					graph.addNode(3, 3, 100, 300, sf::seconds(0.3f));
+					graph.addEdge(3, 1, BlackColor, sf::seconds(0.3f));
+					graph.addEdge(3, 2, BlackColor, sf::seconds(0.3f));
+					graph.addEdge(3, 4, BlackColor, sf::seconds(0.3f));
+					graph.addEdge(5, 3, BlueColor, sf::seconds(0.3f));
+				}
+				if (event.mouseButton.button == sf::Mouse::Right) {
+					graph.addNode(0, 0, 100, 100, sf::seconds(0.3f));
+				}
+				if (event.mouseButton.button == sf::Mouse::Middle) {
+					graph.addNode(0, 0, 100, 100);
+					graph.addNode(1, 1, 300, 100);
+					graph.addNode(2, 2, 200, 150);
+					graph.addNode(4, 4, 300, 300);
+				}
+				break;
+			case sf::Event::KeyPressed:
+				if (event.key.code == sf::Keyboard::W) {
+					graph.moveNode(3, 150, 250, sf::seconds(1));
+					graph.moveNode(5, 700, 700, sf::seconds(1));
+				}
+				if (event.key.code == sf::Keyboard::S) {
+					graph.moveNode(3, 50, 450, sf::seconds(1));
+					graph.moveNode(5, 400, 200, sf::seconds(1));
+				}
+				if (event.key.code == sf::Keyboard::R) {
+					graph.updateNodeValueColor(2, WhiteColor, sf::seconds(0.3f));
+					graph.updateNodeFillColor(2, OrangeColor, sf::seconds(0.3f));
+					graph.updateNodeOutlineColor(2, OrangeColor, sf::seconds(0.3f));
+				}
+				if (event.key.code == sf::Keyboard::T) {
+					graph.updateNodeValueColor(2, OrangeColor, sf::seconds(0.3f));
+					graph.updateNodeFillColor(2, WhiteColor, sf::seconds(0.3f));
+					graph.updateNodeOutlineColor(2, OrangeColor, sf::seconds(0.3f));
+				}
+				if (event.key.code == sf::Keyboard::Y) {
+					graph.updateNodeValueColor(2, BlackColor, sf::seconds(0.3f));
+					graph.updateNodeFillColor(2, WhiteColor, sf::seconds(0.3f));
+					graph.updateNodeOutlineColor(2, BlackColor, sf::seconds(0.3f));
+				}
+				if (event.key.code == sf::Keyboard::Q) {
+					graph.updateEdgeColor(3, 2, OrangeColor, sf::seconds(0.3f));
+					graph.updateEdgeColor(3, 4, RedColor, sf::seconds(0.3f));
+				}
+				if (event.key.code == sf::Keyboard::Delete) {
+					std::cout << "Pressed Delete\n";
+					graph.deleteEdge(3, 2, sf::seconds(0.3f));
+				}
+				break;
+		}

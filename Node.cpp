@@ -162,7 +162,7 @@ void Node::addValueColor(sf::Color goalColor, sf::Time time) {
 	std::vector <double> tmp;
 	tmp.resize(4);
 	sf::Color prevColor;
-	if (outlineColorQueue.empty()) {
+	if (valueColorQueue.empty()) {
 		prevColor = valueColor;
 	}
 	else {
@@ -201,9 +201,9 @@ void Node::updateValueColor(sf::Time deltaT) {
 Node::Node(double _x, double _y, int _value,
 	double _radius, double _outlineSize,
 	sf::Color _fillColor, sf::Color _outlineColor, sf::Color _valueColor,
-	sf::Font* _font) :
-	x(_x), y(_y), value(_value), radius(_radius), outlineSize(_outlineSize), 
-	fillColor(_fillColor), outlineColor(_outlineColor), valueColor(_valueColor), font(_font)
+	sf::Font* _font, bool _display) :
+	x(_x), y(_y), value(_value), radius(_radius), outlineSize(_outlineSize),
+	fillColor(_fillColor), outlineColor(_outlineColor), valueColor(_valueColor), font(_font), display(_display)
 {
 	shape = sf::CircleShape(radius);
 	shape.setFillColor(fillColor);
@@ -241,6 +241,10 @@ void Node::moveX(double dx) {
 void Node::moveY(double dy) {
 	y += dy;
 	shape.setPosition(x, y);
+}
+
+void Node::setDisplay(bool _display) {
+	display = _display;
 }
 
 void Node::setFont(sf::Font* newFont) {
@@ -289,6 +293,14 @@ double Node::getOutlineSize() {
 	return outlineSize;
 }
 
+bool Node::getDisplay() {
+	return display;
+}
+
+int Node::getValue() {
+	return value;
+}
+
 sf::CircleShape& Node::getShape() {
 	return shape;
 }
@@ -301,16 +313,46 @@ void Node::updateAnimation(sf::Time deltaT) {
 	updateValueColor(deltaT);
 }
 
+void Node::stopAnimation() {
+	if (!movementQueue.empty()) {
+		double x = movementQueue.back().goalX;
+		double y = movementQueue.back().goalY;
+		setXY(x, y);
+		movementQueue.clear();
+	}
+	if (!zoomingQueue.empty()) {
+		double radius = zoomingQueue.back().goalRadius;
+		double outlineSize = zoomingQueue.back().goalOutline;
+		setRadius(radius);
+		setOutline(outlineSize);
+		zoomingQueue.clear();
+	}
+	if (!fillColorQueue.empty()) {
+		setFillColor(fillColorQueue.back().goalColor);;
+		fillColorQueue.clear();
+	}
+	if (!outlineColorQueue.empty()) {
+		setOutlineColor(outlineColorQueue.back().goalColor);
+		outlineColorQueue.clear();
+	}
+	if (!valueColorQueue.empty()) {
+		setValueColor(valueColorQueue.back().goalColor);
+		valueColorQueue.clear();
+	}
+}
+
 void Node::draw(sf::RenderWindow& window) {
-	window.draw(shape);
-	sf::Text textValue;
-	textValue.setFont(*font);
-	textValue.setString(intToString(value));
-	textValue.setCharacterSize(radius);
-	textValue.setFillColor(valueColor);
-	sf::FloatRect textRect = textValue.getLocalBounds();
-	textValue.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-	textValue.setPosition(getX(), getY());
-	textValue.setStyle(sf::Text::Bold);
-	window.draw(textValue);
+	if (display) {
+		window.draw(shape);
+		sf::Text textValue;
+		textValue.setFont(*font);
+		textValue.setString(intToString(value));
+		textValue.setCharacterSize(radius);
+		textValue.setFillColor(valueColor);
+		sf::FloatRect textRect = textValue.getLocalBounds();
+		textValue.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+		textValue.setPosition(getX(), getY());
+		textValue.setStyle(sf::Text::Bold);
+		window.draw(textValue);
+	}
 }

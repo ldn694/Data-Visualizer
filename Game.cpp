@@ -18,22 +18,42 @@ Game::Game(sf::ContextSettings settings)
 		}
 	}
 	graph.setFont(font(fontType::Arial));
-	graph.addNode(0, 0, 100, 100);
-	graph.addNode(1, 1, 300, 100);
-	graph.addNode(2, 2, 200, 150);
-	graph.addNode(3, 3, 100, 300);
-	graph.addNode(4, 4, 300, 300);
-	graph.addNode(5, 5, 400, 200);
-	graph.addNode(69, 69, 400, 150);
-	graph.addEdge(0, 1, BlackColor);
-	graph.addEdge(0, 3, BlackColor);
-	graph.addEdge(0, 5, BlackColor);
-	graph.addEdge(1, 2, BlackColor);
-	graph.addEdge(2, 0, BlackColor);
-	graph.addEdge(3, 0, RedColor);
-	graph.addEdge(4, 1, GreenColor);
-	graph.addEdge(5, 3, BlueColor);
-	graph.addEdge(69, 1, BlackColor);
+	/*graph.addNode(1, 1, 100, 100, sf::seconds(0.3f));
+	graph.addNode(2, 2, 300, 100, sf::seconds(0.3f));
+	graph.addNode(3, 3, 200, 150, sf::seconds(0.3f));
+	graph.addNode(4, 4, 100, 300, sf::seconds(0.3f));
+	graph.addNode(5, 5, 300, 300, sf::seconds(0.3f));
+	graph.addNode(6, 6, 400, 200, sf::seconds(0.3f));
+	graph.addNode(69, 69, 400, 150, sf::seconds(0.3f));*/
+	std::vector <std::tuple <int, int, double, double> > nodeList;
+	nodeList.push_back({ 1, 1, 100, 100 });
+	nodeList.push_back({ 2, 2, 300, 100 });
+	nodeList.push_back({ 3, 3, 200, 150 });
+	nodeList.push_back({ 4, 4, 100, 300 });
+	nodeList.push_back({ 5, 5, 300, 300 });
+	nodeList.push_back({ 6, 6, 400, 200 });
+	nodeList.push_back({ 69, 69, 400, 150 });
+	graph.addNodes(nodeList, sf::seconds(1.0f));
+	/*graph.addEdge(1, 2, BlackColor, sf::seconds(1.0f));
+	graph.addEdge(1, 4, BlackColor, sf::seconds(1.0f));
+	graph.addEdge(1, 6, BlackColor, sf::seconds(1.0f));
+	graph.addEdge(2, 3, BlackColor, sf::seconds(1.0f));
+	graph.addEdge(3, 1, BlackColor, sf::seconds(1.0f));
+	graph.addEdge(4, 1, RedColor, sf::seconds(1.0f));
+	graph.addEdge(5, 2, GreenColor, sf::seconds(1.0f));
+	graph.addEdge(6, 4, BlueColor, sf::seconds(1.0f));
+	graph.addEdge(69, 2, BlackColor, sf::seconds(1.0f));*/
+	std::vector <std::tuple<int, int, sf::Color> > edgeList;
+	edgeList.push_back({ 1, 2, BlackColor });
+	edgeList.push_back({1, 4, BlackColor});
+	edgeList.push_back({ 1, 6, BlackColor });
+	edgeList.push_back({ 2, 3, BlackColor });
+	edgeList.push_back({ 3, 1, BlackColor });
+	edgeList.push_back({4, 1, RedColor});
+	edgeList.push_back({5, 2, GreenColor});
+	edgeList.push_back({6, 4, BlueColor});
+	edgeList.push_back({69, 2, BlackColor});
+	graph.addEdges(edgeList, sf::seconds(1.0f));
 }
 
 
@@ -48,65 +68,89 @@ void Game::processEvents()
 			return;
 			break;
 		case sf::Event::MouseButtonPressed:
+			graph.stopAnimation();
 			if (event.mouseButton.button == sf::Mouse::Left) {
-				graph.deleteNode(3);
+				graph.deleteNode(4, sf::seconds(0.3f));
 			}
 			if (event.mouseButton.button == sf::Mouse::Right) {
-				graph.deleteNode(0);
+				graph.deleteNode(1, sf::seconds(0.3f));
 			}
 			if (event.mouseButton.button == sf::Mouse::Middle) {
-				graph.deleteNodes({ 1, 2, 4 });
+				graph.deleteNodes({ 2, 3, 5 }, sf::seconds(0.3f));
 			}
 			break;
 		case sf::Event::MouseButtonReleased:
+			graph.stopAnimation();
 			if (event.mouseButton.button == sf::Mouse::Left) {
-				graph.addNode(3, 3, 100, 300);
-				graph.addEdge(3, 1, BlackColor);
-				graph.addEdge(3, 2, BlackColor);
-				graph.addEdge(3, 4, BlackColor);
-				graph.addEdge(5, 3, BlueColor);
+				graph.addNode(4, 4, 100, 300, sf::seconds(0.3f));
+				std::vector <std::tuple<int, int, sf::Color> > edgeList;
+				edgeList.push_back({ 4, 2, BlackColor });
+				edgeList.push_back({4, 3, BlackColor});
+				edgeList.push_back({4, 5, BlackColor});
+				edgeList.push_back({6, 4, BlueColor});
+				graph.addEdges(edgeList, sf::seconds(0.3f));
 			}
 			if (event.mouseButton.button == sf::Mouse::Right) {
-				graph.addNode(0, 0, 100, 100);
+				graph.addNode(1, 1, 100, 100, sf::seconds(0.3f));
 			}
 			if (event.mouseButton.button == sf::Mouse::Middle) {
-				graph.addNode(0, 0, 100, 100);
-				graph.addNode(1, 1, 300, 100);
-				graph.addNode(2, 2, 200, 150);
-				graph.addNode(4, 4, 300, 300);
+				graph.addNode(1, 1, 100, 100, sf::seconds(0.3f));
+				graph.addNode(2, 2, 300, 100, sf::seconds(0.3f));
+				graph.addNode(3, 3, 200, 150, sf::seconds(0.3f));
+				graph.addNode(5, 5, 300, 300, sf::seconds(0.3f));
 			}
 			break;
 		case sf::Event::KeyPressed:
-			if (event.key.code == sf::Keyboard::W) {
-				graph.moveNode(3, 150, 250);
-				graph.moveNode(5, 700, 700);
+			graph.stopAnimation();
+			if(event.key.code == sf::Keyboard::Tab) {
+				break;
 			}
 			if (event.key.code == sf::Keyboard::S) {
-				graph.moveNode(3, 50, 450);
-				graph.moveNode(5, 400, 200);
+				std::vector <std::tuple <int, double, double> > moveList;
+				moveList.push_back({ 4, 50, 450 });
+				moveList.push_back({ 6, 500, 500 });
+				graph.moveNodes(moveList, sf::seconds(0.3f));
+			}
+			if (event.key.code == sf::Keyboard::W) {
+				std::vector <std::tuple <int, double, double> > moveList;
+				moveList.push_back({ 4, 150, 250 });
+				moveList.push_back({ 6, 400, 200 });
+				graph.moveNodes(moveList, sf::seconds(0.3f));
 			}
 			if (event.key.code == sf::Keyboard::R) {
-				graph.updateNodeValueColor(2, WhiteColor);
-				graph.updateNodeFillColor(2, OrangeColor);
-				graph.updateNodeOutlineColor(2, OrangeColor);
+				graph.setNodeFillColor(3, OrangeColor, sf::seconds(0.3f));
+				graph.setNodeOutlineColor(3, OrangeColor, sf::seconds(0.3f));
+				graph.setNodeValueColor(3, WhiteColor, sf::seconds(0.3f));
 			}
 			if (event.key.code == sf::Keyboard::T) {
-				graph.updateNodeValueColor(2, OrangeColor);
-				graph.updateNodeFillColor(2, WhiteColor);
-				graph.updateNodeOutlineColor(2, OrangeColor);
+				graph.setNodeFillColor(3, WhiteColor, sf::seconds(0.3f));
+				graph.setNodeOutlineColor(3, OrangeColor, sf::seconds(0.3f));
+				graph.setNodeValueColor(3, OrangeColor, sf::seconds(0.3f));
 			}
 			if (event.key.code == sf::Keyboard::Y) {
-				graph.updateNodeValueColor(2, BlackColor);
-				graph.updateNodeFillColor(2, WhiteColor);
-				graph.updateNodeOutlineColor(2, BlackColor);
+				graph.setNodeFillColor(3, WhiteColor, sf::seconds(0.3f));
+				graph.setNodeOutlineColor(3, BlackColor, sf::seconds(0.3f));
+				graph.setNodeValueColor(3, BlackColor, sf::seconds(0.3f));
 			}
 			if (event.key.code == sf::Keyboard::Q) {
-				graph.updateEdgeColor(3, 2, OrangeColor);
-				graph.updateEdgeColor(3, 4, RedColor);
+				std::vector <std::tuple<int, int, sf::Color> > edgeList;
+				edgeList.push_back({ 4, 3, OrangeColor });
+				edgeList.push_back({ 4, 5, RedColor });
+				graph.setEdgesColor(edgeList, sf::seconds(0.3f));
 			}
 			if (event.key.code == sf::Keyboard::Delete) {
-				std::cout << "Pressed Delete\n";
-				graph.deleteEdge(3, 2);
+				std::vector <std::pair<int, int> > edgeList;
+				edgeList.push_back({ 1, 2 });
+				edgeList.push_back({ 3, 1 });
+				graph.deleteEdges(edgeList, sf::seconds(1.0f));
+				edgeList.clear();
+				edgeList.push_back({ 4, 1 });
+				edgeList.push_back({ 69, 2 });
+				graph.deleteEdges(edgeList, sf::seconds(1.0f));
+			}
+			if (event.key.code == sf::Keyboard::U) {
+				graph.stopAnimation();
+				graph.switchEdge(4, 3, 69, sf::seconds(1.0f));
 			}
 			break;
 		}
@@ -116,9 +160,7 @@ void Game::processEvents()
 
 void Game::update(sf::Time deltaT)
 {
-	graph.updateEdgeDelete(deltaT);
-	graph.updateNodeDelete(deltaT);
-	graph.updateNodeAnimation(deltaT);
+	graph.update(deltaT);
 }
 
 void Game::render()

@@ -15,36 +15,54 @@ private:
 	struct EdgeInfo {
 		int v;
 		sf::Color color;
-		sf::Time totalTime, remainTime;
-		bool adding; //adding = 0: erasing edge; adding = 1: adding edge
-		EdgeInfo(int _v = 0, sf::Color color = BlackColor, bool adding = ERASE_EDGE, sf::Time totalTime = sf::seconds(0.f), sf::Time remainTime = sf::seconds(0.f));
+		bool display;
+		int priority;
+		EdgeInfo(int v = 0, sf::Color color = BlackColor, bool display = true, int priority = 0);
 	};
-	struct EdgeSwitchInfo {
-		int start, goal;
-		sf::Color color;
-		sf::Time totalTime, remainTime;
-		EdgeSwitchInfo(int start, int goal, sf::Color color, sf::Time totalTime, sf::Time remainTime);
-	};
-	struct NodeDeleteInfo {
-		std::vector <int> nodes;
-		sf::Time totalTime, remainTime;
-		NodeDeleteInfo(std::vector<int> _nodes, sf::Time _totalTime = sf::seconds(0.f), sf::Time _remainTime = sf::seconds(0.f));
-	};
-	struct EdgeDeleteInfo {
-		std::vector <std::pair <int, int> > edges;
-		sf::Time totalTime, remainTime;
-		EdgeDeleteInfo(std::vector<std::pair <int, int> > _edges = {{0, 0}}, sf::Time _totalTime = sf::seconds(0.f), sf::Time _remainTime = sf::seconds(0.f));
-	};
-	struct cmp {
+	struct cmpEdgeInfo {
 		bool operator() (const EdgeInfo& a, const EdgeInfo& b) const;
 	};
+	struct FakeNode {
+		int u, fakeID;
+		FakeNode(int u, int fakeID = -1);
+	};
+	struct NodeAnimation {
+		std::vector <FakeNode> nodes;
+		sf::Time totalTime, remainTime;
+		NodeAnimation(std::vector <FakeNode> nodes, sf::Time totalTime, sf::Time remainTime);
+	};
+	struct FakeEdge {
+		int u, v, fakeIDu, fakeIDv, fakeIDtmp;
+		FakeEdge(int u, int v, int fakeIDu, int fakeIDv = -1, int fakeIDtmp = -1);
+	};
+	struct EdgeAnimation {
+		std::vector <FakeEdge> edges;
+		sf::Time totalTime, remainTime;
+		EdgeAnimation(std::vector <FakeEdge> edges, sf::Time totalTime, sf::Time remainTime);
+	};
+	struct FakeEdgeSwitch {
+		int u, v, newv, fakeID;
+		FakeEdgeSwitch(int u, int v, int newv, int fakeID);
+	};
+	struct EdgeSwitchAnimation {
+		std::vector <FakeEdgeSwitch> edges;
+		sf::Time totalTime, remainTime;
+		EdgeSwitchAnimation(std::vector <FakeEdgeSwitch> edges, sf::Time totalTime, sf::Time remainTime);
+	};
+	std::set <int> fakeIDList;
 	std::map <int, Node> listNode;
-	std::map <int, std::set <EdgeInfo, cmp > > adj, tmpAdj;
-	std::deque <NodeDeleteInfo> nodeDeleteQueue;
-	std::deque <EdgeDeleteInfo> edgeDeleteQueue;
+	std::map <int, std::set <EdgeInfo, cmpEdgeInfo > > adj;
+	std::deque <NodeAnimation> nodeAddQueue, nodeDeleteQueue, nodeMoveQueue, nodeFillColorQueue, nodeOutlineColorQueue, nodeValueColorQueue;
+	std::deque <EdgeAnimation> edgeAddQueue, edgeDeleteQueue, edgeColorQueue;
+	std::deque <EdgeSwitchAnimation> edgeSwitchQueue;
 	Node defaultNode;
 	double lineThickness;
 	EdgeType edgeType;
+	auto findV(int u, int v);
+	void toggleEdgeDisplay(int u, int v, bool display);
+	int getFakeID();
+	void toggleNodeDisplay(int u, bool display);
+	void toggleEdgePriority(int u, int v, int priority);
 public:
 	Graph(double radius = 0, double outlineSize = 0, double _lineThickness = 0,
 		sf::Color fillColor = WhiteColor, sf::Color outlineColor = BlackColor, sf::Color valueColor = BlackColor, 
@@ -53,28 +71,42 @@ public:
 	void draw(sf::RenderWindow& window);
 	void addNode(int pos, int value, double x, double y);
 	void addNode(int pos, int value, double x, double y, sf::Time time);
+	void addNodes(std::vector <std::tuple <int, int, double, double> > nodes, sf::Time time);
+	void updateNodeAdd(sf::Time deltaT);
 	void deleteNode(int pos);
 	void deleteNode(int pos, sf::Time time);
 	void deleteNodes(std::vector <int> nodes);
 	void deleteNodes(std::vector <int> nodes, sf::Time time);
+	void updateDeleteNode(sf::Time deltaT);
 	void moveNode(int pos, double x, double y);
 	void moveNode(int pos, double x, double y, sf::Time time);
-	void updateNodeFillColor(int pos, sf::Color color);
-	void updateNodeFillColor(int pos, sf::Color color, sf::Time time);
-	void updateNodeOutlineColor(int pos, sf::Color color);
-	void updateNodeOutlineColor(int pos, sf::Color color, sf::Time time);
-	void updateNodeValueColor(int pos, sf::Color color);
-	void updateNodeValueColor(int pos, sf::Color color, sf::Time time);
-	void updateNodeAnimation(sf::Time deltaT);
-	void updateNodeDelete(sf::Time deltaT);
-	void addEdge(int u, int v, sf::Color lineColor);
-	void addEdge(int u, int v, sf::Color lineColor, sf::Time time);
-	void addTmpEdge(int u, int v, sf::Color lineColor, sf::Time time);
+	void moveNodes(std::vector <std::tuple<int, double, double> > nodes, sf::Time time);
+	void updateMoveNode(sf::Time deltaT);
+	void setNodeFillColor(int pos, sf::Color color);
+	void setNodeFillColor(int pos, sf::Color color, sf::Time time);
+	void updateNodeFillColor(sf::Time deltaT);
+	void setNodeOutlineColor(int pos, sf::Color color);
+	void setNodeOutlineColor(int pos, sf::Color color, sf::Time time);
+	void updateNodeOutlineColor(sf::Time deltaT);
+	void setNodeValueColor(int pos, sf::Color color);
+	void setNodeValueColor(int pos, sf::Color color, sf::Time time);
+	void updateNodeValueColor(sf::Time deltaT);
+	void addEdge(int u, int v, sf::Color color);
+	void addEdge(int u, int v, sf::Color color, sf::Time time);
+	void addEdges(std::vector <std::tuple <int, int, sf::Color>> edges, sf::Time time);
+	void updateAddEdge(sf::Time time);
 	void deleteEdge(int u, int v);
 	void deleteEdge(int u, int v, sf::Time time);
 	void deleteEdges(std::vector <std::pair<int, int>> edges);
 	void deleteEdges(std::vector <std::pair<int, int>> edges, sf::Time time);
-	void updateEdgeColor(int u, int v, sf::Color lineColor);
-	void updateEdgeColor(int u, int v, sf::Color lineColor, sf::Time time);
 	void updateEdgeDelete(sf::Time deltaT);
+	void switchEdge(int u, int v, int newv);
+	void switchEdge(int u, int v, int newv, sf::Time time);
+	void updateEdgeSwitch(sf::Time deltaT);
+	void setEdgeColor(int u, int v, sf::Color color);
+	void setEdgeColor(int u, int v, sf::Color color, sf::Time time);
+	void setEdgesColor(std::vector <std::tuple <int, int, sf::Color>> edges, sf::Time time);
+	void updateEdgeColor(sf::Time deltaT);
+	void update(sf::Time deltaT);
+	void stopAnimation();
 };
