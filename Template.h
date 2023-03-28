@@ -8,6 +8,7 @@ const sf::Color BlueColor(0, 0, 255);
 const sf::Color BlackColor(0, 0, 0);
 const sf::Color WhiteColor(255, 255, 255);
 const sf::Color OrangeColor(255, 128, 0);
+const sf::Color YellowColor(255, 255, 0);
 
 const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;

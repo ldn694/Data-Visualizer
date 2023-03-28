@@ -210,6 +210,15 @@ void Graph::addNode(int u, int value, double x, double y, sf::Time time) {
 	nodeAddQueue.push_back(NodeAnimation({ FakeNode(u, fakeID) }, time, time));
 }
 
+void Graph::addNodes(std::vector <std::tuple <int, int, double, double> > nodes) {
+	for (auto& nComp : nodes) {
+		int fakeID = getFakeID();
+		int u = std::get<0>(nComp), value = std::get<1>(nComp);
+		double x = std::get<2>(nComp), y = std::get<3>(nComp);
+		addNode(u, value, x, y);
+	}
+}
+
 void Graph::addNodes(std::vector <std::tuple <int, int, double, double> > nodes, sf::Time time) {
 	std::vector <FakeNode> nodeList;
 	for (auto& nComp : nodes) {
@@ -270,6 +279,10 @@ void Graph::deleteNode(int pos) {
 		}
 	}
 	std::cout << "deleted pos = " << pos << " size = " << (int)listNode.size() << "\n";
+	for (auto& uComp : listNode) {
+		std::cout << "(" << uComp.first << " " << uComp.second.getValue() << ") ";;
+	}
+	std::cout << "\n";
 }
 
 void Graph::deleteNode(int pos, sf::Time time) {
@@ -315,9 +328,9 @@ void Graph::deleteNodes(std::vector <int> nodes, sf::Time time) {
 		listNode[fakeID].addZooming(0.f, 0.f, time);
 		nodeList.push_back(FakeNode(pos, fakeID));
 	}
+	nodeDeleteQueue.push_back(NodeAnimation(nodeList, time, time));
+	std::vector <std::pair <int, int> > edges;
 	for (int pos : nodes) {
-		listNode[pos].addZooming(0.f, 0.f, time);
-		std::vector <std::pair <int, int> > edges;
 		for (auto& vComp : adj[pos]) {
 			edges.push_back({ pos, vComp.v });
 		}
@@ -331,14 +344,14 @@ void Graph::deleteNodes(std::vector <int> nodes, sf::Time time) {
 				edges.push_back({ u, here->v });
 			}
 		}
-		deleteEdges(edges, time);
 	}
+	deleteEdges(edges, time);
 	for (auto pos : nodes) {
 		deleteNode(pos);
 	}
 }
 
-void Graph::updateDeleteNode(sf::Time deltaT) {
+void Graph::updateNodeDelete(sf::Time deltaT) {
 	while (!nodeDeleteQueue.empty()) {
 		NodeAnimation cur = nodeDeleteQueue.front();
 		nodeDeleteQueue.pop_front();
@@ -372,6 +385,14 @@ void Graph::moveNode(int pos, double x, double y, sf::Time time) {
 	nodeMoveQueue.push_back(NodeAnimation({FakeNode(pos)}, time, time));
 }
 
+void Graph::moveNodes(std::vector <std::tuple<int, double, double> > nodes) {
+	for (auto& nComp : nodes) {
+		int u = std::get<0>(nComp);
+		double x = std::get<1>(nComp), y = std::get<2>(nComp);
+		listNode[u].setXY(x, y);
+	}
+}
+
 void Graph::moveNodes(std::vector <std::tuple<int, double, double> > nodes, sf::Time time) {
 	std::vector <FakeNode> nodeList;
 	for (auto& nComp : nodes) {
@@ -383,7 +404,7 @@ void Graph::moveNodes(std::vector <std::tuple<int, double, double> > nodes, sf::
 	nodeMoveQueue.push_back(NodeAnimation(nodeList, time, time));
 }
 
-void Graph::updateMoveNode(sf::Time deltaT) {
+void Graph::updateNodeMove(sf::Time deltaT) {
 	while (!nodeMoveQueue.empty()) {
 		NodeAnimation cur = nodeMoveQueue.front();
 		nodeMoveQueue.pop_front();
@@ -410,6 +431,25 @@ void Graph::setNodeFillColor(int pos, sf::Color color) {
 void Graph::setNodeFillColor(int pos, sf::Color color, sf::Time time) {
 	listNode[pos].addFillColor(color, time);
 	nodeFillColorQueue.push_back(NodeAnimation({ FakeNode(pos) }, time, time));
+}
+
+void Graph::setNodesFillColor(std::vector <std::pair<int, sf::Color>> nodes) {
+	for (auto& nComp : nodes) {
+		int pos = nComp.first;
+		sf::Color color = nComp.second;
+		listNode[pos].setFillColor(color);
+	}
+}
+
+void Graph::setNodesFillColor(std::vector <std::pair<int, sf::Color>> nodes, sf::Time time) {
+	std::vector <FakeNode> nodeList;
+	for (auto& nComp : nodes) {
+		int pos = nComp.first;
+		sf::Color color = nComp.second;
+		listNode[pos].addFillColor(color, time);
+		nodeList.push_back(FakeNode(pos));
+	}
+	nodeFillColorQueue.push_back(NodeAnimation(nodeList, time, time));
 }
 
 void Graph::updateNodeFillColor(sf::Time deltaT) {
@@ -441,6 +481,25 @@ void Graph::setNodeOutlineColor(int pos, sf::Color color, sf::Time time) {
 	nodeOutlineColorQueue.push_back(NodeAnimation({ FakeNode(pos) }, time, time));
 }
 
+void Graph::setNodesOutlineColor(std::vector <std::pair<int, sf::Color>> nodes) {
+	for (auto& nComp : nodes) {
+		int pos = nComp.first;
+		sf::Color color = nComp.second;
+		listNode[pos].setOutlineColor(color);
+	}
+}
+
+void Graph::setNodesOutlineColor(std::vector <std::pair<int, sf::Color>> nodes, sf::Time time) {
+	std::vector <FakeNode> nodeList;
+	for (auto& nComp : nodes) {
+		int pos = nComp.first;
+		sf::Color color = nComp.second;
+		listNode[pos].addOutlineColor(color, time);
+		nodeList.push_back(FakeNode(pos));
+	}
+	nodeOutlineColorQueue.push_back(NodeAnimation(nodeList, time, time));
+}
+
 void Graph::updateNodeOutlineColor(sf::Time deltaT) {
 	while (!nodeOutlineColorQueue.empty()) {
 		NodeAnimation cur = nodeOutlineColorQueue.front();
@@ -470,6 +529,25 @@ void Graph::setNodeValueColor(int pos, sf::Color color, sf::Time time) {
 	nodeValueColorQueue.push_back(NodeAnimation({ FakeNode(pos) }, time, time));
 }
 
+void Graph::setNodesValueColor(std::vector <std::pair<int, sf::Color>> nodes) {
+	for (auto& nComp : nodes) {
+		int pos = nComp.first;
+		sf::Color color = nComp.second;
+		listNode[pos].setValueColor(color);
+	}
+}
+
+void Graph::setNodesValueColor(std::vector <std::pair<int, sf::Color>> nodes, sf::Time time) {
+	std::vector <FakeNode> nodeList;
+	for (auto& nComp : nodes) {
+		int pos = nComp.first;
+		sf::Color color = nComp.second;
+		listNode[pos].addValueColor(color, time);
+		nodeList.push_back(FakeNode(pos));
+	}
+	nodeValueColorQueue.push_back(NodeAnimation(nodeList, time, time));
+}
+
 void Graph::updateNodeValueColor(sf::Time deltaT) {
 	while (!nodeValueColorQueue.empty()) {
 		NodeAnimation cur = nodeValueColorQueue.front();
@@ -492,6 +570,15 @@ void Graph::updateNodeValueColor(sf::Time deltaT) {
 
 void Graph::addEdge(int u, int v, sf::Color color) {
 	adj[u].insert(EdgeInfo(v, color));
+}
+
+void Graph::addEdges(std::vector <std::tuple <int, int, sf::Color>> edges) {
+	std::vector <FakeEdge> edgeList;
+	for (auto& eComp : edges) {
+		int u = std::get<0>(eComp), v = std::get<1>(eComp);
+		sf::Color color = std::get<2>(eComp);
+		addEdge(u, v, color);
+	}
 }
 
 void Graph::addEdge(int u, int v, sf::Color color, sf::Time time) {
@@ -540,7 +627,7 @@ void Graph::addEdges(std::vector <std::tuple <int, int, sf::Color>> edges, sf::T
 	edgeAddQueue.push_back(EdgeAnimation(edgeList, time, time));
 }
 
-void Graph::updateAddEdge(sf::Time deltaT) {
+void Graph::updateEdgeAdd(sf::Time deltaT) {
 	while (!edgeAddQueue.empty()) {
 		EdgeAnimation cur = edgeAddQueue.front();
 		edgeAddQueue.pop_front();
@@ -706,8 +793,33 @@ void Graph::switchEdge(int u, int v, int newv, sf::Time time) {
 	addNode(fakeID, 0, listNode[v].getX(), listNode[v].getY());
 	listNode[fakeID].setDisplay(false);
 	addEdge(u, fakeID, findV(u, v)->color);
-	edgeSwitchQueue.push_front(EdgeSwitchAnimation({ FakeEdgeSwitch(u, v, newv, fakeID) }, time, time));
+	edgeSwitchQueue.push_back(EdgeSwitchAnimation({ FakeEdgeSwitch(u, v, newv, fakeID) }, time, time));
 	switchEdge(u, v, newv);
+}
+
+void Graph::switchEdges(std::vector <std::tuple<int, int, int>> edgesSwitch) {
+	for (auto& eComp : edgesSwitch) {
+		int u = std::get<0>(eComp), v = std::get<1>(eComp), newv = std::get<2>(eComp);
+		switchEdge(u, v, newv);
+	}
+}
+
+void Graph::switchEdges(std::vector <std::tuple<int, int, int>> edgesSwitch, sf::Time time) {
+	std::vector <FakeEdgeSwitch> edgeSwitchList;
+	for (auto& eComp : edgesSwitch) {
+		int u = std::get<0>(eComp), v = std::get<1>(eComp), newv = std::get<2>(eComp);
+		if (v == newv || findV(u, v) == adj[u].end()) {
+			return;
+		}
+		toggleEdgeDisplay(u, v, false);
+		int fakeID = getFakeID();
+		addNode(fakeID, 0, listNode[v].getX(), listNode[v].getY());
+		listNode[fakeID].setDisplay(false);
+		addEdge(u, fakeID, findV(u, v)->color);
+		switchEdge(u, v, newv);
+		edgeSwitchList.push_back(FakeEdgeSwitch(u, v, newv, fakeID));
+	}
+	edgeSwitchQueue.push_back(EdgeSwitchAnimation(edgeSwitchList, time, time));
 }
 
 void Graph::updateEdgeSwitch(sf::Time deltaT) {
@@ -781,6 +893,15 @@ void Graph::setEdgeColor(int u, int v, sf::Color color, sf::Time time) {
 	edgeColorQueue.push_back(EdgeAnimation({ FakeEdge(u, v, fakeIDu, fakeIDv, fakeIDtmp) }, time, time));
 }
 
+void Graph::setEdgesColor(std::vector <std::tuple <int, int, sf::Color>> edges) {
+	std::vector <FakeEdge> edgeList;
+	for (auto& eComp : edges) {
+		int u = std::get<0>(eComp), v = std::get<1>(eComp);
+		sf::Color color = std::get<2>(eComp);
+		setEdgeColor(u, v, color);
+	}
+}
+
 void Graph::setEdgesColor(std::vector <std::tuple <int, int, sf::Color>> edges, sf::Time time) {
 	std::vector <FakeEdge> edgeList;
 	for (auto& eComp : edges) {
@@ -851,15 +972,15 @@ void Graph::updateEdgeColor(sf::Time deltaT) {
 }
 
 void Graph::update(sf::Time deltaT) {
-	updateMoveNode(deltaT);
-	updateDeleteNode(deltaT);
 	updateNodeAdd(deltaT);
-	updateAddEdge(deltaT);
-	updateEdgeDelete(deltaT);
-	updateEdgeSwitch(deltaT);
+	updateNodeDelete(deltaT);
+	updateNodeMove(deltaT);
 	updateNodeFillColor(deltaT);
 	updateNodeOutlineColor(deltaT);
 	updateNodeValueColor(deltaT);
+	updateEdgeAdd(deltaT);
+	updateEdgeDelete(deltaT);
+	updateEdgeSwitch(deltaT);
 	updateEdgeColor(deltaT);
 }
 

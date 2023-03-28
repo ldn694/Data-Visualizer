@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "Graph.h"
+#include "DataStructure.h"
 
 const std::string fontName[] = { "arial.ttf" };
 const int numFont = 1;
@@ -22,7 +23,7 @@ private:
 	void handlePlayerInput(sf::Keyboard::Key Key, bool isMoving);
 private:
 	sf::RenderWindow window;
-	Graph graph;
+	DataStructure ds;
 	std::vector <sf::Font> listFont;
 	sf::Font* font(fontType id);
 };
