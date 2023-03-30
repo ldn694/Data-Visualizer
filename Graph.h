@@ -67,6 +67,7 @@ public:
 	Graph(double radius = 0, double outlineSize = 0, double _lineThickness = 0,
 		sf::Color fillColor = WhiteColor, sf::Color outlineColor = BlackColor, sf::Color valueColor = BlackColor, 
 		EdgeType _edgeType = Undirected, sf::Font* font = nullptr);
+	Node getDefaultNode();
 	void setFont(sf::Font* newFont);
 	void draw(sf::RenderWindow& window);
 	void addNode(int pos, int value, double x, double y);
@@ -83,6 +84,9 @@ public:
 	void moveNode(int pos, double x, double y, sf::Time time);
 	void moveNodes(std::vector <std::tuple<int, double, double> > nodes);
 	void moveNodes(std::vector <std::tuple<int, double, double> > nodes, sf::Time time);
+	void translateNodes(std::vector <int> nodes, double dx, double dy);
+	void translateNodes(std::vector <int> nodes, double dx, double dy, sf::Time time);
+	void mergeNodeMove();
 	void updateNodeMove(sf::Time deltaT);
 	void setNodeFillColor(int pos, sf::Color color);
 	void setNodeFillColor(int pos, sf::Color color, sf::Time time);

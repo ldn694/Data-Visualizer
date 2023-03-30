@@ -9,7 +9,7 @@ sf::Font* Game::font(fontType id) {
 }
 
 Game::Game(sf::ContextSettings settings)
-	: window(sf::VideoMode(1080, 720), "Data Visualizer", sf::Style::Close, settings)
+	: window(sf::VideoMode(WIDTH_RES, HEIGHT_RES), "Data Visualizer", sf::Style::Close, settings)
 {
 	listFont.resize(numFont);
 	for (int i = 0; i < numFont; i++) {
@@ -17,65 +17,7 @@ Game::Game(sf::ContextSettings settings)
 			assert(false);
 		}
 	}
-	ds = DataStructure(20, 3, 4, WhiteColor, BlackColor, BlackColor, EdgeType::SinglyDirected, font(fontType::Arial));
-	std::vector <Animation> animationList;
-	Animation tmp;
-	//-----------------
-	tmp.type = AddNode;
-	tmp.element.nodes = { 1, 2, 3, 4, 5 };
-	tmp.work.nodeInfos = { {12, 100, 100}, {69, 200, 100}, {185, 150, 150}, {12, 100, 300}, {15, 150, 300} };
-	animationList.push_back(tmp);
-	tmp.type = AddEdge;
-	tmp.element.edges = { {1, 2}, {1, 3}, {2, 4} , {1, 4} , {3, 5} };
-	tmp.work.colors = { BlackColor, GreenColor, BlueColor, BlackColor, OrangeColor};
-	animationList.push_back(tmp);
-	ds.addAnimations(animationList);
-	//-----------------
-	animationList.clear();
-	tmp.type = EdgeColor;
-	tmp.element.edges = { {3, 5}, {1, 4} };
-	tmp.work.colors = { BlackColor, OrangeColor };
-	animationList.push_back(tmp);
-	ds.addAnimations(animationList);
-	//-----------------
-	animationList.clear();
-	tmp.type = SwitchEdge;
-	tmp.element.edges = { {3, 5}, {1, 4} };
-	tmp.work.goalNode = {4, 5};
-	animationList.push_back(tmp);
-	ds.addAnimations(animationList);
-	//-----------------
-	animationList.clear();
-	tmp.type = DeleteEdge;
-	tmp.element.edges = { {3, 4}, {1, 5} };
-	animationList.push_back(tmp);
-	ds.addAnimations(animationList);
-	//-----------------
-	animationList.clear();
-	tmp.type = FillColorNode;
-	tmp.element.nodes = { 2, 4 };
-	tmp.work.colors = { OrangeColor, WhiteColor };
-	animationList.push_back(tmp);
-	tmp.type = OutlineColorNode;
-	tmp.work.colors = { OrangeColor, OrangeColor };
-	animationList.push_back(tmp);
-	tmp.type = ValueColorNode;
-	tmp.work.colors = { WhiteColor, OrangeColor };
-	animationList.push_back(tmp);
-	ds.addAnimations(animationList);
-	//-----------------
-	animationList.clear();
-	tmp.type = MoveNode;
-	tmp.element.nodes = { 1, 2, 3 };
-	tmp.work.coordinates = { {150, 100}, {250, 100}, {200, 150} };
-	animationList.push_back(tmp);
-	ds.addAnimations(animationList);
-	//-----------------
-	animationList.clear();
-	tmp.type = DeleteNode;
-	tmp.element.nodes = { 3, 4 };
-	animationList.push_back(tmp);
-	ds.addAnimations(animationList);
+	ds = Stack(20, 3, 4, LightTheme, EdgeType::SinglyDirected, font(fontType::Arial));
 }
 
 
@@ -90,26 +32,41 @@ void Game::processEvents()
 			return;
 			break;
 		case sf::Event::KeyPressed:
+			if (event.key.code == sf::Keyboard::Q) {
+				ds.createRandom();
+			}
+			if (event.key.code == sf::Keyboard::T) {
+				ds.push(69);
+			}
+			if (event.key.code == sf::Keyboard::Y) {
+				ds.pop();
+			}
+			if (event.key.code == sf::Keyboard::U) {
+				ds.peek();
+			}
 			if (event.key.code == sf::Keyboard::Num1) {
-				ds.animateFrame(1, sf::seconds(0.3f));
+				ds.animateFrame(1);
 			}
 			if (event.key.code == sf::Keyboard::Num2) {
-				ds.animateFrame(2, sf::seconds(0.3f));
+				ds.animateFrame(2);
 			}
 			if (event.key.code == sf::Keyboard::Num3) {
-				ds.animateFrame(3, sf::seconds(0.3f));
+				ds.animateFrame(3);
 			}
 			if (event.key.code == sf::Keyboard::Num4) {
-				ds.animateFrame(4, sf::seconds(0.3f));
+				ds.animateFrame(4);
 			}
 			if (event.key.code == sf::Keyboard::Num5) {
-				ds.animateFrame(5, sf::seconds(0.3f));
+				ds.animateFrame(5);
 			}
 			if (event.key.code == sf::Keyboard::Num6) {
-				ds.animateFrame(6, sf::seconds(0.3f));
+				ds.animateFrame(6);
 			}
 			if (event.key.code == sf::Keyboard::Num7) {
-				ds.animateFrame(7, sf::seconds(0.3f));
+				ds.animateFrame(7);
+			}
+			if (event.key.code == sf::Keyboard::R) {
+				ds.animateAllFrame();
 			}
 		}
 	}

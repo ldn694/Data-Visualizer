@@ -1,3 +1,5 @@
+#pragma once
+
 #include <vector>
 #include <cassert>
 #include <iostream>
@@ -13,16 +15,99 @@ DataStructure::DataStructure(double radius, double outlineSize, double lineThick
 	mainGraph = defaultGraph;
 	curGraph = defaultGraph;
 	listFrame.push_back({ defaultGraph, {} });
+	speed = 1.0f;
 }
 
 void DataStructure::resetAnimation() {
+	frameQueue.clear();
 	curGraph = mainGraph;
 	listFrame.clear();
 	listFrame.push_back({ mainGraph, {} });
 }
 
+
+
 bool cmpAnimation(const Animation& a, const Animation& b) {
 	return a.type < b.type;
+}
+
+void DataStructure::setNodeColor(std::vector <Animation>& animationList, std::vector <int> nodes, ColorTheme theme, ColorType type)
+{
+	Animation tmp;
+	tmp.type = FillColorNode;
+	tmp.element.nodes = nodes;
+	tmp.work.colors.clear();
+	for (int i = 0; i < (int)nodes.size(); i++) {
+		tmp.work.colors.push_back(colorNode[theme][type].fillColor);
+	}
+	animationList.push_back(tmp);
+	tmp.type = OutlineColorNode;
+	tmp.element.nodes = nodes;
+	tmp.work.colors.clear();
+	for (int i = 0; i < (int)nodes.size(); i++) {
+		tmp.work.colors.push_back(colorNode[theme][type].outlineColor);
+	}
+	animationList.push_back(tmp);
+	tmp.type = ValueColorNode;
+	tmp.element.nodes = nodes;
+	tmp.work.colors.clear();
+	for (int i = 0; i < (int)nodes.size(); i++) {
+		tmp.work.colors.push_back(colorNode[theme][type].valueColor);
+	}
+	animationList.push_back(tmp);
+}
+
+void DataStructure::addNode(std::vector <Animation>& animationList, int pos, int value, double x, double y) {
+	Animation tmp;
+	tmp.type = AddNode;
+	tmp.element.nodes = { pos };
+	tmp.work.nodeInfos = { {value, x, y} };
+	animationList.push_back(tmp);
+}
+
+void DataStructure::deleteNode(std::vector <Animation>& animationList, int pos) {
+	Animation tmp;
+	tmp.type = DeleteNode;
+	tmp.element.nodes = { pos };
+	animationList.push_back(tmp);
+}
+
+void DataStructure::translateNode(std::vector <Animation>& animationList, std::vector <int> nodes, double dx, double dy) {
+	Animation tmp;
+	tmp.type = TranslateNode;
+	tmp.element.nodes = nodes;
+	tmp.work.coordinates = { {dx, dy} };
+	animationList.push_back(tmp);
+}
+
+void DataStructure::mergeMoveNode(std::vector <Animation>& animationList) {
+	Animation tmp;
+	tmp.type = MergeMoveNode;
+	animationList.push_back(tmp);
+}
+
+void DataStructure::moveNode(std::vector <Animation>& animationList, int pos, double x, double y) {
+	Animation tmp;
+	tmp.type = MoveNode;
+	tmp.element.nodes = { pos };
+	tmp.work.coordinates = { {x, y} };
+	animationList.push_back(tmp);
+}
+
+void DataStructure::addEdge(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorType type) {
+	Animation tmp;
+	tmp.type = AddEdge;
+	tmp.element.edges = { {u, v} };
+	tmp.work.colors = { colorNode[theme][type].outlineColor };
+	animationList.push_back(tmp);
+}
+
+void DataStructure::setEdgeColor(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorType type) {
+	Animation tmp;
+	tmp.type = EdgeColor;
+	tmp.element.edges = { {u, v} };
+	tmp.work.colors = { colorNode[theme][type].outlineColor };
+	animationList.push_back(tmp);
 }
 
 void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time time) {
@@ -70,6 +155,21 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 		else {
 			graph.moveNodes(nodeList, time);
 		}
+	}
+	if (animation.type == TranslateNode) {
+		if (animation.work.coordinates.empty()) {
+			assert(false);
+		}
+		double dx = animation.work.coordinates[0].first, dy = animation.work.coordinates[0].second;
+		if (time < epsilonTime) {
+			graph.translateNodes(animation.element.nodes, dx, dy);
+		}
+		else {
+			graph.translateNodes(animation.element.nodes, dx, dy, time);
+		}
+	}
+	if (animation.type == MergeMoveNode) {
+		graph.mergeNodeMove();
 	}
 	if (animation.type == FillColorNode) {
 		if (animation.element.nodes.size() != animation.work.colors.size()) {
@@ -191,31 +291,63 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 	}
 }
 
-void DataStructure::addAnimations(std::vector <Animation> animationList) {
+void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Time time) {
 	sort(animationList.begin(), animationList.end(), cmpAnimation);
 	Graph tmpGraph = listFrame.back().graph;
 	for (Animation& animation : animationList) {
 		updateAnimation(tmpGraph, animation);
 	}
 	listFrame.back().nextStep = animationList;
+	listFrame.back().time = time;
 	listFrame.push_back({ tmpGraph, {} });
 	curGraph = tmpGraph;
+	mainGraph = tmpGraph;
 }
 
-void DataStructure::animateFrame(int idFrame, sf::Time time) {//from idFrame - 1 to idFrame
+void DataStructure::animateFrame(int idFrame) {//from idFrame - 1 to idFrame
 	if (idFrame < 1) {
 		return;
 	}
-	curGraph = listFrame[idFrame - 1].graph;
-	for (Animation& animation : listFrame[idFrame - 1].nextStep) {
-		updateAnimation(curGraph, animation, time);
+	frameQueue.push_back({ idFrame, speed * (listFrame[idFrame - 1].time + delayTime), false});
+}
+
+void DataStructure::animateAllFrame() {
+	for (int i = 1; i < (int)listFrame.size(); i++) {
+		animateFrame(i);
 	}
 }
 
 void DataStructure::update(sf::Time deltaT) {
-	curGraph.update(deltaT);
+	updateFrameQueue(deltaT);
 }
 
 void DataStructure::draw(sf::RenderWindow& window) {
 	curGraph.draw(window);
+}
+
+void DataStructure::updateFrameQueue(sf::Time deltaT) {
+	while (!frameQueue.empty()) {
+		auto &cur = frameQueue.front();
+		frameQueue.pop_front();
+		int idFrame = std::get<0>(cur);
+		sf::Time time = (std::get<1>(cur) - speed * delayTime);
+		if (!std::get<2>(cur)) {
+			curGraph = listFrame[idFrame - 1].graph;
+			for (Animation& animation : listFrame[idFrame - 1].nextStep) {
+				updateAnimation(curGraph, animation, time);
+			}
+		}
+		time += speed * delayTime;
+		sf::Time elapsedTime = (time < deltaT ? time : deltaT);
+		curGraph.update(elapsedTime);
+		deltaT -= elapsedTime;
+		time -= elapsedTime;
+		if (time >= epsilonTime) {
+			frameQueue.push_front({idFrame, time, true});
+		}
+		else {
+
+		}
+		if (deltaT < epsilonTime) break;
+	}
 }

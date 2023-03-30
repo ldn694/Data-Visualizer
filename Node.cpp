@@ -301,6 +301,16 @@ int Node::getValue() {
 	return value;
 }
 
+sf::Color Node::getFillColor() {
+	return fillColor;
+}
+sf::Color Node::getOutlineColor() {
+	return outlineColor;
+}
+sf::Color Node::getValueColor() {
+	return valueColor;
+}
+
 sf::CircleShape& Node::getShape() {
 	return shape;
 }

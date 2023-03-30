@@ -62,6 +62,9 @@ public:
 	double getOutlineSize();
 	bool getDisplay();
 	int getValue();
+	sf::Color getFillColor();
+	sf::Color getOutlineColor();
+	sf::Color getValueColor();
 	sf::CircleShape& getShape();
 	void addMovement(double goalX, double goalY, sf::Time time);
 	void updateMovement(sf::Time deltaT);

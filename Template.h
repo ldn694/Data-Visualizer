@@ -1,6 +1,9 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+const int WIDTH_RES = 1080;
+const int HEIGHT_RES = 720;
+
 const sf::Color GreyColor(211, 211, 211);
 const sf::Color RedColor(255, 0, 0);
 const sf::Color GreenColor(0, 255, 0);
@@ -9,6 +12,8 @@ const sf::Color BlackColor(0, 0, 0);
 const sf::Color WhiteColor(255, 255, 255);
 const sf::Color OrangeColor(255, 128, 0);
 const sf::Color YellowColor(255, 255, 0);
+const sf::Color LightGreenColor(82, 188, 105);
+const sf::Color DarkGreenColor(48, 104, 68);
 
 const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;
@@ -19,10 +24,33 @@ const double epsilonDouble = 1.f / 1000000.f;
 const sf::Time epsilonTime = sf::seconds(1.f / 1000000.f);
 const sf::Time timePerFrame = sf::seconds(1.f / 60.f);
 const sf::Time infTime = sf::seconds(1000000.f);
+const sf::Time stepTime = sf::seconds(0.3f);
+const sf::Time delayTime = sf::seconds(0.2f);
 
 enum EdgeType {
 	Undirected, SinglyDirected, DoublyDirected
 };
+
+enum ColorTheme {
+	LightTheme
+};
+
+enum ColorType {
+	normal, highlight, lowlight, highlight2
+};
+
+const int numColorTheme = 1;
+const int numColorType = 4;
+
+struct ColorNode {
+	sf::Color fillColor, outlineColor, valueColor;
+};
+
+const ColorNode colorNode[numColorTheme][numColorType] = 
+{	WhiteColor, BlackColor, BlackColor ,
+	OrangeColor, OrangeColor, WhiteColor, 
+	WhiteColor, OrangeColor, OrangeColor,
+	LightGreenColor, LightGreenColor, WhiteColor};
 
 std::string intToString(int a);
 int stringToInt(std::string& a);

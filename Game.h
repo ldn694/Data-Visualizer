@@ -4,6 +4,7 @@
 #include <string>
 #include "Graph.h"
 #include "DataStructure.h"
+#include "Stack.h"
 
 const std::string fontName[] = { "arial.ttf" };
 const int numFont = 1;
@@ -23,7 +24,7 @@ private:
 	void handlePlayerInput(sf::Keyboard::Key Key, bool isMoving);
 private:
 	sf::RenderWindow window;
-	DataStructure ds;
+	Stack ds;
 	std::vector <sf::Font> listFont;
 	sf::Font* font(fontType id);
 };

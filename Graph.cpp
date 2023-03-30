@@ -62,6 +62,10 @@ Graph::Graph(double radius, double outlineSize, double _lineThickness,
 	srand(time(0));
 }
 
+Node Graph::getDefaultNode() {
+	return defaultNode;
+}
+
 int Graph::getFakeID() {
 	int x;
 	do {
@@ -196,23 +200,27 @@ void Graph::addNode(int u, int value, double x, double y) {
 	newNode.setValue(value);
 	newNode.setXY(x, y);
 	listNode[u] = newNode;
-	std::cout << "added u = " << u << " size = " << (int)listNode.size() << "\n";
+	//std::cout << "added u = " << u << " value = " << value << " size = " << (int)listNode.size() << "\n";
 }
 
 void Graph::addNode(int u, int value, double x, double y, sf::Time time) {
-	int fakeID = getFakeID();
+	/*int fakeID = getFakeID();
 	addNode(u, value, x, y);
 	listNode[u].setDisplay(false);
 	addNode(fakeID, value, x, y);
 	listNode[fakeID].setRadius(0.f);
 	listNode[fakeID].setOutline(0.f);
 	listNode[fakeID].addZooming(defaultNode.getRadius(), defaultNode.getOutlineSize(), time);
-	nodeAddQueue.push_back(NodeAnimation({ FakeNode(u, fakeID) }, time, time));
+	nodeAddQueue.push_back(NodeAnimation({ FakeNode(u, fakeID) }, time, time));*/
+	addNode(u, value, x, y);
+	listNode[u].setRadius(0.f);
+	listNode[u].setOutline(0.f);
+	listNode[u].addZooming(defaultNode.getRadius(), defaultNode.getOutlineSize(), time);
+	nodeAddQueue.push_back(NodeAnimation({ FakeNode(u) }, time, time));
 }
 
 void Graph::addNodes(std::vector <std::tuple <int, int, double, double> > nodes) {
 	for (auto& nComp : nodes) {
-		int fakeID = getFakeID();
 		int u = std::get<0>(nComp), value = std::get<1>(nComp);
 		double x = std::get<2>(nComp), y = std::get<3>(nComp);
 		addNode(u, value, x, y);
@@ -222,7 +230,7 @@ void Graph::addNodes(std::vector <std::tuple <int, int, double, double> > nodes)
 void Graph::addNodes(std::vector <std::tuple <int, int, double, double> > nodes, sf::Time time) {
 	std::vector <FakeNode> nodeList;
 	for (auto& nComp : nodes) {
-		int fakeID = getFakeID();
+		/*int fakeID = getFakeID();
 		int u = std::get<0>(nComp), value = std::get<1>(nComp);
 		double x = std::get<2>(nComp), y = std::get<3>(nComp);
 		addNode(u, value, x, y);
@@ -231,7 +239,15 @@ void Graph::addNodes(std::vector <std::tuple <int, int, double, double> > nodes,
 		listNode[fakeID].setRadius(0.f);
 		listNode[fakeID].setOutline(0.f);
 		listNode[fakeID].addZooming(defaultNode.getRadius(), defaultNode.getOutlineSize(), time);
-		nodeList.push_back(FakeNode(u, fakeID));
+		nodeList.push_back(FakeNode(u, fakeID));*/
+
+		int u = std::get<0>(nComp), value = std::get<1>(nComp);
+		double x = std::get<2>(nComp), y = std::get<3>(nComp);
+		addNode(u, value, x, y);
+		listNode[u].setRadius(0.f);
+		listNode[u].setOutline(0.f);
+		listNode[u].addZooming(defaultNode.getRadius(), defaultNode.getOutlineSize(), time);
+		nodeList.push_back(FakeNode(u));
 	}
 	nodeAddQueue.push_back(NodeAnimation(nodeList, time, time));
 }
@@ -242,7 +258,7 @@ void Graph::updateNodeAdd(sf::Time deltaT) {
 		nodeAddQueue.pop_front();
 		sf::Time elapsedTime = (cur.remainTime < deltaT ? cur.remainTime : deltaT);
 		for (auto& nComp : cur.nodes) {
-			listNode[nComp.fakeID].updateZooming(deltaT);
+			listNode[nComp.u].updateZooming(deltaT);
 		}
 		deltaT -= elapsedTime;
 		cur.remainTime -= elapsedTime;
@@ -250,11 +266,11 @@ void Graph::updateNodeAdd(sf::Time deltaT) {
 			nodeAddQueue.push_front(cur);
 		}
 		else {
-			for (auto& nComp : cur.nodes) {
+			/*for (auto& nComp : cur.nodes) {
 				int u = nComp.u, fakeID = nComp.fakeID;
 				deleteNode(fakeID);
 				listNode[u].setDisplay(true);
-			}
+			}*/
 		}
 		if (deltaT < epsilonTime) break;
 	}
@@ -278,11 +294,7 @@ void Graph::deleteNode(int pos) {
 			}
 		}
 	}
-	std::cout << "deleted pos = " << pos << " size = " << (int)listNode.size() << "\n";
-	for (auto& uComp : listNode) {
-		std::cout << "(" << uComp.first << " " << uComp.second.getValue() << ") ";;
-	}
-	std::cout << "\n";
+	//std::cout << "deleted pos = " << pos << " size = " << (int)listNode.size() << "\n";
 }
 
 void Graph::deleteNode(int pos, sf::Time time) {
@@ -301,7 +313,7 @@ void Graph::deleteNode(int pos, sf::Time time) {
 		if (fakeIDList.find(u) != fakeIDList.end()) {
 			continue;
 		}
-		std::cout << u << " ";
+		//std::cout << u << " ";
 		auto here = findV(u, pos);
 		if (here != adj[u].end()) {
 			edges.push_back({ u, here->v });
@@ -402,6 +414,40 @@ void Graph::moveNodes(std::vector <std::tuple<int, double, double> > nodes, sf::
 		nodeList.push_back(FakeNode(pos, -1));
 	}
 	nodeMoveQueue.push_back(NodeAnimation(nodeList, time, time));
+}
+
+void Graph::translateNodes(std::vector <int> nodes, double dx, double dy) {
+	std::vector <std::tuple <int, double, double>> nodeList;
+	for (int i = 0; i < (int)nodes.size(); i++) {
+		int pos = nodes[i];
+		nodeList.push_back({ pos, listNode[pos].getX() + dx, listNode[pos].getY() + dy });
+	}
+	moveNodes(nodeList);
+}
+
+void Graph::translateNodes(std::vector <int> nodes, double dx, double dy, sf::Time time) {
+	std::vector <std::tuple <int, double, double>> nodeList;
+	for (int i = 0; i < (int)nodes.size(); i++) {
+		int pos = nodes[i];
+		nodeList.push_back({ pos, listNode[pos].getX() + dx, listNode[pos].getY() + dy});
+	}
+	moveNodes(nodeList, time);
+}
+
+void Graph::mergeNodeMove() {
+	if (nodeMoveQueue.size() < 2) {
+		return;
+	}
+	NodeAnimation First = nodeMoveQueue.front();
+	nodeMoveQueue.pop_front();
+	NodeAnimation Second = nodeMoveQueue.front();
+	nodeMoveQueue.pop_front();
+	std::vector <FakeNode> nodeList = First.nodes;
+	for (auto& uComp : Second.nodes) {
+		nodeList.push_back(uComp);
+	}
+	NodeAnimation Merge = NodeAnimation(nodeList, First.totalTime, First.remainTime);
+	nodeMoveQueue.push_back(Merge);
 }
 
 void Graph::updateNodeMove(sf::Time deltaT) {
@@ -670,7 +716,7 @@ void Graph::deleteEdge(int u, int v) {
 			break;
 		}
 		adj[u].erase(here);
-		std::cout << "deleted " << u << " " << v << "\n";
+		//std::cout << "deleted " << u << " " << v << "\n";
 	}
 }
 
