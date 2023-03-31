@@ -65,7 +65,7 @@ private:
 	void toggleEdgePriority(int u, int v, int priority);
 public:
 	Graph(double radius = 0, double outlineSize = 0, double _lineThickness = 0,
-		sf::Color fillColor = WhiteColor, sf::Color outlineColor = BlackColor, sf::Color valueColor = BlackColor, 
+		sf::Color fillColor = WhiteColor, sf::Color outlineColor = BlackColor, sf::Color valueColor = BlackColor, sf::Color variableColor = RedColor,
 		EdgeType _edgeType = Undirected, sf::Font* font = nullptr);
 	Node getDefaultNode();
 	void setFont(sf::Font* newFont);
@@ -88,6 +88,8 @@ public:
 	void translateNodes(std::vector <int> nodes, double dx, double dy, sf::Time time);
 	void mergeNodeMove();
 	void updateNodeMove(sf::Time deltaT);
+	void addNodeVariable(int u, std::string variable);
+	void deleteNodeVariable(int u, std::string variable);
 	void setNodeFillColor(int pos, sf::Color color);
 	void setNodeFillColor(int pos, sf::Color color, sf::Time time);
 	void setNodesFillColor(std::vector <std::pair<int, sf::Color>> nodes);

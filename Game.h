@@ -5,6 +5,7 @@
 #include "Graph.h"
 #include "DataStructure.h"
 #include "Stack.h"
+#include "SinglyLinkedList.h"
 
 const std::string fontName[] = { "arial.ttf" };
 const int numFont = 1;

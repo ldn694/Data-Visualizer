@@ -13,8 +13,9 @@ struct Node {
 private:
 	double x, y;
 	int value;
+	std::set <std::string> variableList;
 	double radius, outlineSize;
-	sf::Color fillColor, outlineColor, valueColor;
+	sf::Color fillColor, outlineColor, valueColor, variableColor;
 	sf::CircleShape shape;
 	sf::Font* font;
 	bool display;
@@ -39,10 +40,10 @@ private:
 	std::deque <NodeZooming> zoomingQueue;
 	std::deque <NodeChangingColor> fillColorQueue, outlineColorQueue, valueColorQueue;
 public:
-	Node(double _x = 0, double _y = 0, int _value = 0,
-		double _radius = 0, double _outlineSize = 0,
-		sf::Color _fillColor = WhiteColor, sf::Color _outlineColor = BlackColor, sf::Color _valueColor = BlackColor,
-		sf::Font* _font = nullptr, bool display = true);
+	Node(double x = 0, double y = 0, int value = 0,
+		double radius = 0, double outlineSize = 0,
+		sf::Color fillColor = WhiteColor, sf::Color outlineColor = BlackColor, sf::Color valueColor = BlackColor, sf::Color variableColor = RedColor,
+		sf::Font* font = nullptr, bool display = true);
 	void setValue(int newValue);
 	void setX(double newX);
 	void setY(double newY);
@@ -56,6 +57,7 @@ public:
 	void setFillColor(sf::Color newColor);
 	void setOutlineColor(sf::Color newColor);
 	void setValueColor(sf::Color newColor);
+	void setVariableColor(sf::Color newColor);
 	double getX();
 	double getY();
 	double getRadius();
@@ -76,6 +78,8 @@ public:
 	void updateOutlineColor(sf::Time deltaT);
 	void addValueColor(sf::Color goalColor, sf::Time time);
 	void updateValueColor(sf::Time deltaT);
+	void addVariable(std::string variable);
+	void eraseVariable(std::string variable);
 	void updateAnimation(sf::Time deltaT);
 	void stopAnimation();
 	void draw(sf::RenderWindow& window);

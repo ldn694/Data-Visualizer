@@ -43,14 +43,19 @@ const int numColorTheme = 1;
 const int numColorType = 4;
 
 struct ColorNode {
-	sf::Color fillColor, outlineColor, valueColor;
+	sf::Color fillColor, outlineColor, valueColor, variableColor;
+	ColorNode(sf::Color fillColor, sf::Color outlineColor, sf::Color valueColor, sf::Color variableColor);
 };
 
 const ColorNode colorNode[numColorTheme][numColorType] = 
-{	WhiteColor, BlackColor, BlackColor ,
-	OrangeColor, OrangeColor, WhiteColor, 
-	WhiteColor, OrangeColor, OrangeColor,
-	LightGreenColor, LightGreenColor, WhiteColor};
+{ 
+	{ 
+		ColorNode(WhiteColor, BlackColor, BlackColor, RedColor),
+		ColorNode(OrangeColor, OrangeColor, WhiteColor, RedColor),
+		ColorNode(WhiteColor, OrangeColor, OrangeColor, RedColor),
+		ColorNode(LightGreenColor, LightGreenColor, WhiteColor, RedColor)
+	} 
+};
 
 std::string intToString(int a);
 int stringToInt(std::string& a);

@@ -8,7 +8,7 @@
 Stack::Stack(double radius, double outlineSize, double lineThickness,
 	ColorTheme _theme, EdgeType edgeType, sf::Font* font) : 
 	theme(_theme),
-	DataStructure(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, edgeType, font) {}
+	DataStructure(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, edgeType, font) {}
 
 int Stack::getSize() {
 	return (int)stack.size();
@@ -62,7 +62,7 @@ void Stack::createRandom() {
 	double y = HEIGHT_RES / 3;
 	for (int i = 0; i < n; i++) {
 		int value = rand() % 100 + 1;
-		stack.push_back({ i, value,  (i < n - 1 ? i + 1 : -1)});
+		stack.push_back({ i, value,  (i < n - 1 ? i + 1 : -1) });
 		nodeList.push_back(i);
 		nodeInfo.push_back({ value, x, y });
 		x += defaultNode.getRadius() * 5;
@@ -81,6 +81,8 @@ void Stack::createRandom() {
 	tmp.element.edges = edgeList;
 	tmp.work.colors = color;
 	animationList.push_back(tmp);
+	addVariables(animationList, { 0 }, { "head" });
+	addVariables(animationList, { getSize() - 1 }, { "tail" });
 	addAnimations(animationList, stepTime);
 	animateAllFrame();
 }
@@ -93,9 +95,11 @@ void Stack::push(int value) {
 		addNode(animationList, id, value, WIDTH_RES / 2, HEIGHT_RES / 3);
 		setNodeColor(animationList, { id }, theme, highlight);
 		stack.push_back({ id, value, -1 });
+		addVariables(animationList, { id }, { "head", "tail" ,"vtx"});
 		addAnimations(animationList, stepTime);
 		animationList.clear();
 		setNodeColor(animationList, { id }, theme, normal);
+		deleteVariables(animationList, { id }, { "vtx" });
 		addAnimations(animationList, stepTime);
 		animateAllFrame();
 		return;
@@ -104,6 +108,7 @@ void Stack::push(int value) {
 	std::vector <Animation> animationList;
 	addNode(animationList, id, value, WIDTH_RES / 2, HEIGHT_RES / 3 * 2);
 	setNodeColor(animationList, { id }, theme, highlight);
+	addVariables(animationList, { id }, { "vtx" });
 	addAnimations(animationList, stepTime);
 
 	animationList.clear();
@@ -114,6 +119,8 @@ void Stack::push(int value) {
 	animationList.clear();
 	setNodeColor(animationList, { id }, theme, highlight2);
 	setEdgeColor(animationList, id, head, theme, normal);
+	addVariables(animationList, { id }, { "head" });
+	deleteVariables(animationList, { getHeadID() }, { "head" });
 	addAnimations(animationList, stepTime);
 
 	animationList.clear();
@@ -126,6 +133,7 @@ void Stack::push(int value) {
 
 	animationList.clear();
 	setNodeColor(animationList, { id }, theme, normal);
+	deleteVariables(animationList, { id }, { "vtx" });
 	addAnimations(animationList, stepTime);
 	animateAllFrame();
 }
@@ -138,12 +146,15 @@ void Stack::pop() {
 	int head = getHeadID();
 	std::vector <Animation> animationList;
 	setNodeColor(animationList, { head }, theme, highlight);
+	addVariables(animationList, { head }, { "temp" });
 	addAnimations(animationList, stepTime);
 
 	if (getSize() > 1) {
 		animationList.clear();
 		setEdgeColor(animationList, head, stack[1].id, theme, highlight2);
 		setNodeColor(animationList, { stack[1].id }, theme, highlight2);
+		deleteVariables(animationList, { head }, { "head" });
+		addVariables(animationList, { stack[1].id }, { "head" });
 		addAnimations(animationList, stepTime);
 	}
 

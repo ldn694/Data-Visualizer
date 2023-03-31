@@ -8,9 +8,9 @@
 #include "DataStructure.h"
 
 DataStructure::DataStructure(double radius, double outlineSize, double lineThickness,
-	sf::Color fillColor, sf::Color outlineColor, sf::Color valueColor,
+	sf::Color fillColor, sf::Color outlineColor, sf::Color valueColor, sf::Color variableColor,
 	EdgeType idEdgeType, sf::Font* font) : 
-	defaultGraph(Graph(radius, outlineSize, lineThickness, fillColor, outlineColor, valueColor, idEdgeType, font)) 
+	defaultGraph(Graph(radius, outlineSize, lineThickness, fillColor, outlineColor, valueColor, variableColor, idEdgeType, font)) 
 {
 	mainGraph = defaultGraph;
 	curGraph = defaultGraph;
@@ -51,6 +51,7 @@ void DataStructure::setNodeColor(std::vector <Animation>& animationList, std::ve
 	tmp.type = ValueColorNode;
 	tmp.element.nodes = nodes;
 	tmp.work.colors.clear();
+	sf::Color color = colorNode[theme][type].valueColor;
 	for (int i = 0; i < (int)nodes.size(); i++) {
 		tmp.work.colors.push_back(colorNode[theme][type].valueColor);
 	}
@@ -91,6 +92,22 @@ void DataStructure::moveNode(std::vector <Animation>& animationList, int pos, do
 	tmp.type = MoveNode;
 	tmp.element.nodes = { pos };
 	tmp.work.coordinates = { {x, y} };
+	animationList.push_back(tmp);
+}
+
+void DataStructure::addVariables(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <std::string> variableList) {
+	Animation tmp;
+	tmp.type = AddVariable;
+	tmp.element.nodes = nodes;
+	tmp.work.variables = variableList;
+	animationList.push_back(tmp);
+}
+
+void DataStructure::deleteVariables(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <std::string> variableList) {
+	Animation tmp;
+	tmp.type = DeleteVariable;
+	tmp.element.nodes = nodes;
+	tmp.work.variables = variableList;
 	animationList.push_back(tmp);
 }
 
@@ -170,6 +187,20 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 	}
 	if (animation.type == MergeMoveNode) {
 		graph.mergeNodeMove();
+	}
+	if (animation.type == AddVariable) {
+		for (int u : animation.element.nodes) {
+			for (std::string variable : animation.work.variables) {
+				graph.addNodeVariable(u, variable);
+			}
+		}
+	}
+	if (animation.type == DeleteVariable) {
+		for (int u : animation.element.nodes) {
+			for (std::string variable : animation.work.variables) {
+				graph.deleteNodeVariable(u, variable);
+			}
+		}
 	}
 	if (animation.type == FillColorNode) {
 		if (animation.element.nodes.size() != animation.work.colors.size()) {

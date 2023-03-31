@@ -54,9 +54,9 @@ Graph::EdgeSwitchAnimation::EdgeSwitchAnimation(std::vector <FakeEdgeSwitch> _ed
 	edges(_edges), totalTime(_totalTime), remainTime(_remainTime) {}
 
 Graph::Graph(double radius, double outlineSize, double _lineThickness,
-		sf::Color fillColor, sf::Color outlineColor, sf::Color valueColor,
+		sf::Color fillColor, sf::Color outlineColor, sf::Color valueColor, sf::Color variableColor,
 		EdgeType _idEdgeType, sf::Font* font) :
-	defaultNode(0, 0, 0, radius, outlineSize, fillColor, outlineColor, valueColor, font), edgeType(_idEdgeType)
+	defaultNode(0, 0, 0, radius, outlineSize, fillColor, outlineColor, valueColor, variableColor, font), edgeType(_idEdgeType)
 {
 	lineThickness = _lineThickness;
 	srand(time(0));
@@ -468,6 +468,14 @@ void Graph::updateNodeMove(sf::Time deltaT) {
 		}
 		if (deltaT < epsilonTime) break;
 	}
+}
+
+void Graph::addNodeVariable(int u, std::string variable) {
+	listNode[u].addVariable(variable);
+}
+
+void Graph::deleteNodeVariable(int u, std::string variable) {
+	listNode[u].eraseVariable(variable);
 }
 
 void Graph::setNodeFillColor(int pos, sf::Color color) {

@@ -42,7 +42,7 @@ void Game::processEvents()
 				ds.pop();
 			}
 			if (event.key.code == sf::Keyboard::U) {
-				ds.peek();
+				//ds.peek();
 			}
 			if (event.key.code == sf::Keyboard::Num1) {
 				ds.animateFrame(1);

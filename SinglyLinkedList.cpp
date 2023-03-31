@@ -8,7 +8,7 @@
 SinglyLinkedList::SinglyLinkedList(double radius, double outlineSize, double lineThickness,
 	ColorTheme _theme, EdgeType edgeType, sf::Font* font) :
 	theme(_theme),
-	DataStructure(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, edgeType, font) {}
+	DataStructure(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, edgeType, font) {}
 
 int SinglyLinkedList::getSize() {
 	return (int)linkedList.size();
@@ -164,22 +164,3 @@ void SinglyLinkedList::eraseFront() {
 
 	animateAllFrame();
 }
-
-void SinglyLinkedList::peek() {
-	resetAnimation();
-	if (getSize() == 0) {
-		std::cout << "No nodes found!\n";
-		return;
-	}
-	std::vector <Animation> animationList;
-	setNodeColor(animationList, { getHeadID() }, theme, highlight);
-	addAnimations(animationList, stepTime);
-	std::cout << "Value stored at head is " << stack[0].value << "\n";
-
-	animationList.clear();
-	setNodeColor(animationList, { getHeadID() }, theme, normal);
-	addAnimations(animationList, stepTime);
-
-	animateAllFrame();
-}
-*/

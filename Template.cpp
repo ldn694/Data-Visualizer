@@ -1,6 +1,9 @@
 #include <string>
 #include "Template.h"
 
+ColorNode::ColorNode(sf::Color _fillColor, sf::Color _outlineColor, sf::Color _valueColor, sf::Color _variableColor):
+fillColor(_fillColor), outlineColor(_outlineColor), valueColor(_valueColor), variableColor(_variableColor){}
+
 int stringToInt(std::string& a) {
 	int res = 0;
 	for (int i = 0; i < (int)a.size(); i++) {

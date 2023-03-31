@@ -175,6 +175,20 @@ void Node::addValueColor(sf::Color goalColor, sf::Time time) {
 	valueColorQueue.push_back(NodeChangingColor(goalColor, time, tmp));
 }
 
+void Node::addVariable(std::string variable) {
+	if (variableList.find(variable) != variableList.end()) {
+		return;
+	}
+	variableList.insert(variable);
+}
+
+void Node::eraseVariable(std::string variable) {
+	if (variableList.find(variable) == variableList.end()) {
+		return;
+	}
+	variableList.erase(variableList.find(variable));
+}
+
 void Node::updateValueColor(sf::Time deltaT) {
 	while (!valueColorQueue.empty()) {
 		NodeChangingColor cur = valueColorQueue.front();
@@ -200,10 +214,10 @@ void Node::updateValueColor(sf::Time deltaT) {
 
 Node::Node(double _x, double _y, int _value,
 	double _radius, double _outlineSize,
-	sf::Color _fillColor, sf::Color _outlineColor, sf::Color _valueColor,
+	sf::Color _fillColor, sf::Color _outlineColor, sf::Color _valueColor, sf::Color _variableColor,
 	sf::Font* _font, bool _display) :
 	x(_x), y(_y), value(_value), radius(_radius), outlineSize(_outlineSize),
-	fillColor(_fillColor), outlineColor(_outlineColor), valueColor(_valueColor), font(_font), display(_display)
+	fillColor(_fillColor), outlineColor(_outlineColor), valueColor(_valueColor), variableColor(_variableColor), font(_font), display(_display)
 {
 	shape = sf::CircleShape(radius);
 	shape.setFillColor(fillColor);
@@ -274,6 +288,10 @@ void Node::setOutlineColor(sf::Color newColor) {
 
 void Node::setValueColor(sf::Color newColor) {
 	valueColor = newColor;
+}
+
+void Node::setVariableColor(sf::Color newColor) {
+	variableColor = newColor;
 }
 
 double Node::getX() {
@@ -363,6 +381,25 @@ void Node::draw(sf::RenderWindow& window) {
 		textValue.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
 		textValue.setPosition(getX(), getY());
 		textValue.setStyle(sf::Text::Bold);
+		sf::Text textVariable;
+		std::string variableString;
+		for (std::set<std::string>::iterator cur = variableList.begin(); cur != variableList.end(); cur++) {
+			variableString = variableString + (*cur);
+			std::set<std::string>::iterator nxt = cur;
+			nxt++;
+			if (nxt != variableList.end()) {
+				variableString.push_back('/');
+			}
+		}
+		textVariable.setFont(*font);
+		textVariable.setString(variableString);
+		textVariable.setCharacterSize(radius);
+		textVariable.setFillColor(variableColor);
+		textVariable.setStyle(sf::Text::Bold);
+		textRect = textVariable.getLocalBounds();
+		textVariable.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+		textVariable.setPosition(getX(), getY() + 2 * radius);
 		window.draw(textValue);
+		window.draw(textVariable);
 	}
 }
