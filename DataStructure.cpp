@@ -8,9 +8,9 @@
 #include "DataStructure.h"
 
 DataStructure::DataStructure(double radius, double outlineSize, double lineThickness,
-	sf::Color fillColor, sf::Color outlineColor, sf::Color valueColor, sf::Color variableColor,
-	EdgeType idEdgeType, sf::Font* font) : 
-	defaultGraph(Graph(radius, outlineSize, lineThickness, fillColor, outlineColor, valueColor, variableColor, idEdgeType, font)) 
+	ColorTheme _theme, EdgeType idEdgeType, sf::Font* font) : 
+	theme(_theme),
+	defaultGraph(Graph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font))
 {
 	mainGraph = defaultGraph;
 	curGraph = defaultGraph;
@@ -25,13 +25,99 @@ void DataStructure::resetAnimation() {
 	listFrame.push_back({ mainGraph, {} });
 }
 
+void DataStructure::setTheme(ColorTheme newTheme) {
+	defaultGraph.setTheme(theme, newTheme);
+	curGraph.setTheme(theme, newTheme);
+	mainGraph.setTheme(theme, newTheme);
+	for (int i = 0; i < (int)listFrame.size(); i++) {
+		listFrame[i].graph.setTheme(theme, newTheme);
+		for (int j = 0; j < (int)listFrame[i].nextStep.size(); j++) {
+			Animation& tmp = listFrame[i].nextStep[j];
+			if (tmp.type == FillColorNode) {
+				sf::Color hereColor = tmp.work.colors[0];
+				int resType = -1;
+				for (int type = 0; type < numColorNodeType; type++) {
+					if (colorNode[theme][type].fillColor == hereColor) {
+						resType = type;
+						break;
+					}
+				}
+				assert(resType != -1);
+				tmp.work.colors = { colorNode[newTheme][resType].fillColor };
+			}
+			if (tmp.type == OutlineColorNode) {
+				sf::Color hereColor = tmp.work.colors[0];
+				int resType = -1;
+				for (int type = 0; type < numColorNodeType; type++) {
+					if (colorNode[theme][type].outlineColor == hereColor) {
+						resType = type;
+						break;
+					}
+				}
+				assert(resType != -1);
+				tmp.work.colors = { colorNode[newTheme][resType].outlineColor };
+			}
+			if (tmp.type == ValueColorNode) {
+				sf::Color hereColor = tmp.work.colors[0];
+				int resType = -1;
+				for (int type = 0; type < numColorNodeType; type++) {
+					if (colorNode[theme][type].valueColor == hereColor) {
+						resType = type;
+						break;
+					}
+				}
+				assert(resType != -1);
+				tmp.work.colors = { colorNode[newTheme][resType].valueColor };
+			}
+			if (tmp.type == VariableColorNode) {
+				sf::Color hereColor = tmp.work.colors[0];
+				int resType = -1;
+				for (int type = 0; type < numColorNodeType; type++) {
+					if (colorNode[theme][type].variableColor == hereColor) {
+						resType = type;
+						break;
+					}
+				}
+				assert(resType != -1);
+				tmp.work.colors = { colorNode[newTheme][resType].variableColor };
+			}
+			if (tmp.type == EdgeColor) {
+				sf::Color hereColor = tmp.work.colors[0];
+				int resType = -1;
+				for (int type = 0; type < numColorNodeType; type++) {
+					if (colorNode[theme][type].outlineColor == hereColor) {
+						resType = type;
+						break;
+					}
+				}
+				assert(resType != -1);
+				tmp.work.colors = { colorNode[newTheme][resType].outlineColor };
+			}
+			if (tmp.type == AddEdge) {
+				sf::Color hereColor = tmp.work.colors[0];
+				int resType = -1;
+				for (int type = 0; type < numColorNodeType; type++) {
+					if (colorNode[theme][type].outlineColor == hereColor) {
+						resType = type;
+						break;
+					}
+				}
+				assert(resType != -1);
+				for (int i = 0; i < (int)tmp.work.colors.size(); i++) {
+					tmp.work.colors[i] = colorNode[newTheme][resType].outlineColor;
+				}
+			}
+		}
+	}
+	theme = newTheme;
+}
 
 
 bool cmpAnimation(const Animation& a, const Animation& b) {
 	return a.type < b.type;
 }
 
-void DataStructure::setNodeColor(std::vector <Animation>& animationList, std::vector <int> nodes, ColorTheme theme, ColorType type)
+void DataStructure::setNodeColor(std::vector <Animation>& animationList, std::vector <int> nodes, ColorTheme theme, ColorNodeType type)
 {
 	Animation tmp;
 	tmp.type = FillColorNode;
@@ -51,9 +137,15 @@ void DataStructure::setNodeColor(std::vector <Animation>& animationList, std::ve
 	tmp.type = ValueColorNode;
 	tmp.element.nodes = nodes;
 	tmp.work.colors.clear();
-	sf::Color color = colorNode[theme][type].valueColor;
 	for (int i = 0; i < (int)nodes.size(); i++) {
 		tmp.work.colors.push_back(colorNode[theme][type].valueColor);
+	}
+	animationList.push_back(tmp);
+	tmp.type = VariableColorNode;
+	tmp.element.nodes = nodes;
+	tmp.work.colors.clear();
+	for (int i = 0; i < (int)nodes.size(); i++) {
+		tmp.work.colors.push_back(colorNode[theme][type].variableColor);
 	}
 	animationList.push_back(tmp);
 }
@@ -111,7 +203,7 @@ void DataStructure::deleteVariables(std::vector <Animation>& animationList, std:
 	animationList.push_back(tmp);
 }
 
-void DataStructure::addEdge(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorType type) {
+void DataStructure::addEdge(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorNodeType type) {
 	Animation tmp;
 	tmp.type = AddEdge;
 	tmp.element.edges = { {u, v} };
@@ -119,7 +211,7 @@ void DataStructure::addEdge(std::vector <Animation>& animationList, int u, int v
 	animationList.push_back(tmp);
 }
 
-void DataStructure::setEdgeColor(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorType type) {
+void DataStructure::setEdgeColor(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorNodeType type) {
 	Animation tmp;
 	tmp.type = EdgeColor;
 	tmp.element.edges = { {u, v} };
@@ -252,6 +344,18 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 		else {
 			graph.setNodesValueColor(nodeList, time);
 		}
+	}
+	if (animation.type == VariableColorNode) {
+		if (animation.element.nodes.size() != animation.work.colors.size()) {
+			assert(false);
+		}
+		std::vector <std::pair <int, sf::Color> > nodeList;
+		for (int i = 0; i < (int)animation.element.nodes.size(); i++) {
+			int u = animation.element.nodes[i];
+			sf::Color color = animation.work.colors[i];
+			nodeList.push_back({ u, color });
+		}
+		graph.setNodesVariableColor(nodeList);
 	}
 	if (animation.type == AddEdge) {
 		if (animation.element.edges.size() != animation.work.colors.size()) {

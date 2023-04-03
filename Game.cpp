@@ -18,6 +18,7 @@ Game::Game(sf::ContextSettings settings)
 		}
 	}
 	ds = Stack(20, 3, 4, LightTheme, EdgeType::SinglyDirected, font(fontType::Arial));
+	//box = Box(300, 300, 400, 350, "WWW", font(fontType::Arial), 25, {CommandBoxNormal, CommandBoxSelected}, false, 0);*/
 }
 
 
@@ -42,31 +43,23 @@ void Game::processEvents()
 				ds.pop();
 			}
 			if (event.key.code == sf::Keyboard::U) {
-				//ds.peek();
+				ds.peek();
 			}
-			if (event.key.code == sf::Keyboard::Num1) {
-				ds.animateFrame(1);
+			if (event.key.code == sf::Keyboard::I) {
+				ds.setTheme(DarkTheme);
 			}
-			if (event.key.code == sf::Keyboard::Num2) {
-				ds.animateFrame(2);
+			if (event.key.code == sf::Keyboard::O) {
+				ds.setTheme(LightTheme);
 			}
-			if (event.key.code == sf::Keyboard::Num3) {
-				ds.animateFrame(3);
-			}
-			if (event.key.code == sf::Keyboard::Num4) {
-				ds.animateFrame(4);
-			}
-			if (event.key.code == sf::Keyboard::Num5) {
-				ds.animateFrame(5);
-			}
-			if (event.key.code == sf::Keyboard::Num6) {
-				ds.animateFrame(6);
-			}
-			if (event.key.code == sf::Keyboard::Num7) {
-				ds.animateFrame(7);
+			if (26 <= event.key.code && event.key.code <= 35) { //0 -> 9
+				ds.animateFrame(event.key.code - 26);
 			}
 			if (event.key.code == sf::Keyboard::R) {
 				ds.animateAllFrame();
+			}
+		case sf::Event::MouseButtonPressed:
+			if (box.isInside(event.mouseButton.x, event.mouseButton.y)) {
+				box.toggleColorMode();
 			}
 		}
 	}
@@ -81,6 +74,7 @@ void Game::render()
 {
 	window.clear(WhiteColor);
 	ds.draw(window);
+	//box.draw(window, LightTheme); 
 	window.display();
 }
 

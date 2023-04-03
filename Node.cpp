@@ -328,6 +328,9 @@ sf::Color Node::getOutlineColor() {
 sf::Color Node::getValueColor() {
 	return valueColor;
 }
+sf::Color Node::getVariableColor() {
+	return variableColor;
+}
 
 sf::CircleShape& Node::getShape() {
 	return shape;

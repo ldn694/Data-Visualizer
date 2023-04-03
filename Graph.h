@@ -105,6 +105,8 @@ public:
 	void setNodesValueColor(std::vector <std::pair<int, sf::Color>> nodes);
 	void setNodesValueColor(std::vector <std::pair<int, sf::Color>> nodes, sf::Time time);
 	void updateNodeValueColor(sf::Time deltaT);
+	void setNodeVariableColor(int pos, sf::Color color);
+	void setNodesVariableColor(std::vector <std::pair<int, sf::Color>> nodes);
 	void addEdge(int u, int v, sf::Color color);
 	void addEdge(int u, int v, sf::Color color, sf::Time time);
 	void addEdges(std::vector <std::tuple <int, int, sf::Color>> edges);
@@ -125,6 +127,7 @@ public:
 	void setEdgesColor(std::vector <std::tuple <int, int, sf::Color>> edges);
 	void setEdgesColor(std::vector <std::tuple <int, int, sf::Color>> edges, sf::Time time);
 	void updateEdgeColor(sf::Time deltaT);
+	void setTheme(ColorTheme preTheme, ColorTheme curTheme);
 	void update(sf::Time deltaT);
 	void stopAnimation();
 };

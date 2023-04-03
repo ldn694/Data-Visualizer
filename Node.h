@@ -67,6 +67,7 @@ public:
 	sf::Color getFillColor();
 	sf::Color getOutlineColor();
 	sf::Color getValueColor();
+	sf::Color getVariableColor();
 	sf::CircleShape& getShape();
 	void addMovement(double goalX, double goalY, sf::Time time);
 	void updateMovement(sf::Time deltaT);

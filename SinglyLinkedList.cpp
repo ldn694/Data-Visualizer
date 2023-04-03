@@ -8,7 +8,7 @@
 SinglyLinkedList::SinglyLinkedList(double radius, double outlineSize, double lineThickness,
 	ColorTheme _theme, EdgeType edgeType, sf::Font* font) :
 	theme(_theme),
-	DataStructure(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, edgeType, font) {}
+	DataStructure(radius, outlineSize, lineThickness, _theme, edgeType, font) {}
 
 int SinglyLinkedList::getSize() {
 	return (int)linkedList.size();

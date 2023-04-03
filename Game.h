@@ -6,6 +6,7 @@
 #include "DataStructure.h"
 #include "Stack.h"
 #include "SinglyLinkedList.h"
+#include "Box.h"
 
 const std::string fontName[] = { "arial.ttf" };
 const int numFont = 1;
@@ -26,6 +27,7 @@ private:
 private:
 	sf::RenderWindow window;
 	Stack ds;
+	Box box;
 	std::vector <sf::Font> listFont;
 	sf::Font* font(fontType id);
 };

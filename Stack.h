@@ -6,7 +6,6 @@ private:
 		int id, value, dNext;
 	};
 	std::vector <Data> stack;
-	ColorTheme theme;
 	
 public:
 	Stack(double radius = 0, double outlineSize = 0, double lineThickness = 0,

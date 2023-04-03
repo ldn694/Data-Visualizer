@@ -1,8 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
-const int WIDTH_RES = 1080;
-const int HEIGHT_RES = 720;
+const int WIDTH_RES = 1600;
+const int HEIGHT_RES = 900;
 
 const sf::Color GreyColor(211, 211, 211);
 const sf::Color RedColor(255, 0, 0);
@@ -14,6 +14,9 @@ const sf::Color OrangeColor(255, 128, 0);
 const sf::Color YellowColor(255, 255, 0);
 const sf::Color LightGreenColor(82, 188, 105);
 const sf::Color DarkGreenColor(48, 104, 68);
+const sf::Color LightGreyBlueColor(176, 194, 219);
+const sf::Color DarkGreyBlueColor(71, 108, 158);
+const sf::Color PurpleColor(112, 41, 99);
 
 const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;
@@ -32,29 +35,58 @@ enum EdgeType {
 };
 
 enum ColorTheme {
-	LightTheme
+	LightTheme, DarkTheme
 };
 
-enum ColorType {
+enum ColorNodeType {
 	normal, highlight, lowlight, highlight2
 };
 
-const int numColorTheme = 1;
-const int numColorType = 4;
+const int numColorTheme = 2;
+const int numColorNodeType = 4;
 
 struct ColorNode {
 	sf::Color fillColor, outlineColor, valueColor, variableColor;
 	ColorNode(sf::Color fillColor, sf::Color outlineColor, sf::Color valueColor, sf::Color variableColor);
 };
 
-const ColorNode colorNode[numColorTheme][numColorType] = 
-{ 
-	{ 
+const ColorNode colorNode[numColorTheme][numColorNodeType] =
+{
+	{
 		ColorNode(WhiteColor, BlackColor, BlackColor, RedColor),
 		ColorNode(OrangeColor, OrangeColor, WhiteColor, RedColor),
 		ColorNode(WhiteColor, OrangeColor, OrangeColor, RedColor),
 		ColorNode(LightGreenColor, LightGreenColor, WhiteColor, RedColor)
-	} 
+	} ,
+	{
+		ColorNode(RedColor, YellowColor, YellowColor, BlueColor),
+		ColorNode(PurpleColor, PurpleColor, RedColor, BlueColor),
+		ColorNode(RedColor, PurpleColor, PurpleColor, BlueColor),
+		ColorNode(DarkGreyBlueColor, DarkGreyBlueColor, RedColor, BlueColor)
+	}
+};
+
+enum ColorBoxType {
+	CommandBoxNormal, CommandBoxSelected
+};
+
+const int numColorBoxType = 2;
+
+struct ColorBox {
+	sf::Color fillColor, outlineColor, textColor;
+	ColorBox(sf::Color fillColor, sf::Color outlineColor, sf::Color textColor);
+};
+
+const ColorBox colorBox[numColorTheme][numColorBoxType] =
+{
+	{
+		ColorBox(LightGreyBlueColor, BlackColor, BlackColor),
+		ColorBox(DarkGreyBlueColor, BlackColor, BlackColor)
+	},
+	{
+		ColorBox(PurpleColor, GreenColor, OrangeColor),
+		ColorBox(PurpleColor, GreenColor, OrangeColor)
+	}
 };
 
 std::string intToString(int a);

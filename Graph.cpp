@@ -622,6 +622,18 @@ void Graph::updateNodeValueColor(sf::Time deltaT) {
 	}
 }
 
+void Graph::setNodeVariableColor(int pos, sf::Color color) {
+	listNode[pos].setVariableColor(color);
+}
+
+void Graph::setNodesVariableColor(std::vector <std::pair<int, sf::Color>> nodes) {
+	for (auto& nComp : nodes) {
+		int pos = nComp.first;
+		sf::Color color = nComp.second;
+		listNode[pos].setVariableColor(color);
+	}
+}
+
 void Graph::addEdge(int u, int v, sf::Color color) {
 	adj[u].insert(EdgeInfo(v, color));
 }
@@ -1023,6 +1035,51 @@ void Graph::updateEdgeColor(sf::Time deltaT) {
 		}
 		if (deltaT < epsilonTime) break;
 	}
+}
+
+void Graph::setTheme(ColorTheme preTheme, ColorTheme curTheme) {
+	stopAnimation();
+	for (auto& uComp : listNode) {
+		Node& node = uComp.second;
+		int u = uComp.first;
+		int resType = -1;
+		for (int type = 0; type < numColorNodeType; type++) {
+			ColorNode here = colorNode[preTheme][type];
+			if (node.getFillColor() == here.fillColor && node.getOutlineColor() == here.outlineColor
+				&& node.getValueColor() == here.valueColor && node.getVariableColor() == here.variableColor) {
+				resType = type;
+				break;
+			}
+		}
+		assert(resType != -1);
+		ColorNode colorHere = colorNode[curTheme][resType];
+		setNodeFillColor(u, colorHere.fillColor);
+		setNodeOutlineColor(u, colorHere.outlineColor);
+		setNodeValueColor(u, colorHere.valueColor);
+		setNodeVariableColor(u, colorHere.variableColor);
+	}
+	std::vector <std::tuple <int, int, sf::Color>> listEdge;
+	for (auto& uComp : listNode) {
+		Node& node = uComp.second;
+		int u = uComp.first;
+		for (auto& vComp : adj[u]) {
+			int resType = -1;
+			for (int type = 0; type < numColorNodeType; type++) {
+				ColorNode here = colorNode[preTheme][type];
+				if (vComp.color == here.outlineColor) {
+					resType = type;
+					break;
+				}
+			}
+			assert(resType != -1);
+			listEdge.push_back({ u, vComp.v, colorNode[curTheme][resType].outlineColor });
+		}
+	}
+	setEdgesColor(listEdge);
+	defaultNode.setFillColor(colorNode[curTheme][normal].fillColor);
+	defaultNode.setOutlineColor(colorNode[curTheme][normal].outlineColor);
+	defaultNode.setValueColor(colorNode[curTheme][normal].valueColor);
+	defaultNode.setVariableColor(colorNode[curTheme][normal].variableColor);
 }
 
 void Graph::update(sf::Time deltaT) {
