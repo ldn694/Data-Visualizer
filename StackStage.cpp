@@ -11,6 +11,37 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 			{""},
 			{""}
 		},
+		{
+			{
+				{},
+				{"n = "}
+			},
+			{
+				{"v = "}
+			},
+			{
+				{}
+			},
+			{
+				{}
+			}
+		}
+		,
+		{
+			{
+				{},
+				{{0, 10}}
+			},
+			{
+				{{0, 99}}
+			},
+			{
+				{}
+			},
+			{
+				{}
+			}
+		},
 		theme)
 {
 	ds = Stack(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
@@ -34,7 +65,7 @@ void StackStage::processEvents() {
 						ds.createRandom();
 					}
 					else {
-						ds.createRandom(valueTypingBox.getInt());
+						ds.createRandom(valueTypingBox[0].getInt());
 					}
 				}
 				if (operationName[curOperation] == "Pop") {
@@ -44,7 +75,7 @@ void StackStage::processEvents() {
 					ds.peek();
 				}
 				if (operationName[curOperation] == "Push") {
-					ds.push(valueTypingBox.getInt());
+					ds.push(valueTypingBox[0].getInt());
 				}
 				operating = false;
 			}

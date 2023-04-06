@@ -1,5 +1,6 @@
 #include <iostream>
 #include "TypingBox.h"
+#include "Box.h"
 
 TypingBox::TypingBox(double _x, double _y, double _width, double _height, bool _onlyNumber, sf::Font* _font, int _minValue, int _maxValue) :
 	x(_x), y(_y), width(_width), height(_height), onlyNumber(_onlyNumber), font(_font), minValue(_minValue), maxValue(_maxValue)
@@ -115,6 +116,7 @@ void TypingBox::draw(sf::RenderWindow& window, ColorTheme theme) {
 	rect.setPosition(x, y);
 	rect.setFillColor(colorBox[ColorBoxType::Typing_Box][theme].fillColor);
 	rect.setOutlineThickness(0.f);
+	//std::cout << x << " " << y << "\n";
 	window.draw(rect);
 	sf::Text Text;
 	Text.setFont(*font);
@@ -132,5 +134,43 @@ void TypingBox::draw(sf::RenderWindow& window, ColorTheme theme) {
 		vtx[0] = sf::Vertex(sf::Vector2f(lineX, y + (height - textHeight) * 0.5f), colorBox[Typing_Box][theme].textColor);
 		vtx[1] = sf::Vertex(sf::Vector2f(lineX, y + (height - textHeight) * 0.5f + textHeight), colorBox[Typing_Box][theme].textColor);
 		window.draw(vtx, 2, sf::Lines);
+	}
+}
+
+BigTypingBox::BigTypingBox(double _x, double _y, double _width, double _height, double _outlineSize, std::string _name, 
+	bool _onlyNumber, sf::Font* _font, int _minValue, int _maxValue, bool _drawable, bool _typingBoxDrawable) :
+	outerX(_x), outerY(_y), outerWidth(_width), outerHeight(_height), outlineSize(_outlineSize), name(_name),
+	TypingBox(_x + _width * (1.0f / 3.0f - 1.0f / 20.0f), _y + _height * 0.2, _width * 2 / 3, _height * 0.6, _onlyNumber, _font, _minValue, _maxValue),
+	drawable(_drawable), typingBoxDrawable(_typingBoxDrawable)
+{}
+
+void BigTypingBox::setDrawable(bool val) {
+	drawable = val;
+}
+
+void BigTypingBox::setTypingBoxDrawable(bool val) {
+	typingBoxDrawable = val;
+}
+
+void BigTypingBox::setName(std::string newName) {
+	name = newName;
+}
+
+void BigTypingBox::drawAll(sf::RenderWindow& window, ColorTheme theme) {
+	if (drawable) {
+		Box tmpBox(outerX, outerY, outerWidth, outerHeight, { ColorBoxType::CommandBoxNormal }, "", font, 0, WITH_BORDER, outlineSize);
+		tmpBox.draw(window, theme);
+		sf::Text Text;
+		Text.setFont(*font);
+		Text.setString(name);
+		Text.setCharacterSize(height * 0.6);
+		Text.setFillColor(colorBox[ColorBoxType::CommandBoxNormal][theme].textColor);
+		sf::FloatRect textRect = Text.getLocalBounds();
+		Text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+		Text.setPosition(outerX + outerWidth / 6, outerY + outerHeight / 2);
+		window.draw(Text);
+		if (typingBoxDrawable) {
+			draw(window, theme);
+		}
 	}
 }

@@ -4,7 +4,7 @@
 #include "Template.h"
 
 struct TypingBox {
-private:
+protected:
 	double x, y, width, height;
 	bool onlyNumber, reading;
 	std::string text; 
@@ -27,6 +27,17 @@ public:
 	void draw(sf::RenderWindow& window, ColorTheme theme);
 };
 
-struct BigTypingBox {
-
+struct BigTypingBox : public TypingBox{
+private:
+	double outerX, outerY, outerWidth, outerHeight, outlineSize;
+	std::string name;
+	bool drawable, typingBoxDrawable;
+public:
+	BigTypingBox(double x = 0.f, double y = 0.f, double width = 0.f, double height = 0.f, double outlineSize = 0.f, std::string name = "",
+		bool onlyNumber = true, sf::Font* font = nullptr, int minValue = 0, int maxValue = 10, 
+		bool drawable = true, bool typingBoxDrawable = true);
+	void setDrawable(bool val);
+	void setTypingBoxDrawable(bool val);
+	void setName(std::string newName);
+	void drawAll(sf::RenderWindow& window, ColorTheme theme);
 };

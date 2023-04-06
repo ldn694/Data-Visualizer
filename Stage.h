@@ -24,12 +24,18 @@ protected:
 
 	TriangleButton prevModeButton, nextModeButton;
 
-	TypingBox valueTypingBox, indexTypingBox;
+	std::vector <std::vector <std::vector <std::string> > > valueName;
+	std::vector <std::vector <std::vector <std::pair <int, int> > > > valueBound;
+	std::vector <BigTypingBox> valueTypingBox;
+	std::vector <std::vector <int>> numValue;
 
 	ColorTheme theme;
 	sf::RenderWindow& window;
 public:
-	Stage(sf::RenderWindow &window, std::vector <std::string> operationName, std::vector <std::vector <std::string> > modeName, ColorTheme theme = LightTheme);
+	Stage(sf::RenderWindow &window, std::vector <std::string> operationName, std::vector <std::vector <std::string> > modeName, 
+		std::vector <std::vector <std::vector <std::string> > > valueName, 
+		std::vector <std::vector <std::vector <std::pair <int, int> > > > valueBound,
+		ColorTheme theme = LightTheme);
 	void updateModeBox(int newMode);
 	void handleMousePressed(double x, double y);
 	void handleKeyPressed(int key);

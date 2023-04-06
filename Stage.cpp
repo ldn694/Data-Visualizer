@@ -2,8 +2,11 @@
 #include <iostream>
 #include "Stage.h"
 
-Stage::Stage(sf::RenderWindow &_window, std::vector <std::string> _operationName, std::vector <std::vector <std::string> > _modeName, ColorTheme _theme) : 
-	window(_window), operationName(_operationName), modeName(_modeName), theme(_theme){
+Stage::Stage(sf::RenderWindow &_window, std::vector <std::string> _operationName, std::vector <std::vector <std::string> > _modeName, 
+	std::vector <std::vector <std::vector <std::string> > > _valueName, 
+	std::vector <std::vector <std::vector <std::pair <int, int> > > > _valueBound, 
+	ColorTheme _theme) :
+	window(_window), operationName(_operationName), modeName(_modeName), valueName(_valueName), valueBound(_valueBound), theme(_theme){
 	numOperation = operationName.size();
 	operationBox.resize(numOperation);
 	curOperation = 0;
@@ -41,8 +44,22 @@ Stage::Stage(sf::RenderWindow &_window, std::vector <std::string> _operationName
 	prevModeButton = TriangleButton(widthBox / 5.0f, HEIGHT_RES - heightBox * 1.5f, 20, 5, -90.f);
 	nextModeButton = TriangleButton(2 * widthBox - widthBox / 5.0f, HEIGHT_RES - heightBox * 1.5f, 20, 5, 90.f);
 
-	valueTypingBox = TypingBox(widthBox * 0.25, HEIGHT_RES - heightBox * 0.9, widthBox * 0.75f, heightBox * 0.8, true, font(fontType::Arial));
-	indexTypingBox = TypingBox(widthBox * 1.25, HEIGHT_RES - heightBox * 0.9, widthBox * 0.75f, heightBox * 0.8, true, font(fontType::Arial));
+	numValue.resize(numOperation);
+	assert(valueName.size() == numOperation);
+	assert(valueBound.size() == numOperation);
+	for (int i = 0; i < numOperation; i++) {
+		assert(valueName[i].size() == numMode[i]);
+		assert(valueBound[i].size() == numMode[i]);
+		numValue[i].resize(numMode[i]);
+		for (int j = 0; j < numValue[i].size(); j++) {
+			assert(valueName[i][j].size() == valueBound[i][j].size());
+			numValue[i][j] = valueName[i][j].size();
+		}
+	}
+	if (numOperation && numMode[0]) {
+		updateModeBox(0);
+	}
+
 }
 
 void Stage::updateModeBox(int newMode) {
@@ -51,6 +68,11 @@ void Stage::updateModeBox(int newMode) {
 	}
 	modeBox[curOperation][newMode].setDrawable(true);
 	curMode = newMode;
+	valueTypingBox.resize(numValue[curOperation][curMode]);
+	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
+		valueTypingBox[i] = BigTypingBox(0, HEIGHT_RES - heightBox, widthBox, heightBox, outlineBox, valueName[curOperation][curMode][i],
+			true, font(fontType::Arial), valueBound[curOperation][curMode][i].first, valueBound[curOperation][curMode][i].second);
+	}
 }
 
 void Stage::handleMousePressed(double x, double y) {
@@ -111,16 +133,16 @@ void Stage::handleMousePressed(double x, double y) {
 	if (nextModeButton.isInside(x, y)) {
 		updateModeBox((curMode + numMode[curOperation] + 1) % numMode[curOperation]);
 	}
-	valueTypingBox.clickOn(x, y);
-	indexTypingBox.clickOn(x, y);
+	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
+		valueTypingBox[i].clickOn(x, y);
+	}
 }
 
 void Stage::handleKeyPressed(int key) {
-	if (valueTypingBox.isReading()) {
-		valueTypingBox.readKey(key);
-	}
-	if (indexTypingBox.isReading()) {
-		indexTypingBox.readKey(key);
+	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
+		if (valueTypingBox[i].isReading()) {
+			valueTypingBox[i].readKey(key);
+		}
 	}
 }
 
@@ -137,13 +159,15 @@ void Stage::draw() {
 	}
 	prevModeButton.draw(window, theme);
 	nextModeButton.draw(window, theme);
-	indexTypingBox.draw(window, theme);
-	valueTypingBox.draw(window, theme);
+	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
+		valueTypingBox[i].drawAll(window, theme);
+	}
 }
 
 void Stage::stageUpdate(sf::Time deltaT) {
-	indexTypingBox.update(deltaT);
-	valueTypingBox.update(deltaT);
+	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
+		valueTypingBox[i].update(deltaT);
+	}
 }
 
 void Stage::setTheme(ColorTheme newTheme) {
