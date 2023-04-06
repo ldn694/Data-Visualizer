@@ -27,13 +27,19 @@ void DataStructure::resetAnimation() {
 
 void DataStructure::setTheme(ColorTheme newTheme) {
 	defaultGraph.setTheme(theme, newTheme);
+	std::cout << "Done default\n";
 	curGraph.setTheme(theme, newTheme);
+	std::cout << "Done cur\n";
 	mainGraph.setTheme(theme, newTheme);
+	std::cout << "Done main\n";
 	for (int i = 0; i < (int)listFrame.size(); i++) {
 		listFrame[i].graph.setTheme(theme, newTheme);
 		for (int j = 0; j < (int)listFrame[i].nextStep.size(); j++) {
 			Animation& tmp = listFrame[i].nextStep[j];
 			if (tmp.type == FillColorNode) {
+				if (tmp.work.colors.empty()) {
+					continue;
+				}
 				sf::Color hereColor = tmp.work.colors[0];
 				int resType = -1;
 				for (int type = 0; type < numColorNodeType; type++) {
@@ -46,6 +52,9 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 				tmp.work.colors = { colorNode[newTheme][resType].fillColor };
 			}
 			if (tmp.type == OutlineColorNode) {
+				if (tmp.work.colors.empty()) {
+					continue;
+				}
 				sf::Color hereColor = tmp.work.colors[0];
 				int resType = -1;
 				for (int type = 0; type < numColorNodeType; type++) {
@@ -58,6 +67,9 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 				tmp.work.colors = { colorNode[newTheme][resType].outlineColor };
 			}
 			if (tmp.type == ValueColorNode) {
+				if (tmp.work.colors.empty()) {
+					continue;
+				}
 				sf::Color hereColor = tmp.work.colors[0];
 				int resType = -1;
 				for (int type = 0; type < numColorNodeType; type++) {
@@ -70,6 +82,9 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 				tmp.work.colors = { colorNode[newTheme][resType].valueColor };
 			}
 			if (tmp.type == VariableColorNode) {
+				if (tmp.work.colors.empty()) {
+					continue;
+				}
 				sf::Color hereColor = tmp.work.colors[0];
 				int resType = -1;
 				for (int type = 0; type < numColorNodeType; type++) {
@@ -82,6 +97,9 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 				tmp.work.colors = { colorNode[newTheme][resType].variableColor };
 			}
 			if (tmp.type == EdgeColor) {
+				if (tmp.work.colors.empty()) {
+					continue;
+				}
 				sf::Color hereColor = tmp.work.colors[0];
 				int resType = -1;
 				for (int type = 0; type < numColorNodeType; type++) {
@@ -94,6 +112,9 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 				tmp.work.colors = { colorNode[newTheme][resType].outlineColor };
 			}
 			if (tmp.type == AddEdge) {
+				if (tmp.work.colors.empty()) {
+					continue;
+				}
 				sf::Color hereColor = tmp.work.colors[0];
 				int resType = -1;
 				for (int type = 0; type < numColorNodeType; type++) {
@@ -440,7 +461,7 @@ void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Tim
 }
 
 void DataStructure::animateFrame(int idFrame) {//from idFrame - 1 to idFrame
-	if (idFrame < 1) {
+	if (idFrame < 1 || idFrame >= listFrame.size()) {
 		return;
 	}
 	frameQueue.push_back({ idFrame, speed * (listFrame[idFrame - 1].time + delayTime), false});
@@ -485,4 +506,8 @@ void DataStructure::updateFrameQueue(sf::Time deltaT) {
 		}
 		if (deltaT < epsilonTime) break;
 	}
+}
+
+void DataStructure::clearFrameQueue() {
+	frameQueue.clear();
 }

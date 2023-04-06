@@ -15,7 +15,7 @@ public:
 	int getHeadValue();
 	int getHeadID();
 	std::vector <int> getIDList(int l = 0, int r = 0);
-	void createRandom();
+	void createRandom(int n = -1);
 	void push(int value);
 	void pop();
 	void peek();

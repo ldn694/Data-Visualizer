@@ -24,11 +24,19 @@ const bool ERASE_EDGE = false;
 const int maxID = int(1e9);
 const int pointCountCircle = 50;
 const double epsilonDouble = 1.f / 1000000.f;
+const double PI = 3.14159265358979323846;
 const sf::Time epsilonTime = sf::seconds(1.f / 1000000.f);
 const sf::Time timePerFrame = sf::seconds(1.f / 60.f);
 const sf::Time infTime = sf::seconds(1000000.f);
 const sf::Time stepTime = sf::seconds(0.3f);
 const sf::Time delayTime = sf::seconds(0.2f);
+const sf::Time flickeringTime = sf::seconds(0.5f);
+
+const double heightBox = 100;
+const double widthBox = 250;
+const double outlineBox = 5;
+
+const int maxLetter = 4;
 
 enum EdgeType {
 	Undirected, SinglyDirected, DoublyDirected
@@ -67,30 +75,42 @@ const ColorNode colorNode[numColorTheme][numColorNodeType] =
 };
 
 enum ColorBoxType {
-	CommandBoxNormal, CommandBoxSelected
+	CommandBoxNormal, CommandBoxSelected, GoBoxNormal, TriangleButtonNormal, Typing_Box
 };
 
-const int numColorBoxType = 2;
+const int numColorBoxType = 5;
 
 struct ColorBox {
 	sf::Color fillColor, outlineColor, textColor;
 	ColorBox(sf::Color fillColor, sf::Color outlineColor, sf::Color textColor);
 };
 
-const ColorBox colorBox[numColorTheme][numColorBoxType] =
+const ColorBox colorBox[numColorBoxType][numColorTheme] =
 {
 	{
 		ColorBox(LightGreyBlueColor, BlackColor, BlackColor),
-		ColorBox(DarkGreyBlueColor, BlackColor, BlackColor)
+		ColorBox(PurpleColor, GreenColor, OrangeColor),
 	},
 	{
+		ColorBox(DarkGreyBlueColor, BlackColor, BlackColor),
 		ColorBox(PurpleColor, GreenColor, OrangeColor),
-		ColorBox(PurpleColor, GreenColor, OrangeColor)
+	},
+	{
+		ColorBox(GreenColor, BlackColor, BlackColor),
+		ColorBox(GreenColor, BlackColor, BlackColor)
+	},
+	{
+		ColorBox(GreyColor, BlackColor, BlackColor),
+		ColorBox(GreyColor, BlackColor, BlackColor)
+	},
+	{
+		ColorBox(BlackColor, WhiteColor, WhiteColor),
+		ColorBox(WhiteColor, BlackColor, BlackColor)
 	}
 };
 
 std::string intToString(int a);
-int stringToInt(std::string& a);
+int stringToInt(std::string a);
 
 double dist2p(double x1, double y1, double x2, double y2);
 
@@ -98,3 +118,19 @@ sf::Time min(const sf::Time& a, const sf::Time& b);
 sf::Time max(const sf::Time& a, const sf::Time& b);
 
 void MovePoint(double& x1, double& y1, double x2, double y2, double dist);
+
+void MovePointParallel(double& x, double& y, double x1, double y1, double x2, double y2); //move point A(x, y) to a A'(x', y') so that AA' is parallel to BC in which B is (x1, y1) and C is (x2, y2) and |AA'|=|BC|
+
+const std::string fontName[] = { "arial.ttf" };
+const int numFont = 1;
+enum fontType {
+	Arial
+};
+extern std::vector <sf::Font> listFont;
+sf::Font* font(fontType id);
+
+double area(double x1, double y1, double x2, double y2, double x3, double y3);
+
+bool isInsideTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double x, double y);
+
+void RotatePoint(double& x, double& y, double cx, double cy, double angle);

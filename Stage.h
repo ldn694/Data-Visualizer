@@ -1,0 +1,39 @@
+#pragma once
+
+#include <SFML/Graphics.hpp>
+#include <queue>
+#include "Template.h"
+#include "Box.h"
+#include "TriangleButton.h"
+#include "TypingBox.h"
+
+struct Stage {
+protected:
+	std::vector <std::string> operationName;
+	std::vector <Box> operationBox;
+	int curOperation, numOperation;
+	bool operationSelecting;
+	bool operating;
+
+	Box goBox, outerGoBox;
+
+	std::vector <std::vector <std::string> > modeName;
+	std::vector <std::vector <Box> > modeBox;
+	std::vector <int> numMode;
+	int curMode;
+
+	TriangleButton prevModeButton, nextModeButton;
+
+	TypingBox valueTypingBox, indexTypingBox;
+
+	ColorTheme theme;
+	sf::RenderWindow& window;
+public:
+	Stage(sf::RenderWindow &window, std::vector <std::string> operationName, std::vector <std::vector <std::string> > modeName, ColorTheme theme = LightTheme);
+	void updateModeBox(int newMode);
+	void handleMousePressed(double x, double y);
+	void handleKeyPressed(int key);
+	void draw();
+	void stageUpdate(sf::Time deltaT);
+	void setTheme(ColorTheme newTheme);
+};

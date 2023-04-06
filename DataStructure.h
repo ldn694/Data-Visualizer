@@ -58,5 +58,6 @@ struct DataStructure {
 	void animateFrame(int idFrame);
 	void animateAllFrame();
 	void updateFrameQueue(sf::Time deltaT);
+	void clearFrameQueue();
 	void draw(sf::RenderWindow& window);
 };

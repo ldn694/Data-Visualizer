@@ -7,7 +7,7 @@ fillColor(_fillColor), outlineColor(_outlineColor), valueColor(_valueColor), var
 ColorBox::ColorBox(sf::Color _fillColor, sf::Color _outlineColor, sf::Color _textColor) :
 	fillColor(_fillColor), outlineColor(_outlineColor), textColor(_textColor) {}
 
-int stringToInt(std::string& a) {
+int stringToInt(std::string a) {
 	int res = 0;
 	for (int i = 0; i < (int)a.size(); i++) {
 		res = res * 10 + (a[i] - '0');
@@ -46,4 +46,38 @@ void MovePoint(double& x1, double& y1, double x2, double y2, double dist) {
 	double dy = (y2 - y1) * dist / hypo;
 	x1 += dx;
 	y1 += dy;
+}
+
+void MovePointParallel(double& x, double& y, double x1, double y1, double x2, double y2) {
+	double dx = x2 - x1, dy = y2 - y1;
+	x += dx; 
+	y += dy;
+}
+
+std::vector <sf::Font> listFont;
+
+sf::Font* font(fontType id) {
+	return &listFont[id];
+}
+
+double area(double x1, double y1, double x2, double y2, double x3, double y3) {
+	return abs((x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)) / 2.0);
+}
+
+
+bool isInsideTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double x, double y)
+{
+	double A = area(x1, y1, x2, y2, x3, y3);
+	double A1 = area(x, y, x2, y2, x3, y3);
+	double A2 = area(x1, y1, x, y, x3, y3);
+	double A3 = area(x1, y1, x2, y2, x, y);
+	return abs(A - (A1 + A2 + A3)) < epsilonDouble;
+}
+
+void RotatePoint(double& x, double& y, double cx, double cy, double angle) {
+	angle = angle * (PI / 180); // Convert to radians
+	double rotatedX = cos(angle) * (x - cx) - sin(angle) * (y - cy) + cx;
+	double rotatedY = sin(angle) * (x - cx) + cos(angle) * (y - cy) + cy;
+	x = rotatedX;
+	y = rotatedY;
 }

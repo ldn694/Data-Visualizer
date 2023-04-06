@@ -148,7 +148,11 @@
     <ClCompile Include="DataStructure.cpp" />
     <ClCompile Include="SinglyLinkedList.cpp" />
     <ClCompile Include="Stack.cpp" />
+    <ClCompile Include="StackStage.cpp" />
+    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Template.cpp" />
+    <ClCompile Include="TriangleButton.cpp" />
+    <ClCompile Include="TypingBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Box.h" />
@@ -159,7 +163,11 @@
     <ClInclude Include="Node.h" />
     <ClInclude Include="SinglyLinkedList.h" />
     <ClInclude Include="Stack.h" />
+    <ClInclude Include="StackStage.h" />
+    <ClInclude Include="Stage.h" />
     <ClInclude Include="Template.h" />
+    <ClInclude Include="TriangleButton.h" />
+    <ClInclude Include="TypingBox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

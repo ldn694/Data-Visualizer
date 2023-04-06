@@ -1,9 +1,18 @@
 #include <SFML/Graphics.hpp>
+#include "Template.h"
+#include "cassert"
 #include <iostream>
 #include "Game.h"
+#include "StackStage.h"
 
 int main()
 {
+	listFont.resize(numFont);
+	for (int i = 0; i < numFont; i++) {
+		if (!listFont[i].loadFromFile(fontName[fontType::Arial])) {
+			assert(false);
+		}
+	}
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 16;
 	Game game(settings);

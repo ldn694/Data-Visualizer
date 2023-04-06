@@ -46,8 +46,10 @@ int Stack::getEmptyID() {
 	return id;
 }
 
-void Stack::createRandom() {
-	int n = rand() % 10 + 1;
+void Stack::createRandom(int n) {
+	if (n == -1) {
+		n = rand() % 10 + 1;
+	}
 	stack.clear();
 	mainGraph = defaultGraph;
 	resetAnimation();
@@ -76,10 +78,12 @@ void Stack::createRandom() {
 	tmp.element.nodes = nodeList;
 	tmp.work.nodeInfos = nodeInfo;
 	animationList.push_back(tmp);
-	tmp.type = AddEdge;
-	tmp.element.edges = edgeList;
-	tmp.work.colors = color;
-	animationList.push_back(tmp);
+	if (n > 1) {
+		tmp.type = AddEdge;
+		tmp.element.edges = edgeList;
+		tmp.work.colors = color;
+		animationList.push_back(tmp);
+	}
 	addVariables(animationList, { 0 }, { "head" });
 	addVariables(animationList, { getSize() - 1 }, { "tail" });
 	addAnimations(animationList, stepTime);

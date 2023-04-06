@@ -1,22 +1,39 @@
 #include "Box.h"
 
-Box::Box(double _x1, double _y1, double _x2, double _y2,
-	std::string _text, sf::Font* _font, double _textSize,
+Box::Box(double _x1, double _y1, double _width, double _height,
 	std::vector <ColorBoxType> _colorModes,
+	std::string _text, sf::Font* _font, double _textSize,
 	bool _isBorder, double _outlineSize) :
-	x1(_x1), y1(_y1), x2(_x2), y2(_y2), 
+	x1(_x1), y1(_y1), width(_width), height(_height),
 	text(_text), font(_font), textSize(_textSize),
 	colorModes(_colorModes),
 	isBorder(_isBorder), outlineSize(_outlineSize)
 {
 	curMode = 0;
+	isDrawable = true;
+}
+
+double Box::getOutlineSize() {
+	return outlineSize;
+}
+
+void Box::setPosition(double _x1, double _y1) {
+	x1 = _x1;
+	y1 = _y1;
+}
+
+void Box::setDrawable(bool drawable) {
+	isDrawable = drawable;
 }
 
 void Box::draw(sf::RenderWindow& window, ColorTheme theme) {
+	if (!isDrawable) {
+		return;
+	}
 	double tmpOutlineSize = (isBorder ? outlineSize : 0.f);
-	sf::RectangleShape outerRect(sf::Vector2f(x2 - x1 - tmpOutlineSize * 2, y2 - y1 - tmpOutlineSize * 2));
-	outerRect.setPosition(x1 + tmpOutlineSize, y1 + tmpOutlineSize);
-	ColorBox cur = colorBox[theme][colorModes[curMode]];
+	sf::RectangleShape outerRect(sf::Vector2f(width - tmpOutlineSize, height - tmpOutlineSize));
+	outerRect.setPosition(x1 + tmpOutlineSize / 2.0f, y1 + tmpOutlineSize / 2.0f);
+	ColorBox cur = colorBox[colorModes[curMode]][theme];
 	outerRect.setFillColor(cur.fillColor);
 	outerRect.setOutlineColor(cur.outlineColor);
 	outerRect.setOutlineThickness(outlineSize);
@@ -28,13 +45,13 @@ void Box::draw(sf::RenderWindow& window, ColorTheme theme) {
 	Text.setFillColor(cur.textColor);
 	sf::FloatRect textRect = Text.getLocalBounds();
 	Text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-	Text.setPosition((x1 + x2) / 2, (y1 + y2) / 2);
-	//Text.setStyle(sf::Text::Bold);
+	Text.setPosition(x1 + width / 2.0f, y1 + height / 2.0f);
+	Text.setStyle(sf::Text::Bold);
 	window.draw(Text);
 }
 
 bool Box::isInside(double x, double y) {
-	return (x1 <= x && x <= x2 && y1 <= y && y <= y2);
+	return (x1 <= x && x <= x1 + width && y1 <= y && y <= y1 + height);
 }
 
 void Box::toggleColorMode() {

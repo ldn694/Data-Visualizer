@@ -8,12 +8,6 @@
 #include "SinglyLinkedList.h"
 #include "Box.h"
 
-const std::string fontName[] = { "arial.ttf" };
-const int numFont = 1;
-enum fontType {
-	Arial
-};
-
 struct Game
 {
 public:
@@ -23,11 +17,10 @@ private:
 	void processEvents();
 	void update(sf::Time deltaT);
 	void render();
-	void handlePlayerInput(sf::Keyboard::Key Key, bool isMoving);
+	void handlePlayerInput();
+	void runStack();
 private:
+	ColorTheme theme;
 	sf::RenderWindow window;
-	Stack ds;
 	Box box;
-	std::vector <sf::Font> listFont;
-	sf::Font* font(fontType id);
 };

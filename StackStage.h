@@ -1,0 +1,16 @@
+#pragma once
+
+#include "Stack.h"
+#include "Stage.h"
+
+struct StackStage : public Stage {
+private:
+	Stack ds;
+	void processEvents();
+	void update(sf::Time deltaT);
+	void render();
+public:
+	StackStage(sf::RenderWindow& window, double radius = 0, double outlineSize = 0, double lineThickness = 0,
+		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected);
+	void run();
+};

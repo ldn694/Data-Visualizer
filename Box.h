@@ -6,18 +6,23 @@ const bool WITH_BORDER = true;
 const bool NO_BORDER = false;
 
 struct Box {
-	double x1, y1, x2, y2, outlineSize, textSize;
+private:
+	double x1, y1, width, height, outlineSize, textSize;
 	std::string text;
 	sf::Font* font;
 	std::vector <ColorBoxType> colorModes;
-	bool isBorder;
+	bool isBorder, isDrawable;
 	int curMode;
-	Box(double x1 = 0.f, double y1 = 0.f, double x2 = 0.f, double y2 = 0.f,
-		std::string text = "", sf::Font* font = nullptr, double textSize = 0.f,
+public:
+	Box(double x1 = 0.f, double y1 = 0.f, double width = 0.f, double height = 0.f,
 		std::vector <ColorBoxType> colorModes = {},
-		bool isBorder = false, double outlineSize = 0.f);
+		std::string text = "", sf::Font* font = nullptr, double textSize = 0.f,
+		bool isBorder = true, double outlineSize = outlineBox);
+	double getOutlineSize();
+	void setPosition(double x1, double y1);
 	void draw(sf::RenderWindow& window, ColorTheme theme);
 	bool isInside(double x, double y);
 	void toggleColorMode();
+	void setDrawable(bool drawable);
 	void setColorMode(int mode);
 };
