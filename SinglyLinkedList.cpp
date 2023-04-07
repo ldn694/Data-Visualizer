@@ -81,7 +81,7 @@ void SinglyLinkedList::createRandom() {
 	tmp.element.edges = edgeList;
 	tmp.work.colors = color;
 	animationList.push_back(tmp);
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 1);
 	animateAllFrame();
 }
 
@@ -93,10 +93,10 @@ void SinglyLinkedList::insertFront(int value) {
 		addNode(animationList, id, value, WIDTH_RES / 2, HEIGHT_RES / 3);
 		setNodeColor(animationList, { id }, theme, highlight);
 		linkedList.push_back({ id, value, -1 });
-		addAnimations(animationList, stepTime);
+		addAnimations(animationList, stepTime, 1);
 		animationList.clear();
 		setNodeColor(animationList, { id }, theme, normal);
-		addAnimations(animationList, stepTime);
+		addAnimations(animationList, stepTime, 1);
 		animateAllFrame();
 		return;
 	}
@@ -104,17 +104,17 @@ void SinglyLinkedList::insertFront(int value) {
 	std::vector <Animation> animationList;
 	addNode(animationList, id, value, WIDTH_RES / 2, HEIGHT_RES / 3 * 2);
 	setNodeColor(animationList, { id }, theme, highlight);
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 1);
 
 	animationList.clear();
 	addEdge(animationList, id, head, theme, highlight);
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 2);
 
 
 	animationList.clear();
 	setNodeColor(animationList, { id }, theme, highlight2);
 	setEdgeColor(animationList, id, head, theme, normal);
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 3);
 
 	animationList.clear();
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -122,11 +122,11 @@ void SinglyLinkedList::insertFront(int value) {
 	linkedList.insert(linkedList.begin(), { id, value, head });
 	moveNode(animationList, id, (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2, HEIGHT_RES / 3);
 	mergeMoveNode(animationList);
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 4);
 
 	animationList.clear();
 	setNodeColor(animationList, { id }, theme, normal);
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 4);
 	animateAllFrame();
 }
 
@@ -138,13 +138,13 @@ void SinglyLinkedList::eraseFront() {
 	int head = getHeadID();
 	std::vector <Animation> animationList;
 	setNodeColor(animationList, { head }, theme, highlight);
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 1);
 
 	if (getSize() > 1) {
 		animationList.clear();
 		setEdgeColor(animationList, head, linkedList[1].id, theme, highlight2);
 		setNodeColor(animationList, { linkedList[1].id }, theme, highlight2);
-		addAnimations(animationList, stepTime);
+		addAnimations(animationList, stepTime, 2);
 	}
 
 	animationList.clear();
@@ -153,13 +153,13 @@ void SinglyLinkedList::eraseFront() {
 	if (getSize() > 1) {
 		translateNode(animationList, getIDList(1, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
 	}
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 3);
 	linkedList.erase(linkedList.begin());
 
 	if (getSize() > 0) {
 		animationList.clear();
 		setNodeColor(animationList, { getHeadID() }, theme, normal);
-		addAnimations(animationList, stepTime);
+		addAnimations(animationList, stepTime, 3);
 	}
 
 	animateAllFrame();

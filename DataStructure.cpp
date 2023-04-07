@@ -8,14 +8,64 @@
 #include "DataStructure.h"
 
 DataStructure::DataStructure(double radius, double outlineSize, double lineThickness,
-	ColorTheme _theme, EdgeType idEdgeType, sf::Font* font) : 
-	theme(_theme),
+	ColorTheme _theme, EdgeType idEdgeType, sf::Font* font, 
+	std::vector <std::vector <std::string> > _codes, double x, double y, double width, double height, sf::Font* codeFont) :
+	theme(_theme), codes(_codes),
 	defaultGraph(Graph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font))
 {
 	mainGraph = defaultGraph;
 	curGraph = defaultGraph;
 	listFrame.push_back({ defaultGraph, {} });
 	speed = 1.0f;
+	
+	numOperation = codes.size();
+	numStep.resize(numOperation);
+	for (int i = 0; i < numOperation; i++) {
+		assert(!codes[i].empty());
+		assert(codes[0][0] == "");
+		numStep[i] = codes[i].size() - 1;
+	}
+	codeText.resize(numOperation);
+	for (int i = 0; i < numOperation; i++) {
+		codeText[i].resize(numStep[i] + 1);
+		double stepY = height / numStep[i];
+		double outlineSize = height / numStep[i] * 0.2f;
+		double maxHeight = height / numStep[i] * 0.6f;
+		double charSize = 10000.f;
+		for (int j = 1; j <= numStep[i]; j++) {
+			double l = 0, r = maxHeight, res = 0;
+			for (int cnt = 0; cnt < 60; cnt++) {
+				double mid = (l + r) / 2.0f;
+				sf::Text text;
+				text.setString(codes[i][j]);
+				text.setFont(*codeFont);
+				text.setCharacterSize(mid);
+				if (text.getLocalBounds().width <= width - outlineSize * 2) {
+					res = mid;
+					l = mid;
+				}
+				else {
+					r = mid;
+				}
+			}
+			if (charSize - res > epsilonDouble) {
+				charSize = res;
+			}
+		}
+		double curY = y + outlineSize;
+		for (int j = 1; j <= numStep[i]; j++) {
+			sf::Text text;
+			text.setString(codes[i][j]);
+			text.setFont(*codeFont);
+			text.setCharacterSize(charSize);
+			text.setPosition(x + outlineSize, curY);
+			text.setFillColor(codeViewColor[theme]);
+			curY += stepY;
+			codeText[i][j] = text;
+		}
+	}
+	codeBoard = sf::RectangleShape(sf::Vector2f(width, height));
+	codeBoard.setPosition(x, y);
 }
 
 void DataStructure::resetAnimation() {
@@ -240,6 +290,17 @@ void DataStructure::setEdgeColor(std::vector <Animation>& animationList, int u, 
 	animationList.push_back(tmp);
 }
 
+void DataStructure::doNothing(std::vector <Animation>& animationList) {
+	Animation tmp;
+	tmp.type = DoNothing;
+	animationList.push_back(tmp);
+}
+
+void DataStructure::setCurOperation(int val) {
+	curOperation = val;
+	curStep = 0;
+}
+
 void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time time) {
 	if (animation.type == AddNode) {
 		if (animation.element.nodes.size() != animation.work.nodeInfos.size()) {
@@ -445,9 +506,12 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 			graph.setEdgesColor(edgeList, time);
 		}
 	}
+	if (animation.type == DoNothing) {
+		
+	}
 }
 
-void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Time time) {
+void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Time time, int line) {
 	sort(animationList.begin(), animationList.end(), cmpAnimation);
 	Graph tmpGraph = listFrame.back().graph;
 	for (Animation& animation : animationList) {
@@ -455,7 +519,7 @@ void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Tim
 	}
 	listFrame.back().nextStep = animationList;
 	listFrame.back().time = time;
-	listFrame.push_back({ tmpGraph, {} });
+	listFrame.push_back({ tmpGraph, {}, sf::seconds(0.f), line});
 	curGraph = tmpGraph;
 	mainGraph = tmpGraph;
 }
@@ -479,6 +543,27 @@ void DataStructure::update(sf::Time deltaT) {
 
 void DataStructure::draw(sf::RenderWindow& window) {
 	curGraph.draw(window);
+	sf::RectangleShape tmpRect = codeBoard;
+	tmpRect.setFillColor(codeNormalBackGroundColor[theme]);
+	window.draw(tmpRect);
+	if (codes[curOperation][curStep] != "") {
+		double width = codeBoard.getGlobalBounds().width;
+		double height = codeBoard.getGlobalBounds().height;
+		double left = codeBoard.getGlobalBounds().left;
+		double top = codeBoard.getGlobalBounds().top;
+		double stepY = height / numStep[curOperation];
+		double outlineSize = height / numStep[curOperation] * 0.2f;
+		sf::RectangleShape highlightRect(sf::Vector2f(width,  stepY));
+		highlightRect.setPosition(left, top + (curStep - 1) * stepY);
+		highlightRect.setFillColor(codeHighlightBackGroundColor[theme]);
+		window.draw(highlightRect);
+	}
+	for (int i = 1; i <= numStep[curOperation]; i++) {
+		window.draw(codeText[curOperation][i]);
+		if (curOperation == 3) {
+			std::string txt = codeText[curOperation][i].getString();
+		}
+	}
 }
 
 void DataStructure::updateFrameQueue(sf::Time deltaT) {
@@ -488,6 +573,7 @@ void DataStructure::updateFrameQueue(sf::Time deltaT) {
 		int idFrame = std::get<0>(cur);
 		sf::Time time = (std::get<1>(cur) - speed * delayTime);
 		if (!std::get<2>(cur)) {
+			curStep = listFrame[idFrame].line;
 			curGraph = listFrame[idFrame - 1].graph;
 			for (Animation& animation : listFrame[idFrame - 1].nextStep) {
 				updateAnimation(curGraph, animation, time);

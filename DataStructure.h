@@ -9,7 +9,7 @@ enum AnimationType {
 	FillColorNode, OutlineColorNode, ValueColorNode, VariableColorNode,
 	AddVariable, DeleteVariable,
 	EdgeColor, SwitchEdge,
-	DeleteNode, DeleteEdge
+	DeleteNode, DeleteEdge, DoNothing
 };
 
 struct Animation {
@@ -32,14 +32,21 @@ struct DataStructure {
 		Graph graph;
 		std::vector <Animation> nextStep;
 		sf::Time time;
+		int line;
 	};
 	float speed;
 	Graph defaultGraph, curGraph, mainGraph;
 	std::vector <Frame> listFrame;
 	std::deque <std::tuple<int, sf::Time, bool> > frameQueue;
 	ColorTheme theme;
+	std::vector <std::vector <std::string> > codes;
+	std::vector <std::vector <sf::Text> > codeText;
+	std::vector <int> numStep;
+	int numOperation, curStep = 0, curOperation = 0;
+	sf::RectangleShape codeBoard;
 	DataStructure(double radius = 0, double outlineSize = 0, double lineThickness = 0,
-		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected, sf::Font* font = nullptr);
+		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected, sf::Font* font = nullptr, 
+		std::vector <std::vector <std::string> > codes = {}, double x = 0, double y = 0, double width = 0, double height = 0, sf::Font* codeFont = nullptr);
 	void resetAnimation();
 	void setTheme(ColorTheme theme);
 	void setNodeColor(std::vector <Animation> &animationList, std::vector <int> nodes, ColorTheme theme, ColorNodeType type);
@@ -52,9 +59,11 @@ struct DataStructure {
 	void deleteVariables(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <std::string> variableList);
 	void addEdge(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorNodeType type);
 	void setEdgeColor(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorNodeType type);
+	void doNothing(std::vector <Animation>& animationList);
+	void setCurOperation(int val);
 	void update(sf::Time deltaT);
 	void updateAnimation(Graph& graph, Animation animation, sf::Time time = sf::seconds(0.f));
-	void addAnimations(std::vector <Animation> animationList, sf::Time time);
+	void addAnimations(std::vector <Animation> animationList, sf::Time time, int line);
 	void animateFrame(int idFrame);
 	void animateAllFrame();
 	void updateFrameQueue(sf::Time deltaT);

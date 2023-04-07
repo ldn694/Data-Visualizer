@@ -116,7 +116,6 @@ void TypingBox::draw(sf::RenderWindow& window, ColorTheme theme) {
 	rect.setPosition(x, y);
 	rect.setFillColor(colorBox[ColorBoxType::Typing_Box][theme].fillColor);
 	rect.setOutlineThickness(0.f);
-	//std::cout << x << " " << y << "\n";
 	window.draw(rect);
 	sf::Text Text;
 	Text.setFont(*font);
@@ -125,7 +124,6 @@ void TypingBox::draw(sf::RenderWindow& window, ColorTheme theme) {
 	Text.setFillColor(colorBox[ColorBoxType::Typing_Box][theme].textColor);
 	Text.setPosition(x + 10, y + height * 0.1);
 	sf::FloatRect textRect = Text.getLocalBounds();
-	//Text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
 	window.draw(Text);
 	if (reading && displayingLine) {
 		sf::Vertex vtx[4]; 

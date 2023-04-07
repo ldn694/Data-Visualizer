@@ -1,5 +1,8 @@
 #pragma once
 #include "DataStructure.h"
+enum StackOperation {
+	Create, Push, Pop, Peek
+};
 struct Stack: public DataStructure {
 private:
 	struct Data {

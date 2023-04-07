@@ -58,6 +58,7 @@ void StackStage::processEvents() {
 			break;
 		case sf::Event::MouseButtonPressed:
 			handleMousePressed(event.mouseButton.x, event.mouseButton.y);
+			ds.setCurOperation(curOperation);
 			if (operating) {
 				std::string modeString = modeName[curOperation][curMode];
 				if (operationName[curOperation] == "Create") {

@@ -6,8 +6,31 @@
 #include "Stack.h"
 
 Stack::Stack(double radius, double outlineSize, double lineThickness,
-	ColorTheme _theme, EdgeType edgeType, sf::Font* font) : 
-	DataStructure(radius, outlineSize, lineThickness, _theme, edgeType, font) {}
+	ColorTheme _theme, EdgeType edgeType, sf::Font* _font) : 
+	DataStructure(radius, outlineSize, lineThickness, _theme, edgeType, _font, 
+		{
+			{
+				""
+			},
+			{
+				"",
+				"Vertex vtx = new Vertex(v)",
+				"vtx.next = head",
+				"head = vtx"
+			},
+			{
+				"",
+				"if empty, do nothing",
+				"temp = head",
+				"head = head.next",
+				"delete temp"
+			},
+			{
+				"",
+				"if empty, return NOT_FOUND",
+				"return head.item"
+			}
+		}, WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 3, widthBox * 2, heightBox * 3, font(fontType::Arial))  {}
 
 int Stack::getSize() {
 	return (int)stack.size();
@@ -85,8 +108,7 @@ void Stack::createRandom(int n) {
 		animationList.push_back(tmp);
 	}
 	addVariables(animationList, { 0 }, { "head" });
-	addVariables(animationList, { getSize() - 1 }, { "tail" });
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 0);
 	animateAllFrame();
 }
 
@@ -98,12 +120,16 @@ void Stack::push(int value) {
 		addNode(animationList, id, value, WIDTH_RES / 2, HEIGHT_RES / 3);
 		setNodeColor(animationList, { id }, theme, highlight);
 		stack.push_back({ id, value, -1 });
-		addVariables(animationList, { id }, { "head", "tail" ,"vtx"});
-		addAnimations(animationList, stepTime);
+		addVariables(animationList, { id }, { "vtx" });
+		addAnimations(animationList, stepTime, 1);
+		animationList.clear();
+		addVariables(animationList, { id }, { "head" });
+		setNodeColor(animationList, { id }, theme, highlight2);
+		addAnimations(animationList, stepTime, 3);
 		animationList.clear();
 		setNodeColor(animationList, { id }, theme, normal);
 		deleteVariables(animationList, { id }, { "vtx" });
-		addAnimations(animationList, stepTime);
+		addAnimations(animationList, stepTime, 0);
 		animateAllFrame();
 		return;
 	}
@@ -112,11 +138,11 @@ void Stack::push(int value) {
 	addNode(animationList, id, value, WIDTH_RES / 2, HEIGHT_RES / 3 * 2);
 	setNodeColor(animationList, { id }, theme, highlight);
 	addVariables(animationList, { id }, { "vtx" });
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 1);
 
 	animationList.clear();
 	addEdge(animationList, id, head, theme, highlight);
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 2);
 
 
 	animationList.clear();
@@ -124,7 +150,7 @@ void Stack::push(int value) {
 	setEdgeColor(animationList, id, head, theme, normal);
 	addVariables(animationList, { id }, { "head" });
 	deleteVariables(animationList, { getHeadID() }, { "head" });
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 3);
 
 	animationList.clear();
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -132,25 +158,31 @@ void Stack::push(int value) {
 	stack.insert(stack.begin(), {id, value, head});
 	moveNode(animationList, id, (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2, HEIGHT_RES / 3);
 	mergeMoveNode(animationList);
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 3);
 
 	animationList.clear();
 	setNodeColor(animationList, { id }, theme, normal);
 	deleteVariables(animationList, { id }, { "vtx" });
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 0);
 	animateAllFrame();
 }
 
 void Stack::pop() {
 	resetAnimation();
+	std::vector <Animation> animationList;
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 1);
 	if (getSize() == 0) {
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 0);
+		animateAllFrame();
 		return;
 	}
+	animationList.clear();
 	int head = getHeadID();
-	std::vector <Animation> animationList;
 	setNodeColor(animationList, { head }, theme, highlight);
 	addVariables(animationList, { head }, { "temp" });
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 2);
 
 	if (getSize() > 1) {
 		animationList.clear();
@@ -158,7 +190,7 @@ void Stack::pop() {
 		setNodeColor(animationList, { stack[1].id }, theme, highlight2);
 		deleteVariables(animationList, { head }, { "head" });
 		addVariables(animationList, { stack[1].id }, { "head" });
-		addAnimations(animationList, stepTime);
+		addAnimations(animationList, stepTime, 3);
 	}
 
 	animationList.clear();
@@ -167,13 +199,13 @@ void Stack::pop() {
 	if (getSize() > 1) {
 		translateNode(animationList, getIDList(1, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
 	}
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 4);
 	stack.erase(stack.begin());
 
 	if (getSize() > 0) {
 		animationList.clear();
 		setNodeColor(animationList, { getHeadID() }, theme, normal);
-		addAnimations(animationList, stepTime);
+		addAnimations(animationList, stepTime, 0);
 	}
 
 	animateAllFrame();
@@ -181,18 +213,24 @@ void Stack::pop() {
 
 void Stack::peek() {
 	resetAnimation();
+	std::vector <Animation> animationList;
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 1);
+	animationList.clear();
 	if (getSize() == 0) {
 		std::cout << "No nodes found!\n";
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 0);
+		animateAllFrame();
 		return;
 	}
-	std::vector <Animation> animationList;
 	setNodeColor(animationList, { getHeadID() }, theme, highlight);
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 2);
 	std::cout << "Value stored at head is " << stack[0].value << "\n";
 
 	animationList.clear();
 	setNodeColor(animationList, { getHeadID() }, theme, normal);
-	addAnimations(animationList, stepTime);
+	addAnimations(animationList, stepTime, 0);
 
 	animateAllFrame();
 }

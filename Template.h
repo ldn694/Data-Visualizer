@@ -17,6 +17,8 @@ const sf::Color DarkGreenColor(48, 104, 68);
 const sf::Color LightGreyBlueColor(176, 194, 219);
 const sf::Color DarkGreyBlueColor(71, 108, 158);
 const sf::Color PurpleColor(112, 41, 99);
+const sf::Color LightCyanColor(203, 228, 222);
+const sf::Color DarkCyanColor(14, 131, 136);
 
 const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;
@@ -108,6 +110,10 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 		ColorBox(WhiteColor, BlackColor, BlackColor)
 	}
 };
+
+const sf::Color codeViewColor[numColorTheme] = { BlackColor, BlackColor };
+const sf::Color codeNormalBackGroundColor[numColorTheme] = { LightCyanColor, LightCyanColor };
+const sf::Color codeHighlightBackGroundColor[numColorTheme]{ DarkCyanColor, DarkCyanColor };
 
 std::string intToString(int a);
 int stringToInt(std::string a);
