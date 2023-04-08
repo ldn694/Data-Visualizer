@@ -13,6 +13,7 @@ DataStructure::DataStructure(double radius, double outlineSize, double lineThick
 	theme(_theme), codes(_codes),
 	defaultGraph(Graph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font))
 {
+	isAnimating = true;
 	mainGraph = defaultGraph;
 	curGraph = defaultGraph;
 	listFrame.push_back({ defaultGraph, {} });
@@ -524,11 +525,27 @@ void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Tim
 	mainGraph = tmpGraph;
 }
 
+void DataStructure::setIsAnimating(bool val) {
+	isAnimating = val;
+}
+
 void DataStructure::animateFrame(int idFrame) {//from idFrame - 1 to idFrame
 	if (idFrame < 1 || idFrame >= listFrame.size()) {
 		return;
 	}
 	frameQueue.push_back({ idFrame, speed * (listFrame[idFrame - 1].time + delayTime), false});
+}
+
+void DataStructure::setFrame(int idFrame) {
+	if (idFrame < 0 || idFrame >= listFrame.size()) {
+		return;
+	}
+	curFrame = idFrame;
+	curGraph = listFrame[idFrame].graph;
+	clearFrameQueue();
+	for (int i = idFrame + 1; i < listFrame.size(); i++) {
+		animateFrame(i);
+	}
 }
 
 void DataStructure::animateAllFrame() {
@@ -567,12 +584,13 @@ void DataStructure::draw(sf::RenderWindow& window) {
 }
 
 void DataStructure::updateFrameQueue(sf::Time deltaT) {
-	while (!frameQueue.empty()) {
+	while (!frameQueue.empty() && isAnimating) {
 		auto &cur = frameQueue.front();
 		frameQueue.pop_front();
 		int idFrame = std::get<0>(cur);
 		sf::Time time = (std::get<1>(cur) - speed * delayTime);
 		if (!std::get<2>(cur)) {
+			curFrame = idFrame;
 			curStep = listFrame[idFrame].line;
 			curGraph = listFrame[idFrame - 1].graph;
 			for (Animation& animation : listFrame[idFrame - 1].nextStep) {

@@ -38,11 +38,13 @@ struct DataStructure {
 	Graph defaultGraph, curGraph, mainGraph;
 	std::vector <Frame> listFrame;
 	std::deque <std::tuple<int, sf::Time, bool> > frameQueue;
+	bool isAnimating;
 	ColorTheme theme;
 	std::vector <std::vector <std::string> > codes;
 	std::vector <std::vector <sf::Text> > codeText;
 	std::vector <int> numStep;
 	int numOperation, curStep = 0, curOperation = 0;
+	int curFrame;
 	sf::RectangleShape codeBoard;
 	DataStructure(double radius = 0, double outlineSize = 0, double lineThickness = 0,
 		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected, sf::Font* font = nullptr, 
@@ -64,7 +66,9 @@ struct DataStructure {
 	void update(sf::Time deltaT);
 	void updateAnimation(Graph& graph, Animation animation, sf::Time time = sf::seconds(0.f));
 	void addAnimations(std::vector <Animation> animationList, sf::Time time, int line);
+	void setIsAnimating(bool val);
 	void animateFrame(int idFrame);
+	void setFrame(int idFrame);
 	void animateAllFrame();
 	void updateFrameQueue(sf::Time deltaT);
 	void clearFrameQueue();

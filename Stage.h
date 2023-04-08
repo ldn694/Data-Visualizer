@@ -6,6 +6,7 @@
 #include "Box.h"
 #include "TriangleButton.h"
 #include "TypingBox.h"
+#include "Scrubber.h"
 
 struct Stage {
 protected:
@@ -29,6 +30,8 @@ protected:
 	std::vector <BigTypingBox> valueTypingBox;
 	std::vector <std::vector <int>> numValue;
 
+	Scrubber scrubber;
+
 	ColorTheme theme;
 	sf::RenderWindow& window;
 public:
@@ -38,6 +41,8 @@ public:
 		ColorTheme theme = LightTheme);
 	void updateModeBox(int newMode);
 	void handleMousePressed(double x, double y);
+	void handleMouseMove(double x, double y);
+	void handleMouseReleased(double x, double y);
 	void handleKeyPressed(int key);
 	void draw();
 	void stageUpdate(sf::Time deltaT);

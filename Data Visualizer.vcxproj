@@ -146,6 +146,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="DataStructure.cpp" />
+    <ClCompile Include="Scrubber.cpp" />
     <ClCompile Include="SinglyLinkedList.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="StackStage.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Graph.h" />
     <ClInclude Include="DataStructure.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="Scrubber.h" />
     <ClInclude Include="SinglyLinkedList.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="StackStage.h" />

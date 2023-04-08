@@ -45,6 +45,7 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 		theme)
 {
 	ds = Stack(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
+	scrubber.setDS(&ds);
 }
 
 void StackStage::processEvents() {
@@ -59,6 +60,7 @@ void StackStage::processEvents() {
 		case sf::Event::MouseButtonPressed:
 			handleMousePressed(event.mouseButton.x, event.mouseButton.y);
 			ds.setCurOperation(curOperation);
+			scrubber.setIsAnimating(true);
 			if (operating) {
 				std::string modeString = modeName[curOperation][curMode];
 				if (operationName[curOperation] == "Create") {
@@ -83,6 +85,13 @@ void StackStage::processEvents() {
 			break;
 		case sf::Event::KeyPressed:
 			handleKeyPressed(int(event.key.code));
+			break;
+		case sf::Event::MouseMoved:
+			handleMouseMove(event.mouseMove.x, event.mouseMove.y);
+			break;
+		case sf::Event::MouseButtonReleased:
+			handleMouseReleased(event.mouseButton.x, event.mouseButton.y);
+			break;
 		}
 	}
 }

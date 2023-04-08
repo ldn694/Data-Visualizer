@@ -19,6 +19,9 @@ const sf::Color DarkGreyBlueColor(71, 108, 158);
 const sf::Color PurpleColor(112, 41, 99);
 const sf::Color LightCyanColor(203, 228, 222);
 const sf::Color DarkCyanColor(14, 131, 136);
+const sf::Color LightYellowColor(255, 217, 61);
+const sf::Color DarkBrownColor(79, 32, 13);
+const sf::Color MilkColor(246, 241, 233);
 
 const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;
@@ -39,6 +42,9 @@ const double widthBox = 250;
 const double outlineBox = 5;
 
 const int maxLetter = 4;
+
+const double heightScrubber = 20;
+const double zipWidth = 15;
 
 enum EdgeType {
 	Undirected, SinglyDirected, DoublyDirected
@@ -114,6 +120,10 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 const sf::Color codeViewColor[numColorTheme] = { BlackColor, BlackColor };
 const sf::Color codeNormalBackGroundColor[numColorTheme] = { LightCyanColor, LightCyanColor };
 const sf::Color codeHighlightBackGroundColor[numColorTheme]{ DarkCyanColor, DarkCyanColor };
+
+const sf::Color scrubberZipColor[numColorTheme] = {MilkColor, MilkColor};
+const sf::Color scrubberPassedColor[numColorTheme] = { OrangeColor, OrangeColor };
+const sf::Color scrubberRemainColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
 
 std::string intToString(int a);
 int stringToInt(std::string a);

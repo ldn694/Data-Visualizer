@@ -60,6 +60,8 @@ Stage::Stage(sf::RenderWindow &_window, std::vector <std::string> _operationName
 		updateModeBox(0);
 	}
 
+	scrubber = Scrubber(2 * widthBox, HEIGHT_RES - heightBox, 2 * widthBox, heightScrubber, zipWidth);
+
 }
 
 void Stage::updateModeBox(int newMode) {
@@ -136,6 +138,7 @@ void Stage::handleMousePressed(double x, double y) {
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
 		valueTypingBox[i].clickOn(x, y);
 	}
+	scrubber.handleMousePressed(x, y);
 }
 
 void Stage::handleKeyPressed(int key) {
@@ -144,6 +147,15 @@ void Stage::handleKeyPressed(int key) {
 			valueTypingBox[i].readKey(key);
 		}
 	}
+	scrubber.handleKeyPressed(key);
+}
+
+void Stage::handleMouseMove(double x, double y) {
+	scrubber.handleMouseMove(x, y);
+}
+
+void Stage::handleMouseReleased(double x, double y) {
+	scrubber.handleMouseReleased(x, y);
 }
 
 void Stage::draw() {
@@ -162,6 +174,7 @@ void Stage::draw() {
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
 		valueTypingBox[i].drawAll(window, theme);
 	}
+	scrubber.draw(window, theme);
 }
 
 void Stage::stageUpdate(sf::Time deltaT) {
