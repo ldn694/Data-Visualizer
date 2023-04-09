@@ -144,8 +144,10 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyShape.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="DataStructure.cpp" />
+    <ClCompile Include="PlayButton.cpp" />
     <ClCompile Include="Scrubber.cpp" />
     <ClCompile Include="SinglyLinkedList.cpp" />
     <ClCompile Include="Stack.cpp" />
@@ -161,7 +163,9 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="DataStructure.h" />
+    <ClInclude Include="MyShape.h" />
     <ClInclude Include="Node.h" />
+    <ClInclude Include="PlayButton.h" />
     <ClInclude Include="Scrubber.h" />
     <ClInclude Include="SinglyLinkedList.h" />
     <ClInclude Include="Stack.h" />

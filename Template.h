@@ -125,6 +125,9 @@ const sf::Color scrubberZipColor[numColorTheme] = {MilkColor, MilkColor};
 const sf::Color scrubberPassedColor[numColorTheme] = { OrangeColor, OrangeColor };
 const sf::Color scrubberRemainColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
 
+const sf::Color playButtonCircleColor[numColorTheme] = { LightYellowColor, LightYellowColor };
+const sf::Color playButtonTriangleColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
+
 std::string intToString(int a);
 int stringToInt(std::string a);
 

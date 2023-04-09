@@ -5,8 +5,11 @@
 Stage::Stage(sf::RenderWindow &_window, std::vector <std::string> _operationName, std::vector <std::vector <std::string> > _modeName, 
 	std::vector <std::vector <std::vector <std::string> > > _valueName, 
 	std::vector <std::vector <std::vector <std::pair <int, int> > > > _valueBound, 
-	ColorTheme _theme) :
-	window(_window), operationName(_operationName), modeName(_modeName), valueName(_valueName), valueBound(_valueBound), theme(_theme){
+	ColorTheme _theme, DataStructure* _ds) :
+	window(_window), operationName(_operationName), modeName(_modeName), valueName(_valueName), valueBound(_valueBound), theme(_theme),
+	playButton(3 * widthBox, HEIGHT_RES - heightBox, heightBox / 3),
+	ds(_ds)
+{
 	numOperation = operationName.size();
 	operationBox.resize(numOperation);
 	curOperation = 0;
@@ -60,8 +63,11 @@ Stage::Stage(sf::RenderWindow &_window, std::vector <std::string> _operationName
 		updateModeBox(0);
 	}
 
-	scrubber = Scrubber(2 * widthBox, HEIGHT_RES - heightBox, 2 * widthBox, heightScrubber, zipWidth);
+	scrubber = Scrubber(2 * widthBox, HEIGHT_RES - heightBox * 2, 2 * widthBox, heightScrubber, zipWidth);
+}
 
+void Stage::setDS(DataStructure* newDS) {
+	ds = newDS;
 }
 
 void Stage::updateModeBox(int newMode) {
@@ -104,6 +110,8 @@ void Stage::handleMousePressed(double x, double y) {
 						modeBox[curOperation][j].setDrawable(false);
 					}
 					curOperation = i;
+					ds->setCurOperation(i);
+					ds->resetAnimation();
 					updateModeBox(0);
 				}
 				for (int j = 0; j < numOperation; j++) {
@@ -139,6 +147,7 @@ void Stage::handleMousePressed(double x, double y) {
 		valueTypingBox[i].clickOn(x, y);
 	}
 	scrubber.handleMousePressed(x, y);
+	playButton.handleMousePressed(x, y);
 }
 
 void Stage::handleKeyPressed(int key) {
@@ -175,6 +184,7 @@ void Stage::draw() {
 		valueTypingBox[i].drawAll(window, theme);
 	}
 	scrubber.draw(window, theme);
+	playButton.draw(window, theme);
 }
 
 void Stage::stageUpdate(sf::Time deltaT) {

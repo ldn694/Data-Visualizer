@@ -5,7 +5,7 @@ struct Scrubber {
 private: 
 	double x, y, width, height, zipWidth;
 	DataStructure* ds;
-	bool isChangingFrame, isAnimating, preIsAnimating;
+	bool isChangingFrame, preIsAnimating;
 public:
 	Scrubber(double x = 0.f, double y = 0.f, double width = 0.f, double height = 0.f, double zipWidth = 0.f, DataStructure* ds = nullptr);
 	void setIsAnimating(bool val);

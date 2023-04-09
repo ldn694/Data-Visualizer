@@ -7,9 +7,11 @@
 #include "TriangleButton.h"
 #include "TypingBox.h"
 #include "Scrubber.h"
+#include "PlayButton.h"
 
 struct Stage {
 protected:
+	DataStructure* ds;
 	std::vector <std::string> operationName;
 	std::vector <Box> operationBox;
 	int curOperation, numOperation;
@@ -31,6 +33,7 @@ protected:
 	std::vector <std::vector <int>> numValue;
 
 	Scrubber scrubber;
+	PlayButton playButton;
 
 	ColorTheme theme;
 	sf::RenderWindow& window;
@@ -38,7 +41,8 @@ public:
 	Stage(sf::RenderWindow &window, std::vector <std::string> operationName, std::vector <std::vector <std::string> > modeName, 
 		std::vector <std::vector <std::vector <std::string> > > valueName, 
 		std::vector <std::vector <std::vector <std::pair <int, int> > > > valueBound,
-		ColorTheme theme = LightTheme);
+		ColorTheme theme = LightTheme, DataStructure* ds = nullptr);
+	void setDS(DataStructure* newDS);
 	void updateModeBox(int newMode);
 	void handleMousePressed(double x, double y);
 	void handleMouseMove(double x, double y);

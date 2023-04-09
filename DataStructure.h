@@ -37,7 +37,7 @@ struct DataStructure {
 	float speed;
 	Graph defaultGraph, curGraph, mainGraph;
 	std::vector <Frame> listFrame;
-	std::deque <std::tuple<int, sf::Time, bool> > frameQueue;
+	std::deque <std::tuple<int, sf::Time, sf::Time, bool> > frameQueue;
 	bool isAnimating;
 	ColorTheme theme;
 	std::vector <std::vector <std::string> > codes;

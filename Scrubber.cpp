@@ -2,15 +2,14 @@
 #include "Scrubber.h"
 
 Scrubber::Scrubber(double _x, double _y, double _width, double _height, double _zipWidth, DataStructure* _ds):
-	x(_x), y(_y), width(_width), height(_height), zipWidth(_zipWidth), ds(_ds), isChangingFrame(false), isAnimating(true) {}
+	x(_x), y(_y), width(_width), height(_height), zipWidth(_zipWidth), ds(_ds), isChangingFrame(false) {}
 
 void Scrubber::setDS(DataStructure* newDS) {
 	ds = newDS;
 }
 
 void Scrubber::setIsAnimating(bool val) {
-	isAnimating = val;
-	ds->setIsAnimating(isAnimating);
+	ds->setIsAnimating(val);
 }
 
 void Scrubber::setNearestFrame(double mouseX, double mouseY) {
@@ -30,9 +29,8 @@ void Scrubber::handleMousePressed(double mouseX, double mouseY) {
 		return;
 	}
 	isChangingFrame = true;
-	preIsAnimating = isAnimating;
+	preIsAnimating = ds->isAnimating;
 	setIsAnimating(false);
-	ds->setIsAnimating(isAnimating);
 	setNearestFrame(mouseX, mouseY);
 }
 
@@ -54,7 +52,13 @@ void Scrubber::handleMouseReleased(double mouseX, double mouseY) {
 
 void Scrubber::handleKeyPressed(int key) {
 	if (key == sf::Keyboard::Space) {
-		setIsAnimating(isAnimating ^ 1);
+		if (ds->frameQueue.empty() && ds->listFrame.size() > 1) {
+			setIsAnimating(true);
+			ds->setFrame(0);
+		}
+		else {
+			setIsAnimating(ds->isAnimating ^ 1);
+		}
 	}
 }
 

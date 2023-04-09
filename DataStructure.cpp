@@ -13,7 +13,7 @@ DataStructure::DataStructure(double radius, double outlineSize, double lineThick
 	theme(_theme), codes(_codes),
 	defaultGraph(Graph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font))
 {
-	isAnimating = true;
+	isAnimating = false;
 	mainGraph = defaultGraph;
 	curGraph = defaultGraph;
 	listFrame.push_back({ defaultGraph, {} });
@@ -533,7 +533,7 @@ void DataStructure::animateFrame(int idFrame) {//from idFrame - 1 to idFrame
 	if (idFrame < 1 || idFrame >= listFrame.size()) {
 		return;
 	}
-	frameQueue.push_back({ idFrame, speed * (listFrame[idFrame - 1].time + delayTime), false});
+	frameQueue.push_back({ idFrame, speed * listFrame[idFrame - 1].time, speed * delayTime, false});
 }
 
 void DataStructure::setFrame(int idFrame) {
@@ -549,9 +549,7 @@ void DataStructure::setFrame(int idFrame) {
 }
 
 void DataStructure::animateAllFrame() {
-	for (int i = 1; i < (int)listFrame.size(); i++) {
-		animateFrame(i);
-	}
+	setFrame(0);
 }
 
 void DataStructure::update(sf::Time deltaT) {
@@ -577,36 +575,41 @@ void DataStructure::draw(sf::RenderWindow& window) {
 	}
 	for (int i = 1; i <= numStep[curOperation]; i++) {
 		window.draw(codeText[curOperation][i]);
-		if (curOperation == 3) {
-			std::string txt = codeText[curOperation][i].getString();
-		}
 	}
 }
 
 void DataStructure::updateFrameQueue(sf::Time deltaT) {
-	while (!frameQueue.empty() && isAnimating) {
+	while (!frameQueue.empty()) {
 		auto &cur = frameQueue.front();
+		if (!isAnimating && (speed * delayTime - std::get<2>(cur) < epsilonTime && speed * delayTime - std::get<2>(cur) > -epsilonTime)) {
+			break;
+		}
 		frameQueue.pop_front();
 		int idFrame = std::get<0>(cur);
-		sf::Time time = (std::get<1>(cur) - speed * delayTime);
-		if (!std::get<2>(cur)) {
-			curFrame = idFrame;
-			curStep = listFrame[idFrame].line;
-			curGraph = listFrame[idFrame - 1].graph;
-			for (Animation& animation : listFrame[idFrame - 1].nextStep) {
-				updateAnimation(curGraph, animation, time);
+		sf::Time time = std::get<1>(cur);
+		sf::Time delayTime = std::get<2>(cur);
+		if (delayTime < epsilonTime) {
+			if (!std::get<3>(cur)) {
+				curFrame = idFrame;
+				curStep = listFrame[idFrame].line;
+				curGraph = listFrame[idFrame - 1].graph;
+				for (Animation& animation : listFrame[idFrame - 1].nextStep) {
+					updateAnimation(curGraph, animation, time);
+				}
+			}
+			sf::Time elapsedTime = (time < deltaT ? time : deltaT);
+			curGraph.update(elapsedTime);
+			deltaT -= elapsedTime;
+			time -= elapsedTime;
+			if (time >= epsilonTime) {
+				frameQueue.push_front({idFrame, time, sf::seconds(0.f), true});
 			}
 		}
-		time += speed * delayTime;
-		sf::Time elapsedTime = (time < deltaT ? time : deltaT);
-		curGraph.update(elapsedTime);
-		deltaT -= elapsedTime;
-		time -= elapsedTime;
-		if (time >= epsilonTime) {
-			frameQueue.push_front({idFrame, time, true});
-		}
 		else {
-
+			sf::Time elapsedTime = (delayTime < deltaT ? delayTime : deltaT);
+			deltaT -= elapsedTime;
+			delayTime -= elapsedTime;
+			frameQueue.push_front({ idFrame, time, delayTime, false });
 		}
 		if (deltaT < epsilonTime) break;
 	}
