@@ -6,6 +6,7 @@
 #include "Template.h"
 #include "Graph.h"
 #include "DataStructure.h"
+#include "Box.h"
 
 DataStructure::DataStructure(double radius, double outlineSize, double lineThickness,
 	ColorTheme _theme, EdgeType idEdgeType, sf::Font* font, 
@@ -563,9 +564,12 @@ void DataStructure::update(sf::Time deltaT) {
 
 void DataStructure::draw(sf::RenderWindow& window) {
 	curGraph.draw(window);
-	sf::RectangleShape tmpRect = codeBoard;
+	/*sf::RectangleShape tmpRect = codeBoard;
 	tmpRect.setFillColor(codeNormalBackGroundColor[theme]);
-	window.draw(tmpRect);
+	window.draw(tmpRect);*/
+	sf::FloatRect codeBoardRect = codeBoard.getGlobalBounds();
+	Box tmpBox(codeBoardRect.left, codeBoardRect.top, codeBoardRect.width, codeBoardRect.height, {CodeOuterBox});
+	tmpBox.draw(window, theme);
 	if (codes[curOperation][curStep] != "") {
 		double width = codeBoard.getGlobalBounds().width;
 		double height = codeBoard.getGlobalBounds().height;

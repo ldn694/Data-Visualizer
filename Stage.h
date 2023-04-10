@@ -6,8 +6,10 @@
 #include "Box.h"
 #include "TriangleButton.h"
 #include "TypingBox.h"
-#include "MediaControl.h"
+#include "IngameSettings.h"
+#include "DataStructure.h"
 #include "MultipleChoice.h"
+#include "MediaControl.h"
 
 struct Stage {
 protected:
@@ -28,19 +30,19 @@ protected:
 	TriangleButton prevModeButton, nextModeButton;
 
 	std::vector <std::vector <std::vector <std::string> > > valueName;
+	std::vector <std::vector <std::vector <TypingBoxMode> > > typingMode;
 	std::vector <std::vector <std::vector <std::pair <int, int> > > > valueBound;
 	std::vector <BigTypingBox> valueTypingBox;
 	std::vector <std::vector <int>> numValue;
 
-	MediaControl mediaControl;
-
-	MultipleChoice themeChoices, speedChoices;
+	IngameSettings ingameSettings;
 
 	ColorTheme theme;
 	sf::RenderWindow& window;
 public:
 	Stage(sf::RenderWindow &window, std::vector <std::string> operationName, std::vector <std::vector <std::string> > modeName, 
 		std::vector <std::vector <std::vector <std::string> > > valueName, 
+		std::vector <std::vector <std::vector <TypingBoxMode> > > typingMode,
 		std::vector <std::vector <std::vector <std::pair <int, int> > > > valueBound,
 		ColorTheme theme = LightTheme, DataStructure* ds = nullptr);
 	void setDS(DataStructure* newDS);

@@ -143,6 +143,7 @@
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graph.cpp" />
+    <ClCompile Include="IngameSettings.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MediaControl.cpp" />
     <ClCompile Include="MultipleChoice.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="DataStructure.h" />
+    <ClInclude Include="IngameSettings.h" />
     <ClInclude Include="MediaControl.h" />
     <ClInclude Include="MultipleChoice.h" />
     <ClInclude Include="MyShape.h" />

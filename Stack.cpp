@@ -69,7 +69,7 @@ int Stack::getEmptyID() {
 	return id;
 }
 
-void Stack::createRandom(int n) {
+void Stack::createRandom(int n, std::vector <int> values) {
 	if (n == -1) {
 		n = rand() % 10 + 1;
 	}
@@ -85,7 +85,7 @@ void Stack::createRandom(int n) {
 	double x = (WIDTH_RES - (defaultNode.getRadius() * (5 * n - 5))) / 2;
 	double y = HEIGHT_RES / 3;
 	for (int i = 0; i < n; i++) {
-		int value = rand() % 100 + 1;
+		int value = (values.empty() ? rand() % 100 + 1 : values[i]);
 		stack.push_back({ i, value,  (i < n - 1 ? i + 1 : -1) });
 		nodeList.push_back(i);
 		nodeInfo.push_back({ value, x, y });

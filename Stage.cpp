@@ -4,13 +4,12 @@
 
 Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName, std::vector <std::vector <std::string> > _modeName,
 	std::vector <std::vector <std::vector <std::string> > > _valueName,
+	std::vector <std::vector <std::vector <TypingBoxMode> > > _typingMode,
 	std::vector <std::vector <std::vector <std::pair <int, int> > > > _valueBound,
 	ColorTheme _theme, DataStructure* _ds) :
-	window(_window), operationName(_operationName), modeName(_modeName), valueName(_valueName), valueBound(_valueBound), theme(_theme),
-	mediaControl(widthBox* (2 + 1.0f / 6), HEIGHT_RES - heightBox * 3, widthBox * 2, heightBox),
-	ds(_ds), 
-	themeChoices(widthBox * 2, HEIGHT_RES - heightBox * 2, widthBox, heightBox * 2, {"Light Theme", "Dark Theme"}, font(fontType::Arial), 0),
-	speedChoices(widthBox * 3, HEIGHT_RES - heightBox * 2, widthBox, heightBox * 2, {"x0.25", "x0.5", "x1.0", "x2.0", "x4.0"}, font(fontType::Arial), 2)
+	window(_window), operationName(_operationName), modeName(_modeName), valueName(_valueName), typingMode(_typingMode), valueBound(_valueBound), theme(_theme),
+	ingameSettings(widthBox * 2, HEIGHT_RES - heightBox * 3, WIDTH_RES - widthBox * 4, heightBox * 3),
+	ds(_ds)
 {
 	numOperation = operationName.size();
 	operationBox.resize(numOperation);
@@ -52,12 +51,15 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	numValue.resize(numOperation);
 	assert(valueName.size() == numOperation);
 	assert(valueBound.size() == numOperation);
+	assert(typingMode.size() == numOperation);
 	for (int i = 0; i < numOperation; i++) {
 		assert(valueName[i].size() == numMode[i]);
 		assert(valueBound[i].size() == numMode[i]);
+		assert(typingMode[i].size() == numMode[i]);
 		numValue[i].resize(numMode[i]);
 		for (int j = 0; j < numValue[i].size(); j++) {
 			assert(valueName[i][j].size() == valueBound[i][j].size());
+			assert(typingMode[i][j].size() == valueBound[i][j].size());
 			numValue[i][j] = valueName[i][j].size();
 		}
 	}
@@ -67,7 +69,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 }
 
 void Stage::setDS(DataStructure* newDS) {
-	mediaControl.setDS(newDS);
+	ingameSettings.setDS(newDS);
 	ds = newDS;
 }
 
@@ -79,8 +81,9 @@ void Stage::updateModeBox(int newMode) {
 	curMode = newMode;
 	valueTypingBox.resize(numValue[curOperation][curMode]);
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
-		valueTypingBox[i] = BigTypingBox(0, HEIGHT_RES - heightBox, widthBox, heightBox, outlineBox, valueName[curOperation][curMode][i],
-			true, font(fontType::Arial), valueBound[curOperation][curMode][i].first, valueBound[curOperation][curMode][i].second);
+		valueTypingBox[i] = BigTypingBox(0, HEIGHT_RES - heightBox, 2 * widthBox / numValue[curOperation][curMode], heightBox, widthBox / 3, outlineBox, valueName[curOperation][curMode][i],
+			0, HEIGHT_RES - heightBox * 3 - 50, widthBox * 2, 50,
+			typingMode[curOperation][curMode][i], font(fontType::Arial), typingModeMaxCharacter[typingMode[curOperation][curMode][i]], valueBound[curOperation][curMode][i].first, valueBound[curOperation][curMode][i].second);
 	}
 }
 
@@ -147,12 +150,9 @@ void Stage::handleMousePressed(double x, double y) {
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
 		valueTypingBox[i].clickOn(x, y);
 	}
-	mediaControl.handleMousePressed(x, y);
-	if (themeChoices.handleMousePressed(x, y)) {
-		setTheme(ColorTheme(themeChoices.getChoice()));
-	}
-	if (speedChoices.handleMousePressed(x, y)) {
-		ds->setSpeed(speedList[speedChoices.getChoice()]);
+	int themeCode = ingameSettings.handleMousePressed(x, y);
+	if (themeCode != -1) {
+		setTheme(ColorTheme(themeCode));
 	}
 }
 
@@ -162,15 +162,15 @@ void Stage::handleKeyPressed(int key) {
 			valueTypingBox[i].readKey(key);
 		}
 	}
-	mediaControl.handleKeyPressed(key);
+	ingameSettings.handleKeyPressed(key);
 }
 
 void Stage::handleMouseMove(double x, double y) {
-	mediaControl.handleMouseMove(x, y);
+	ingameSettings.handleMouseMove(x, y);
 }
 
 void Stage::handleMouseReleased(double x, double y) {
-	mediaControl.handleMouseReleased(x, y);
+	ingameSettings.handleMouseReleased(x, y);
 }
 
 void Stage::draw() {
@@ -186,12 +186,16 @@ void Stage::draw() {
 	}
 	prevModeButton.draw(window, theme);
 	nextModeButton.draw(window, theme);
-	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
-		valueTypingBox[i].drawAll(window, theme);
+	if (numValue[curOperation][curMode]) {
+		for (int i = 0; i < numValue[curOperation][curMode]; i++) {
+			valueTypingBox[i].drawAll(window, theme);
+		}
 	}
-	mediaControl.draw(window, theme);
-	themeChoices.draw(window, theme);
-	speedChoices.draw(window, theme);
+	else {
+		Box emptyBox(0, HEIGHT_RES - heightBox, widthBox * 2, heightBox, { CommandBoxNormal });
+		emptyBox.draw(window, theme);
+	}
+	ingameSettings.draw(window, theme);
 }
 
 void Stage::stageUpdate(sf::Time deltaT) {

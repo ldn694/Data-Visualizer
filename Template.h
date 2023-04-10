@@ -60,8 +60,15 @@ enum ColorNodeType {
 	normal, highlight, lowlight, highlight2
 };
 
+enum TypingBoxMode {
+	singleNumber, multipleNumber, string
+};
+
 const int numColorTheme = 2;
 const int numColorNodeType = 4;
+const int numTypingBoxMode = 3;
+
+const int  typingModeMaxCharacter[numTypingBoxMode] = { 3, 20, 20 };
 
 struct ColorNode {
 	sf::Color fillColor, outlineColor, valueColor, variableColor;
@@ -85,10 +92,10 @@ const ColorNode colorNode[numColorTheme][numColorNodeType] =
 };
 
 enum ColorBoxType {
-	CommandBoxNormal, CommandBoxSelected, GoBoxNormal, TriangleButtonNormal, Typing_Box, MediaBox
+	CommandBoxNormal, CommandBoxSelected, GoBoxNormal, TriangleButtonNormal, Typing_Box, MediaBox, CodeOuterBox, WarningBox
 };
 
-const int numColorBoxType = 6;
+const int numColorBoxType = 8;
 
 struct ColorBox {
 	sf::Color fillColor, outlineColor, textColor;
@@ -120,6 +127,14 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 	{
 		ColorBox(MilkColor, BlackColor, BlackColor),
 		ColorBox(MilkColor, BlackColor, BlackColor)
+	}, 
+	{
+		ColorBox(LightCyanColor, BlackColor, BlackColor),
+		ColorBox(LightCyanColor, BlackColor, BlackColor)
+	},
+	{
+		ColorBox(LightYellowColor, RedColor, BlackColor),
+		ColorBox(LightYellowColor, RedColor, BlackColor)
 	}
 };
 
@@ -137,6 +152,8 @@ const sf::Color playButtonTriangleColor[numColorTheme] = { DarkBrownColor, DarkB
 const sf::Color choicesColor[numColorTheme] = {DarkBrownColor, DarkBrownColor};
 const sf::Color choicesOuterCircleColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
 const sf::Color choicesInnerCircleColor[numColorTheme] = { OrangeColor, OrangeColor };
+
+const sf::Color warningColor[numColorTheme] = { RedColor, RedColor };
 
 std::string intToString(int a);
 int stringToInt(std::string a);

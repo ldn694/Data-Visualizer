@@ -6,7 +6,7 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 	ColorTheme theme, EdgeType edgeType) :
 	Stage(window, { "Create", "Push", "Pop", "Peek" }, 
 		{ 
-			{"Random", "n = ?"}, 
+			{"Random", "n = ?", "Custom"},
 			{"v = ?"},
 			{""},
 			{""}
@@ -14,10 +14,11 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 		{
 			{
 				{},
-				{"n = "}
+				{"n ="},
+				{"v[] ="}
 			},
 			{
-				{"v = "}
+				{"v ="}
 			},
 			{
 				{}
@@ -25,12 +26,28 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 			{
 				{}
 			}
-		}
-		,
+		},
 		{
 			{
 				{},
-				{{0, 10}}
+				{singleNumber},
+				{multipleNumber}
+			},
+			{
+				{singleNumber}
+			},
+			{
+				{}
+			},
+			{
+				{}
+			}
+		},
+		{
+			{
+				{},
+				{{0, 10}},
+				{{0, 99}}
 			},
 			{
 				{{0, 99}}
@@ -46,7 +63,6 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 {
 	ds = Stack(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
 	setDS(&ds);
-	mediaControl.setDS(&ds);
 }
 
 void StackStage::processEvents() {
@@ -67,8 +83,17 @@ void StackStage::processEvents() {
 					if (modeString == "Random") {
 						ds.createRandom();
 					}
-					else {
-						ds.createRandom(valueTypingBox[0].getInt());
+					if (modeString == "n = ?") {
+						int val = valueTypingBox[0].getProperInt();
+						if (val != -1) {
+							ds.createRandom(val);
+						}
+					}
+					if (modeString == "Custom") {
+						std::vector <int> values = valueTypingBox[0].getListInt();
+						if (!values.empty()) {
+							ds.createRandom(values.size(), values);
+						}
 					}
 				}
 				if (operationName[curOperation] == "Pop") {
@@ -78,7 +103,10 @@ void StackStage::processEvents() {
 					ds.peek();
 				}
 				if (operationName[curOperation] == "Push") {
-					ds.push(valueTypingBox[0].getInt());
+					int val = valueTypingBox[0].getProperInt();
+					if (val != -1) {
+						ds.push(val);
+					}
 				}
 				operating = false;
 			}

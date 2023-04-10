@@ -72,6 +72,9 @@
     <ClCompile Include="MultipleChoice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="IngameSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -126,6 +129,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MultipleChoice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="IngameSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

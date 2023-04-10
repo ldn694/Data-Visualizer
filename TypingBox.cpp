@@ -2,12 +2,17 @@
 #include "TypingBox.h"
 #include "Box.h"
 
-TypingBox::TypingBox(double _x, double _y, double _width, double _height, bool _onlyNumber, sf::Font* _font, int _minValue, int _maxValue) :
-	x(_x), y(_y), width(_width), height(_height), onlyNumber(_onlyNumber), font(_font), minValue(_minValue), maxValue(_maxValue)
+TypingBox::TypingBox(double _x, double _y, double _width, double _height, 
+	double _xWarning, double _yWarning, double _widthWarning, double _heightWarning,
+	TypingBoxMode _typingMode, sf::Font* _font, int _maxCharacter, int _minValue, int _maxValue) :
+	x(_x), y(_y), width(_width), height(_height), 
+	xWarning(_xWarning), yWarning(_yWarning), widthWarning(_widthWarning), heightWarning(_heightWarning),
+	typingMode(_typingMode), font(_font), maxCharacter(_maxCharacter), minValue(_minValue), maxValue(_maxValue)
 {
 	reading = false;
 	displayingLine = true;
-	if (onlyNumber) {
+	displayingWarning = false;
+	if (typingMode == singleNumber) {
 		text = intToString(getInt());
 	}
 }
@@ -16,15 +21,49 @@ bool TypingBox::isReading() {
 	return reading;
 }
 
+void TypingBox::setWarning() {
+	if (typingMode == singleNumber) {
+		int curVal = getInt();
+		if (curVal < minValue || curVal > maxValue) {
+			displayingWarning = true;
+			warning = "Value must be in [";
+			warning = warning + intToString(minValue) + "," + intToString(maxValue) + "]!";
+		}
+		else {
+			displayingWarning = false;
+		}
+	}
+	if (typingMode == multipleNumber) {
+		std::vector <int> tmp = getListInt();
+		/*for (int i = 0; i < tmp.size(); i++) {
+			std::cout << tmp[i] << " ";
+		}
+		std::cout << "\n";*/
+		if (!tmp.empty() && tmp[0] == -1) {
+			displayingWarning = true;
+			warning = "Illegar character found, character must be space or in [";
+			warning = warning + intToString(minValue) + "," + intToString(maxValue) + "]!";
+			return;
+		}
+		if (!tmp.empty() && (tmp[0] == -2 || tmp[0] == -3)) {
+			displayingWarning = true;
+			warning = "Value must be in [";
+			warning = warning + intToString(minValue) + "," + intToString(maxValue) + "]!";
+			return;
+		}
+		displayingWarning = false;
+	}
+}
+
 std::string TypingBox::getText() {
-	if (onlyNumber) {
+	if (typingMode == singleNumber) {
 		return (text.empty() ? "0" : text);
 	}
 	return text;
 }
 
 void TypingBox::setText(std::string newText) {
-	if (onlyNumber) {
+	if (typingMode == singleNumber) {
 		text.clear();
 		for (char x : newText) {
 			if ('0' <= x && x <= '9') {
@@ -45,30 +84,81 @@ int TypingBox::getInt() {
 	return res;
 }
 
+std::vector <int> TypingBox::getListInt() {
+	std::vector <int> tmp;
+	int i = 0;
+	std::string valText;
+	std::string curText = text + ";";
+	while (i < curText.size()) {
+		if (curText[i] == ';') {
+			if (!valText.empty()) {
+				tmp.push_back(stringToInt(valText));
+				valText.clear();
+			}
+			i++;
+			continue;
+		}
+		if (curText[i] < '0' || curText[i] > '9') {
+			return { -1 };
+		}
+		valText.push_back(curText[i]);
+		if (valText.size() > 9) {
+			return { -3 };
+		}
+		if (stringToInt(valText) < minValue || stringToInt(valText) > maxValue) {
+			return { -2 };
+		}
+		i++;
+	}
+	return tmp;
+}
+
+int TypingBox::getProperInt() {
+	int val = getInt();
+	if (val < minValue || val > maxValue) {
+		return -1;
+	}
+	return val;
+}
+
 void TypingBox::insert(int key) {
-	if (key < 0 || key > 35) return;
-	if (text.size() + 1 > maxLetter) {
+	if ((key < 0 || key > 35) && key != int(sf::Keyboard::SemiColon)) return;
+	if (text.size() + 1 > maxCharacter) {
 		return;
 	}
-	if (onlyNumber) {
-		if (key < 26) return;
+	if (typingMode == singleNumber) {
+		if (key < 26 || key == int(sf::Keyboard::SemiColon)) return;
 	}
-	char x = ((key < 26) ? char(key + 'a') : char(key - 26 + '0'));
+	if (typingMode == multipleNumber) {
+		if (key < 26 && key != int(sf::Keyboard::SemiColon)) return;
+	}
+	char x;
+	if (key < 26) {
+		x = char(key + 'a'); 
+	}
+	if (key <= 35) {
+		x = char(key - 26 + '0');
+	}
+	if (key == int(sf::Keyboard::SemiColon)) {
+		x = ';';
+	}
 	text.push_back(x);
 	sf::Text Text;
 	Text.setFont(*font);
 	Text.setString(text);
-	Text.setCharacterSize(height * 0.8);
+	Text.setCharacterSize(height * 0.6);
 	sf::FloatRect textRect = Text.getLocalBounds();
-	if (textRect.width > width - 20) {
+	if (textRect.width > width - 15) {
 		text.pop_back();
 	}
+	setWarning();
 }
 
 void TypingBox::deleteBack() {
 	if (!text.empty()) {
 		text.pop_back();
 	}
+	setWarning();
 }
 
 void TypingBox::update(sf::Time deltaT) {
@@ -84,7 +174,7 @@ void TypingBox::update(sf::Time deltaT) {
 void TypingBox::clickOn(double hereX, double hereY) {
 	if (hereX < x || hereX > x + width || hereY < y || hereY > y + height) {
 		reading = false;
-		if (onlyNumber) {
+		if (typingMode == singleNumber) {
 			text = intToString(getInt());
 		}
 		return;
@@ -97,7 +187,7 @@ void TypingBox::clickOn(double hereX, double hereY) {
 }
 
 void TypingBox::readKey(int key) {
-	if (0 <= key && key <= 35) {
+	if ((0 <= key && key <= 35) || key == int(sf::Keyboard::SemiColon)) {
 		insert(key);
 	}
 	if (key == int(sf::Keyboard::BackSpace)) {
@@ -105,7 +195,7 @@ void TypingBox::readKey(int key) {
 	}
 	if (key == int(sf::Keyboard::Enter)) {
 		reading = false;
-		if (onlyNumber) {
+		if (typingMode == singleNumber) {
 			text = intToString(getInt());
 		}
 	}
@@ -133,12 +223,33 @@ void TypingBox::draw(sf::RenderWindow& window, ColorTheme theme) {
 		vtx[1] = sf::Vertex(sf::Vector2f(lineX, y + (height - textHeight) * 0.5f + textHeight), colorBox[Typing_Box][theme].textColor);
 		window.draw(vtx, 2, sf::Lines);
 	}
+	if (displayingWarning) {
+		double l = 0.f, r = 50.f;
+		for (int cnt = 0; cnt < 60; cnt++) {
+			double mid = (l + r) / 2;
+			sf::Text text;
+			text.setFont(*font);
+			text.setString(warning);
+			text.setCharacterSize(mid);
+			sf::FloatRect textRect = text.getLocalBounds();
+			if (textRect.width <= widthWarning && textRect.height <= heightWarning * 0.75) {
+				l = mid;
+			}
+			else {
+				r = mid;
+			}
+		}
+		Box warningBox(xWarning, yWarning - outlineBox * 2, widthWarning, heightWarning, { WarningBox }, warning, font, l, false, 0.f);
+		warningBox.draw(window, theme);
+	}
 }
 
-BigTypingBox::BigTypingBox(double _x, double _y, double _width, double _height, double _outlineSize, std::string _name, 
-	bool _onlyNumber, sf::Font* _font, int _minValue, int _maxValue, bool _drawable, bool _typingBoxDrawable) :
-	outerX(_x), outerY(_y), outerWidth(_width), outerHeight(_height), outlineSize(_outlineSize), name(_name),
-	TypingBox(_x + _width * (1.0f / 3.0f - 1.0f / 20.0f), _y + _height * 0.2, _width * 2 / 3, _height * 0.6, _onlyNumber, _font, _minValue, _maxValue),
+BigTypingBox::BigTypingBox(double _x, double _y, double _width, double _height, double _valueWidth, double _outlineSize, std::string _name, 
+	double xWarning, double yWarning, double widthWarning, double heightWarning,
+	TypingBoxMode _typingMode, sf::Font* _font, int _maxCharacter, int _minValue, int _maxValue, bool _drawable, bool _typingBoxDrawable) :
+	outerX(_x), outerY(_y), outerWidth(_width), outerHeight(_height), valueWidth(_valueWidth), outlineSize(_outlineSize), name(_name),
+	TypingBox(_x + _valueWidth + _outlineSize, _y + _height * 0.2, _width - _valueWidth - 3 * _outlineSize, _height * 0.6,
+		xWarning, yWarning, widthWarning, heightWarning, _typingMode, _font, _maxCharacter, _minValue, _maxValue),
 	drawable(_drawable), typingBoxDrawable(_typingBoxDrawable)
 {}
 
@@ -165,7 +276,7 @@ void BigTypingBox::drawAll(sf::RenderWindow& window, ColorTheme theme) {
 		Text.setFillColor(colorBox[ColorBoxType::CommandBoxNormal][theme].textColor);
 		sf::FloatRect textRect = Text.getLocalBounds();
 		Text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-		Text.setPosition(outerX + outerWidth / 6, outerY + outerHeight / 2);
+		Text.setPosition(outerX + (valueWidth + outlineSize) / 2, outerY + outerHeight / 2);
 		window.draw(Text);
 		if (typingBoxDrawable) {
 			draw(window, theme);
