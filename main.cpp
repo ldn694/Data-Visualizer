@@ -9,7 +9,7 @@ int main()
 {
 	listFont.resize(numFont);
 	for (int i = 0; i < numFont; i++) {
-		if (!listFont[i].loadFromFile(fontName[fontType::Arial])) {
+		if (!listFont[i].loadFromFile(fontName[i])) {
 			assert(false);
 		}
 	}

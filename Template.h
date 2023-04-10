@@ -23,6 +23,16 @@ const sf::Color LightYellowColor(255, 217, 61);
 const sf::Color DarkBrownColor(79, 32, 13);
 const sf::Color MilkColor(246, 241, 233);
 const sf::Color SlightlyBlackColor(30, 30, 30);
+const sf::Color NavyColor(0, 72, 124);
+const sf::Color LightNavyColor(62, 102, 128);
+const sf::Color DarkBlueColor(28, 130, 173);
+const sf::Color SlightlyGreenColor(76, 175, 80);
+const sf::Color DarkOrangeColor(255, 155, 66);
+const sf::Color DarkPinkColor(240, 128, 128);
+const sf::Color PastelBlueColor(191, 215, 234);
+const sf::Color DarkYellowGreenColor(142, 168, 4);
+const sf::Color BuffColor(216, 164, 127);
+const sf::Color BrightPinkColor(238, 75, 106);
 
 const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;
@@ -104,52 +114,52 @@ struct ColorBox {
 
 const ColorBox colorBox[numColorBoxType][numColorTheme] =
 {
-	{
-		ColorBox(LightGreyBlueColor, BlackColor, BlackColor),
-		ColorBox(PurpleColor, WhiteColor, OrangeColor),
+	{ //CommandBoxNormal
+		ColorBox(DarkPinkColor, BlackColor, BlackColor),
+		ColorBox(NavyColor, WhiteColor, WhiteColor),
 	},
-	{
-		ColorBox(DarkGreyBlueColor, BlackColor, BlackColor),
-		ColorBox(PurpleColor, WhiteColor, OrangeColor),
+	{ //CommandBoxSelected
+		ColorBox(DarkOrangeColor, BlackColor, BlackColor),
+		ColorBox(DarkBlueColor, WhiteColor, WhiteColor),
 	},
-	{
-		ColorBox(GreenColor, BlackColor, BlackColor),
-		ColorBox(GreenColor, BlackColor, BlackColor)
+	{ //GoBoxNormal
+		ColorBox(SlightlyGreenColor, BlackColor, WhiteColor),
+		ColorBox(DarkGreenColor, WhiteColor, WhiteColor)
 	},
-	{
-		ColorBox(GreyColor, BlackColor, BlackColor),
-		ColorBox(GreyColor, BlackColor, BlackColor)
+	{ //TriangleButtonNormal
+		ColorBox(PastelBlueColor, BlackColor, BlackColor),
+		ColorBox(GreyColor, WhiteColor, WhiteColor)
 	},
-	{
+	{ //Typing_Box
 		ColorBox(BlackColor, WhiteColor, WhiteColor),
-		ColorBox(WhiteColor, BlackColor, BlackColor)
+		ColorBox(WhiteColor, WhiteColor, WhiteColor)
 	},
-	{
-		ColorBox(MilkColor, BlackColor, BlackColor),
-		ColorBox(MilkColor, BlackColor, BlackColor)
+	{ //MediaBox
+		ColorBox(DarkPinkColor, BlackColor, BlackColor),
+		ColorBox(DarkPinkColor, WhiteColor, WhiteColor)
 	}, 
-	{
-		ColorBox(LightCyanColor, BlackColor, BlackColor),
-		ColorBox(LightCyanColor, BlackColor, BlackColor)
+	{ //CodeOuterBox
+		ColorBox(BuffColor, BlackColor, BlackColor),
+		ColorBox(BuffColor, WhiteColor, WhiteColor)
 	},
-	{
+	{ //WarningBox
 		ColorBox(LightYellowColor, RedColor, BlackColor),
-		ColorBox(LightYellowColor, RedColor, BlackColor)
+		ColorBox(LightYellowColor, RedColor, WhiteColor)
 	}
 };
 
-const sf::Color codeViewColor[numColorTheme] = { BlackColor, BlackColor };
-const sf::Color codeNormalBackGroundColor[numColorTheme] = { LightCyanColor, LightCyanColor };
-const sf::Color codeHighlightBackGroundColor[numColorTheme]{ DarkCyanColor, DarkCyanColor };
+const sf::Color codeNormalViewColor[numColorTheme] = { BlackColor, BlackColor };
+const sf::Color codeHightlightViewColor[numColorTheme] = { WhiteColor, WhiteColor };
+const sf::Color codeHighlightBackGroundColor[numColorTheme]{ BrightPinkColor, DarkCyanColor };
 
-const sf::Color scrubberZipColor[numColorTheme] = {MilkColor, MilkColor};
+const sf::Color scrubberZipColor[numColorTheme] = {LightYellowColor, LightYellowColor };
 const sf::Color scrubberPassedColor[numColorTheme] = { OrangeColor, OrangeColor };
 const sf::Color scrubberRemainColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
 
 const sf::Color playButtonCircleColor[numColorTheme] = { LightYellowColor, LightYellowColor };
 const sf::Color playButtonTriangleColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
 
-const sf::Color choicesColor[numColorTheme] = {DarkBrownColor, DarkBrownColor};
+const sf::Color choicesColor[numColorTheme] = {BlackColor, DarkBrownColor};
 const sf::Color choicesOuterCircleColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
 const sf::Color choicesInnerCircleColor[numColorTheme] = { OrangeColor, OrangeColor };
 
@@ -167,10 +177,10 @@ void MovePoint(double& x1, double& y1, double x2, double y2, double dist);
 
 void MovePointParallel(double& x, double& y, double x1, double y1, double x2, double y2); //move point A(x, y) to a A'(x', y') so that AA' is parallel to BC in which B is (x1, y1) and C is (x2, y2) and |AA'|=|BC|
 
-const std::string fontName[] = { "arial.ttf" };
-const int numFont = 1;
+const std::string fontName[] = { "Fonts/arial.ttf", "Fonts/Consolas.ttf"};
+const int numFont = 2;
 enum fontType {
-	Arial
+	Arial, Consolas
 };
 extern std::vector <sf::Font> listFont;
 sf::Font* font(fontType id);

@@ -30,7 +30,7 @@ Stack::Stack(double radius, double outlineSize, double lineThickness,
 				"if empty, return NOT_FOUND",
 				"return head.item"
 			}
-		}, WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 3, widthBox * 2, heightBox * 3, font(fontType::Arial))  {}
+		}, WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 3, widthBox * 2, heightBox * 3, font(fontType::Consolas))  {}
 
 int Stack::getSize() {
 	return (int)stack.size();

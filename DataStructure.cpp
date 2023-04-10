@@ -61,7 +61,7 @@ DataStructure::DataStructure(double radius, double outlineSize, double lineThick
 			text.setFont(*codeFont);
 			text.setCharacterSize(charSize);
 			text.setPosition(x + outlineSize, curY);
-			text.setFillColor(codeViewColor[theme]);
+			text.setFillColor(codeNormalViewColor[theme]);
 			curY += stepY;
 			codeText[i][j] = text;
 		}
@@ -583,7 +583,13 @@ void DataStructure::draw(sf::RenderWindow& window) {
 		window.draw(highlightRect);
 	}
 	for (int i = 1; i <= numStep[curOperation]; i++) {
+		if (i == curStep) {
+			codeText[curOperation][i].setFillColor(codeHightlightViewColor[theme]);
+		}
 		window.draw(codeText[curOperation][i]);
+		if (i == curStep) {
+			codeText[curOperation][i].setFillColor(codeNormalViewColor[theme]);
+		}
 	}
 }
 
