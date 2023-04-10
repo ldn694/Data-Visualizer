@@ -88,9 +88,9 @@ std::vector <int> TypingBox::getListInt() {
 	std::vector <int> tmp;
 	int i = 0;
 	std::string valText;
-	std::string curText = text + ";";
+	std::string curText = text + ",";
 	while (i < curText.size()) {
-		if (curText[i] == ';') {
+		if (curText[i] == ',') {
 			if (!valText.empty()) {
 				tmp.push_back(stringToInt(valText));
 				valText.clear();
@@ -122,15 +122,15 @@ int TypingBox::getProperInt() {
 }
 
 void TypingBox::insert(int key) {
-	if ((key < 0 || key > 35) && key != int(sf::Keyboard::SemiColon)) return;
+	if ((key < 0 || key > 35) && key != int(sf::Keyboard::Comma)) return;
 	if (text.size() + 1 > maxCharacter) {
 		return;
 	}
 	if (typingMode == singleNumber) {
-		if (key < 26 || key == int(sf::Keyboard::SemiColon)) return;
+		if (key < 26 || key == int(sf::Keyboard::Comma)) return;
 	}
 	if (typingMode == multipleNumber) {
-		if (key < 26 && key != int(sf::Keyboard::SemiColon)) return;
+		if (key < 26 && key != int(sf::Keyboard::Comma)) return;
 	}
 	char x;
 	if (key < 26) {
@@ -139,8 +139,8 @@ void TypingBox::insert(int key) {
 	if (key <= 35) {
 		x = char(key - 26 + '0');
 	}
-	if (key == int(sf::Keyboard::SemiColon)) {
-		x = ';';
+	if (key == int(sf::Keyboard::Comma)) {
+		x = ',';
 	}
 	text.push_back(x);
 	sf::Text Text;
@@ -187,7 +187,7 @@ void TypingBox::clickOn(double hereX, double hereY) {
 }
 
 void TypingBox::readKey(int key) {
-	if ((0 <= key && key <= 35) || key == int(sf::Keyboard::SemiColon)) {
+	if ((0 <= key && key <= 35) || key == int(sf::Keyboard::Comma)) {
 		insert(key);
 	}
 	if (key == int(sf::Keyboard::BackSpace)) {
