@@ -6,8 +6,8 @@
 #include "Box.h"
 #include "TriangleButton.h"
 #include "TypingBox.h"
-#include "Scrubber.h"
-#include "PlayButton.h"
+#include "MediaControl.h"
+#include "MultipleChoice.h"
 
 struct Stage {
 protected:
@@ -32,8 +32,9 @@ protected:
 	std::vector <BigTypingBox> valueTypingBox;
 	std::vector <std::vector <int>> numValue;
 
-	Scrubber scrubber;
-	PlayButton playButton;
+	MediaControl mediaControl;
+
+	MultipleChoice themeChoices, speedChoices;
 
 	ColorTheme theme;
 	sf::RenderWindow& window;

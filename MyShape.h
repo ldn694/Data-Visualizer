@@ -10,5 +10,6 @@ struct MyShape {
 	MyShape(std::string filename, double x, double y, double width, double height, const sf::Color* color);
 	bool isMousePressed(double x, double y);
 	void setOrigin(double x, double y);
+	void setPosition(double x, double y);
 	void draw(sf::RenderWindow& window, ColorTheme theme);
 };

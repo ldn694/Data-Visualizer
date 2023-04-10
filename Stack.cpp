@@ -135,7 +135,7 @@ void Stack::push(int value) {
 	}
 	int head = getHeadID();
 	std::vector <Animation> animationList;
-	addNode(animationList, id, value, WIDTH_RES / 2, HEIGHT_RES / 3 * 2);
+	addNode(animationList, id, value, WIDTH_RES / 2, HEIGHT_RES / 2);
 	setNodeColor(animationList, { id }, theme, highlight);
 	addVariables(animationList, { id }, { "vtx" });
 	addAnimations(animationList, stepTime, 1);

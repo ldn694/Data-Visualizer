@@ -2,13 +2,15 @@
 #include <iostream>
 #include "Stage.h"
 
-Stage::Stage(sf::RenderWindow &_window, std::vector <std::string> _operationName, std::vector <std::vector <std::string> > _modeName, 
-	std::vector <std::vector <std::vector <std::string> > > _valueName, 
-	std::vector <std::vector <std::vector <std::pair <int, int> > > > _valueBound, 
+Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName, std::vector <std::vector <std::string> > _modeName,
+	std::vector <std::vector <std::vector <std::string> > > _valueName,
+	std::vector <std::vector <std::vector <std::pair <int, int> > > > _valueBound,
 	ColorTheme _theme, DataStructure* _ds) :
 	window(_window), operationName(_operationName), modeName(_modeName), valueName(_valueName), valueBound(_valueBound), theme(_theme),
-	playButton(3 * widthBox, HEIGHT_RES - heightBox, heightBox / 3),
-	ds(_ds)
+	mediaControl(widthBox* (2 + 1.0f / 6), HEIGHT_RES - heightBox * 3, widthBox * 2, heightBox),
+	ds(_ds), 
+	themeChoices(widthBox * 2, HEIGHT_RES - heightBox * 2, widthBox, heightBox * 2, {"Light Theme", "Dark Theme"}, font(fontType::Arial), 0),
+	speedChoices(widthBox * 3, HEIGHT_RES - heightBox * 2, widthBox, heightBox * 2, {"x0.25", "x0.5", "x1.0", "x2.0", "x4.0"}, font(fontType::Arial), 2)
 {
 	numOperation = operationName.size();
 	operationBox.resize(numOperation);
@@ -62,11 +64,10 @@ Stage::Stage(sf::RenderWindow &_window, std::vector <std::string> _operationName
 	if (numOperation && numMode[0]) {
 		updateModeBox(0);
 	}
-
-	scrubber = Scrubber(2 * widthBox, HEIGHT_RES - heightBox * 2, 2 * widthBox, heightScrubber, zipWidth);
 }
 
 void Stage::setDS(DataStructure* newDS) {
+	mediaControl.setDS(newDS);
 	ds = newDS;
 }
 
@@ -146,8 +147,13 @@ void Stage::handleMousePressed(double x, double y) {
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
 		valueTypingBox[i].clickOn(x, y);
 	}
-	scrubber.handleMousePressed(x, y);
-	playButton.handleMousePressed(x, y);
+	mediaControl.handleMousePressed(x, y);
+	if (themeChoices.handleMousePressed(x, y)) {
+		setTheme(ColorTheme(themeChoices.getChoice()));
+	}
+	if (speedChoices.handleMousePressed(x, y)) {
+		ds->setSpeed(speedList[speedChoices.getChoice()]);
+	}
 }
 
 void Stage::handleKeyPressed(int key) {
@@ -156,15 +162,15 @@ void Stage::handleKeyPressed(int key) {
 			valueTypingBox[i].readKey(key);
 		}
 	}
-	scrubber.handleKeyPressed(key);
+	mediaControl.handleKeyPressed(key);
 }
 
 void Stage::handleMouseMove(double x, double y) {
-	scrubber.handleMouseMove(x, y);
+	mediaControl.handleMouseMove(x, y);
 }
 
 void Stage::handleMouseReleased(double x, double y) {
-	scrubber.handleMouseReleased(x, y);
+	mediaControl.handleMouseReleased(x, y);
 }
 
 void Stage::draw() {
@@ -183,8 +189,9 @@ void Stage::draw() {
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
 		valueTypingBox[i].drawAll(window, theme);
 	}
-	scrubber.draw(window, theme);
-	playButton.draw(window, theme);
+	mediaControl.draw(window, theme);
+	themeChoices.draw(window, theme);
+	speedChoices.draw(window, theme);
 }
 
 void Stage::stageUpdate(sf::Time deltaT) {
@@ -195,4 +202,5 @@ void Stage::stageUpdate(sf::Time deltaT) {
 
 void Stage::setTheme(ColorTheme newTheme) {
 	theme = newTheme;
+	ds->setTheme(theme);
 }

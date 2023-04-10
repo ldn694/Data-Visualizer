@@ -21,6 +21,10 @@ void MyShape::setOrigin(double _x, double _y) {
 	sprite.setPosition(x, y);
 }
 
+void MyShape::setPosition(double _x, double _y) {
+	sprite.setPosition(_x, _y);
+}
+
 void MyShape::draw(sf::RenderWindow& window, ColorTheme theme) {
 	sprite.setColor(color[theme]);
 	window.draw(sprite);

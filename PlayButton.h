@@ -1,6 +1,6 @@
 #pragma once
+#include "DataStructure.h"
 #include "MyShape.h"
-#include "Scrubber.h"
 
 struct PlayButton {
 	MyShape circle, triangle, pause, replay;

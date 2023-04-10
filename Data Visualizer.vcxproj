@@ -144,6 +144,8 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graph.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MediaControl.cpp" />
+    <ClCompile Include="MultipleChoice.cpp" />
     <ClCompile Include="MyShape.cpp" />
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="DataStructure.cpp" />
@@ -163,6 +165,8 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Graph.h" />
     <ClInclude Include="DataStructure.h" />
+    <ClInclude Include="MediaControl.h" />
+    <ClInclude Include="MultipleChoice.h" />
     <ClInclude Include="MyShape.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="PlayButton.h" />

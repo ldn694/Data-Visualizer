@@ -184,6 +184,10 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 	theme = newTheme;
 }
 
+void DataStructure::setSpeed(double newSpeed) {
+	speed = newSpeed;
+}
+
 
 bool cmpAnimation(const Animation& a, const Animation& b) {
 	return a.type < b.type;
@@ -533,7 +537,7 @@ void DataStructure::animateFrame(int idFrame) {//from idFrame - 1 to idFrame
 	if (idFrame < 1 || idFrame >= listFrame.size()) {
 		return;
 	}
-	frameQueue.push_back({ idFrame, speed * listFrame[idFrame - 1].time, speed * delayTime, false});
+	frameQueue.push_back({ idFrame, listFrame[idFrame - 1].time, delayTime, false});
 }
 
 void DataStructure::setFrame(int idFrame) {
@@ -542,6 +546,7 @@ void DataStructure::setFrame(int idFrame) {
 	}
 	curFrame = idFrame;
 	curGraph = listFrame[idFrame].graph;
+	curStep = listFrame[idFrame].line;
 	clearFrameQueue();
 	for (int i = idFrame + 1; i < listFrame.size(); i++) {
 		animateFrame(i);
@@ -553,7 +558,7 @@ void DataStructure::animateAllFrame() {
 }
 
 void DataStructure::update(sf::Time deltaT) {
-	updateFrameQueue(deltaT);
+	updateFrameQueue(deltaT * (float)speed);
 }
 
 void DataStructure::draw(sf::RenderWindow& window) {
@@ -581,7 +586,7 @@ void DataStructure::draw(sf::RenderWindow& window) {
 void DataStructure::updateFrameQueue(sf::Time deltaT) {
 	while (!frameQueue.empty()) {
 		auto &cur = frameQueue.front();
-		if (!isAnimating && (speed * delayTime - std::get<2>(cur) < epsilonTime && speed * delayTime - std::get<2>(cur) > -epsilonTime)) {
+		if (!isAnimating && (delayTime - std::get<2>(cur) < epsilonTime && delayTime - std::get<2>(cur) > -epsilonTime)) {
 			break;
 		}
 		frameQueue.pop_front();

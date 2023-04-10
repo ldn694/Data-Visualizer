@@ -34,7 +34,7 @@ struct DataStructure {
 		sf::Time time;
 		int line;
 	};
-	float speed;
+	double speed;
 	Graph defaultGraph, curGraph, mainGraph;
 	std::vector <Frame> listFrame;
 	std::deque <std::tuple<int, sf::Time, sf::Time, bool> > frameQueue;
@@ -51,6 +51,7 @@ struct DataStructure {
 		std::vector <std::vector <std::string> > codes = {}, double x = 0, double y = 0, double width = 0, double height = 0, sf::Font* codeFont = nullptr);
 	void resetAnimation();
 	void setTheme(ColorTheme theme);
+	void setSpeed(double newSpeed);
 	void setNodeColor(std::vector <Animation> &animationList, std::vector <int> nodes, ColorTheme theme, ColorNodeType type);
 	void addNode(std::vector <Animation>& animationList, int pos, int value, double x, double y);
 	void deleteNode(std::vector <Animation>& animationList, int pos);

@@ -46,8 +46,7 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 {
 	ds = Stack(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
 	setDS(&ds);
-	scrubber.setDS(&ds);
-	playButton.setDS(&ds);
+	mediaControl.setDS(&ds);
 }
 
 void StackStage::processEvents() {
@@ -62,7 +61,7 @@ void StackStage::processEvents() {
 		case sf::Event::MouseButtonPressed:
 			handleMousePressed(event.mouseButton.x, event.mouseButton.y);
 			if (operating) {
-				scrubber.setIsAnimating(true);
+				ds.setIsAnimating(true);
 				std::string modeString = modeName[curOperation][curMode];
 				if (operationName[curOperation] == "Create") {
 					if (modeString == "Random") {
@@ -104,7 +103,7 @@ void StackStage::update(sf::Time deltaT) {
 }
 
 void StackStage::render() {
-	window.clear(theme == LightTheme ? WhiteColor : BlackColor);
+	window.clear(theme == LightTheme ? WhiteColor : SlightlyBlackColor);
 	ds.draw(window);
 	//std::cout << "drawed ds\n";
 	draw();

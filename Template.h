@@ -22,6 +22,7 @@ const sf::Color DarkCyanColor(14, 131, 136);
 const sf::Color LightYellowColor(255, 217, 61);
 const sf::Color DarkBrownColor(79, 32, 13);
 const sf::Color MilkColor(246, 241, 233);
+const sf::Color SlightlyBlackColor(30, 30, 30);
 
 const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;
@@ -40,6 +41,7 @@ const sf::Time flickeringTime = sf::seconds(0.5f);
 const double heightBox = 100;
 const double widthBox = 250;
 const double outlineBox = 5;
+const double speedList[] = { 0.25, 0.5, 1.0, 2.0, 4.0 };
 
 const int maxLetter = 4;
 
@@ -75,18 +77,18 @@ const ColorNode colorNode[numColorTheme][numColorNodeType] =
 		ColorNode(LightGreenColor, LightGreenColor, WhiteColor, RedColor)
 	} ,
 	{
-		ColorNode(RedColor, YellowColor, YellowColor, BlueColor),
-		ColorNode(PurpleColor, PurpleColor, RedColor, BlueColor),
-		ColorNode(RedColor, PurpleColor, PurpleColor, BlueColor),
-		ColorNode(DarkGreyBlueColor, DarkGreyBlueColor, RedColor, BlueColor)
+		ColorNode(BlackColor, WhiteColor, WhiteColor, OrangeColor),
+		ColorNode(YellowColor, YellowColor, BlackColor, OrangeColor),
+		ColorNode(BlackColor, YellowColor, YellowColor, OrangeColor),
+		ColorNode(GreenColor, GreenColor, BlackColor, OrangeColor)
 	}
 };
 
 enum ColorBoxType {
-	CommandBoxNormal, CommandBoxSelected, GoBoxNormal, TriangleButtonNormal, Typing_Box
+	CommandBoxNormal, CommandBoxSelected, GoBoxNormal, TriangleButtonNormal, Typing_Box, MediaBox
 };
 
-const int numColorBoxType = 5;
+const int numColorBoxType = 6;
 
 struct ColorBox {
 	sf::Color fillColor, outlineColor, textColor;
@@ -97,11 +99,11 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 {
 	{
 		ColorBox(LightGreyBlueColor, BlackColor, BlackColor),
-		ColorBox(PurpleColor, GreenColor, OrangeColor),
+		ColorBox(PurpleColor, WhiteColor, OrangeColor),
 	},
 	{
 		ColorBox(DarkGreyBlueColor, BlackColor, BlackColor),
-		ColorBox(PurpleColor, GreenColor, OrangeColor),
+		ColorBox(PurpleColor, WhiteColor, OrangeColor),
 	},
 	{
 		ColorBox(GreenColor, BlackColor, BlackColor),
@@ -114,6 +116,10 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 	{
 		ColorBox(BlackColor, WhiteColor, WhiteColor),
 		ColorBox(WhiteColor, BlackColor, BlackColor)
+	},
+	{
+		ColorBox(MilkColor, BlackColor, BlackColor),
+		ColorBox(MilkColor, BlackColor, BlackColor)
 	}
 };
 
@@ -127,6 +133,10 @@ const sf::Color scrubberRemainColor[numColorTheme] = { DarkBrownColor, DarkBrown
 
 const sf::Color playButtonCircleColor[numColorTheme] = { LightYellowColor, LightYellowColor };
 const sf::Color playButtonTriangleColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
+
+const sf::Color choicesColor[numColorTheme] = {DarkBrownColor, DarkBrownColor};
+const sf::Color choicesOuterCircleColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
+const sf::Color choicesInnerCircleColor[numColorTheme] = { OrangeColor, OrangeColor };
 
 std::string intToString(int a);
 int stringToInt(std::string a);
