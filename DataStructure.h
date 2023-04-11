@@ -3,6 +3,7 @@
 #include <vector>
 #include "Template.h"
 #include "Graph.h"
+#include "Box.h"
 
 enum AnimationType {
 	AddNode, AddEdge, MoveNode, TranslateNode, MergeMoveNode,
@@ -33,6 +34,7 @@ struct DataStructure {
 		std::vector <Animation> nextStep;
 		sf::Time time;
 		int line;
+		std::string announcement;
 	};
 	double speed;
 	Graph defaultGraph, curGraph, mainGraph;
@@ -42,13 +44,16 @@ struct DataStructure {
 	ColorTheme theme;
 	std::vector <std::vector <std::string> > codes;
 	std::vector <std::vector <sf::Text> > codeText;
+	double xAnnouncement, yAnnouncement, widthAnnouncement, heightAnnouncement;
+	sf::Font* announcementFont;
 	std::vector <int> numStep;
 	int numOperation, curStep = 0, curOperation = 0;
-	int curFrame;
+	int curFrame = 0;
 	sf::RectangleShape codeBoard;
 	DataStructure(double radius = 0, double outlineSize = 0, double lineThickness = 0,
 		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected, sf::Font* font = nullptr, 
-		std::vector <std::vector <std::string> > codes = {}, double x = 0, double y = 0, double width = 0, double height = 0, sf::Font* codeFont = nullptr);
+		std::vector <std::vector <std::string> > codes = {}, double x = 0, double y = 0, double width = 0, double height = 0, sf::Font* codeFont = nullptr,
+		double xAnnouncement = 0, double yAnnouncement = 0, double widthAnnouncement = 0, double heightAnnouncement = 0, sf::Font *announcementFont = nullptr);
 	void resetAnimation();
 	void setTheme(ColorTheme theme);
 	void setSpeed(double newSpeed);
@@ -66,7 +71,7 @@ struct DataStructure {
 	void setCurOperation(int val);
 	void update(sf::Time deltaT);
 	void updateAnimation(Graph& graph, Animation animation, sf::Time time = sf::seconds(0.f));
-	void addAnimations(std::vector <Animation> animationList, sf::Time time, int line);
+	void addAnimations(std::vector <Animation> animationList, sf::Time time, int line, std::string announcement = "");
 	void setIsAnimating(bool val);
 	void animateFrame(int idFrame);
 	void setFrame(int idFrame);

@@ -61,8 +61,8 @@ void MultipleChoice::draw(sf::RenderWindow& window, ColorTheme theme) {
 		text.setFont(*font);
 		text.setCharacterSize(letterSize);
 		text.setFillColor(choicesColor[theme]);
-		text.setOrigin(text.getGlobalBounds().width / 2.0f, text.getGlobalBounds().height / 2.0f);
-		text.setPosition(x + width * 0.4, y + stepHeight * (i + 0.5) - 0.025 * width);
+		text.setOrigin(text.getLocalBounds().left + text.getLocalBounds().width / 2.0f, text.getLocalBounds().top + text.getLocalBounds().height / 2.0f);
+		text.setPosition(x + width * 0.4, y + stepHeight * (i + 0.5));
 		window.draw(text);
 		circles[i].setFillColor(choicesOuterCircleColor[theme]);
 		window.draw(circles[i]);

@@ -19,7 +19,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	operationSelecting = false;
 	for (int i = 0; i < numOperation; i++) {
 		operationBox[i] = Box(0, HEIGHT_RES - heightBox * 3, widthBox, heightBox, { CommandBoxNormal, CommandBoxSelected },
-						operationName[i], font(fontType::Arial), 50, WITH_BORDER, outlineBox);
+						operationName[i], font(fontType::Prototype), 50, WITH_BORDER, outlineBox);
 		if (i != 0) {
 			operationBox[i].setDrawable(false);
 		}
@@ -27,7 +27,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 
 	outerGoBox = Box(widthBox, HEIGHT_RES - heightBox * 3, widthBox, heightBox, { CommandBoxNormal });
 	goBox = Box(widthBox * 1.25f, HEIGHT_RES - heightBox * 2.75f, widthBox / 2.0f, heightBox / 2.0f, { GoBoxNormal },
-				"GO", font(fontType::Arial), 30);
+				"GO", font(fontType::Prototype), 30);
 
 	assert(modeName.size() == numOperation);
 	numMode.resize(numOperation);
@@ -37,7 +37,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 		modeBox[i].resize(numMode[i]);
 		for (int j = 0; j < numMode[i]; j++) {
 			modeBox[i][j] = Box(0, HEIGHT_RES - heightBox * 2, 2 * widthBox, heightBox, { CommandBoxNormal },
-							modeName[i][j], font(fontType::Arial), 30);
+							modeName[i][j], font(fontType::Prototype), 30);
 			modeBox[i][j].setDrawable(false);
 		}
 	}
@@ -84,7 +84,7 @@ void Stage::updateModeBox(int newMode) {
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
 		valueTypingBox[i] = BigTypingBox(0, HEIGHT_RES - heightBox, 2 * widthBox / numValue[curOperation][curMode], heightBox, widthBox / 3, outlineBox, valueName[curOperation][curMode][i],
 			0, HEIGHT_RES - heightBox * 3 - 50, widthBox * 2, 50,
-			typingMode[curOperation][curMode][i], font(fontType::Arial), typingModeMaxCharacter[typingMode[curOperation][curMode][i]], valueBound[curOperation][curMode][i].first, valueBound[curOperation][curMode][i].second);
+			typingMode[curOperation][curMode][i], font(fontType::Prototype), typingModeMaxCharacter[typingMode[curOperation][curMode][i]], valueBound[curOperation][curMode][i].first, valueBound[curOperation][curMode][i].second);
 	}
 }
 

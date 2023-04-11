@@ -10,8 +10,10 @@
 
 DataStructure::DataStructure(double radius, double outlineSize, double lineThickness,
 	ColorTheme _theme, EdgeType idEdgeType, sf::Font* font, 
-	std::vector <std::vector <std::string> > _codes, double x, double y, double width, double height, sf::Font* codeFont) :
+	std::vector <std::vector <std::string> > _codes, double x, double y, double width, double height, sf::Font* codeFont,
+	double _xAnnouncement, double _yAnnouncement, double _widthAnnouncement, double _heightAnnouncement, sf::Font* _announcementFont) :
 	theme(_theme), codes(_codes),
+	xAnnouncement(_xAnnouncement), yAnnouncement(_yAnnouncement), widthAnnouncement(_widthAnnouncement), heightAnnouncement(_heightAnnouncement), announcementFont(_announcementFont),
 	defaultGraph(Graph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font))
 {
 	isAnimating = false;
@@ -308,6 +310,7 @@ void DataStructure::doNothing(std::vector <Animation>& animationList) {
 void DataStructure::setCurOperation(int val) {
 	curOperation = val;
 	curStep = 0;
+	curFrame = 0;
 	for (int i = 0; i < numOperation; i++) {
 		for (int j = 1; j <= numStep[i]; j++) {
 			codeText[i][j].setFillColor(codeNormalViewColor[theme]);
@@ -525,7 +528,7 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 	}
 }
 
-void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Time time, int line) {
+void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Time time, int line, std::string announcement) {
 	sort(animationList.begin(), animationList.end(), cmpAnimation);
 	Graph tmpGraph = listFrame.back().graph;
 	for (Animation& animation : animationList) {
@@ -533,7 +536,7 @@ void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Tim
 	}
 	listFrame.back().nextStep = animationList;
 	listFrame.back().time = time;
-	listFrame.push_back({ tmpGraph, {}, sf::seconds(0.f), line});
+	listFrame.push_back({ tmpGraph, {}, sf::seconds(0.f), line, announcement});
 	curGraph = tmpGraph;
 	mainGraph = tmpGraph;
 }
@@ -598,6 +601,49 @@ void DataStructure::draw(sf::RenderWindow& window) {
 		if (i == curStep) {
 			codeText[curOperation][i].setFillColor(codeNormalViewColor[theme]);
 		}
+	}
+	if (!listFrame.empty()) {
+		std::string resText, cur, tmp;
+		sf::Text tmpText;
+		tmpText.setFont(*announcementFont);
+		tmpText.setCharacterSize(sizeLetterAnnouncement);
+		std::vector <std::string> words;
+		cur = listFrame[curFrame].announcement + " ";
+		for (char x : cur) {
+			if (x == ' ') {
+				words.push_back(tmp);
+				tmp.clear();
+			}
+			else {
+				tmp.push_back(x);
+			}
+		}
+		cur.clear();
+		tmp.clear();
+		for (int i = 0; i < words.size(); i++) {
+			tmp = cur + " " + words[i];
+			tmpText.setString(tmp);
+			if (tmpText.getLocalBounds().width > widthAnnouncement) {
+				resText = resText + cur + "\n";
+				cur = words[i];
+			}
+			else {
+				cur = tmp;
+			}
+		}
+		resText = resText + cur;
+		while (!resText.empty() && resText[0] == ' ') {
+			resText.erase(0, 1);
+		}
+		sf::RectangleShape tmpRect(sf::Vector2f(widthAnnouncement - outlineBox, heightAnnouncement - outlineBox));
+		tmpRect.setPosition(xAnnouncement + outlineBox, yAnnouncement - outlineBox);
+		tmpRect.setFillColor(announcementFillColor[theme]);
+		window.draw(tmpRect);
+		tmpText.setString(resText);
+		tmpText.setOrigin(tmpText.getLocalBounds().left + tmpText.getLocalBounds().width / 2.0f, tmpText.getLocalBounds().top + tmpText.getLocalBounds().height / 2.0f);
+		tmpText.setPosition(tmpRect.getGlobalBounds().left + tmpRect.getGlobalBounds().width / 2.0f, tmpRect.getGlobalBounds().top + tmpRect.getGlobalBounds().height / 2.0f);
+		tmpText.setFillColor(announcementTextColor[theme]);
+		window.draw(tmpText);
 	}
 }
 

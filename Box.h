@@ -20,6 +20,11 @@ public:
 		bool isBorder = true, double outlineSize = outlineBox);
 	double getOutlineSize();
 	void setPosition(double x1, double y1);
+	void setText(std::string newText);
+	void setTextSize(double newSize);
+	int getWidth();
+	int getHeight();
+	sf::Font* getFont();
 	void draw(sf::RenderWindow& window, ColorTheme theme);
 	bool isInside(double x, double y);
 	void toggleColorMode();

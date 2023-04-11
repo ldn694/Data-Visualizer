@@ -59,6 +59,7 @@ const double heightBox = 100;
 const double widthBox = 250;
 const double outlineBox = 5;
 const double speedList[] = { 0.25, 0.5, 1.0, 2.0, 4.0 };
+const double sizeLetterAnnouncement = 25;
 
 const int maxLetter = 4;
 
@@ -175,6 +176,9 @@ const sf::Color warningColor[numColorTheme] = { RedColor, RedColor };
 const sf::Color backButtonNormalOutlineColor[numColorTheme] = { BlackColor, TaupeGrayColor };
 const sf::Color backButtonNormalFillColor[numColorTheme] = { DarkPinkColor, GrapeColor };
 
+const sf::Color announcementFillColor[numColorTheme] = { DarkOrangeColor , CaribbeanCurrentColor };
+const sf::Color announcementTextColor[numColorTheme] = { BlackColor, WhiteColor };
+
 std::string intToString(int a);
 int stringToInt(std::string a);
 
@@ -187,10 +191,10 @@ void MovePoint(double& x1, double& y1, double x2, double y2, double dist);
 
 void MovePointParallel(double& x, double& y, double x1, double y1, double x2, double y2); //move point A(x, y) to a A'(x', y') so that AA' is parallel to BC in which B is (x1, y1) and C is (x2, y2) and |AA'|=|BC|
 
-const std::string fontName[] = { "Fonts/arial.ttf", "Fonts/Consolas.ttf"};
-const int numFont = 2;
+const std::string fontName[] = { "Fonts/arial.ttf", "Fonts/Consolas.ttf", "Fonts/CartoGothic.otf", "Fonts/DejaVuSans.ttf", "Fonts/Genshin.ttf", "Fonts/CSGO.ttf", "Fonts/Prototype.ttf"};
+const int numFont = 7;
 enum fontType {
-	Arial, Consolas
+	Arial, Consolas, CartoGothic, DejaVu, Genshin, CSGO, Prototype
 };
 extern std::vector <sf::Font> listFont;
 sf::Font* font(fontType id);

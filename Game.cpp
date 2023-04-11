@@ -8,7 +8,7 @@
 Game::Game(sf::ContextSettings settings)
 	: window(sf::VideoMode(WIDTH_RES, HEIGHT_RES), "Data Visualizer", sf::Style::Close, settings)
 {
-	box = Box(300, 500, 200, 300, { CommandBoxNormal }, "Stack",  font(fontType::Arial), 50, NO_BORDER, 5);
+	box = Box(300, 500, 200, 300, { CommandBoxNormal }, "Stack",  font(fontType::Prototype), 50, NO_BORDER, 5);
 	theme = LightTheme;
 }
 

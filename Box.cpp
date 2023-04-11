@@ -17,6 +17,25 @@ double Box::getOutlineSize() {
 	return outlineSize;
 }
 
+void Box::setTextSize(double newSize) {
+	textSize = newSize;
+}
+
+void Box::setText(std::string newText) {
+	text = newText;
+}
+
+sf::Font* Box::getFont() {
+	return font;
+}
+
+int Box::getWidth() {
+	return width;
+}
+int Box::getHeight() {
+	return height;
+}
+
 void Box::setPosition(double _x1, double _y1) {
 	x1 = _x1;
 	y1 = _y1;
