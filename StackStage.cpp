@@ -65,17 +65,19 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 	setDS(&ds);
 }
 
-void StackStage::processEvents() {
+bool StackStage::processEvents() {
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
 		switch (event.type) {
 		case sf::Event::Closed:
 			window.close();
-			return;
+			return true;
 			break;
 		case sf::Event::MouseButtonPressed:
-			handleMousePressed(event.mouseButton.x, event.mouseButton.y);
+			if (handleMousePressed(event.mouseButton.x, event.mouseButton.y)) {
+				return true;
+			}
 			if (operating) {
 				ds.setIsAnimating(true);
 				std::string modeString = modeName[curOperation][curMode];
@@ -122,6 +124,7 @@ void StackStage::processEvents() {
 			break;
 		}
 	}
+	return false;
 }
 
 void StackStage::update(sf::Time deltaT) {
@@ -144,9 +147,11 @@ void StackStage::run() {
 	sf::Time timePool = sf::Time::Zero;
 	while (window.isOpen())
 	{
-		processEvents();
 		timePool += mClock.restart();
 		while (timePool >= timePerFrame) {
+			if (processEvents()) {
+				return;
+			}
 			timePool -= timePerFrame;
 			update(timePerFrame);
 			render();

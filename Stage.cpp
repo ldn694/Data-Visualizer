@@ -9,6 +9,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	ColorTheme _theme, DataStructure* _ds) :
 	window(_window), operationName(_operationName), modeName(_modeName), valueName(_valueName), typingMode(_typingMode), valueBound(_valueBound), theme(_theme),
 	ingameSettings(widthBox * 2, HEIGHT_RES - heightBox * 3, WIDTH_RES - widthBox * 4, heightBox * 3),
+	backButton(0, 0, widthBox / 4, widthBox / 4),
 	ds(_ds)
 {
 	numOperation = operationName.size();
@@ -87,7 +88,7 @@ void Stage::updateModeBox(int newMode) {
 	}
 }
 
-void Stage::handleMousePressed(double x, double y) {
+bool Stage::handleMousePressed(double x, double y) {
 	if (!operationSelecting) {
 		if (operationBox[curOperation].isInside(x, y)) {
 			operationSelecting = true;
@@ -154,6 +155,7 @@ void Stage::handleMousePressed(double x, double y) {
 	if (themeCode != -1) {
 		setTheme(ColorTheme(themeCode));
 	}
+	return backButton.handleMousePressed(x, y);
 }
 
 void Stage::handleKeyPressed(int key) {
@@ -196,6 +198,7 @@ void Stage::draw() {
 		emptyBox.draw(window, theme);
 	}
 	ingameSettings.draw(window, theme);
+	backButton.draw(window, theme);
 }
 
 void Stage::stageUpdate(sf::Time deltaT) {

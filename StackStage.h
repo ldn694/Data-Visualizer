@@ -6,7 +6,7 @@
 struct StackStage : public Stage {
 private:
 	Stack ds;
-	void processEvents();
+	bool processEvents();
 	void update(sf::Time deltaT);
 	void render();
 public:

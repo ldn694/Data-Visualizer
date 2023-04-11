@@ -17,7 +17,7 @@ void Game::runStack() {
 	st.run();
 }
 
-void Game::processEvents()
+void Game::processEvents(sf::Clock& mClock)
 {
 	sf::Event event;
 	while (window.pollEvent(event))
@@ -30,6 +30,7 @@ void Game::processEvents()
 		case sf::Event::MouseButtonPressed:
 			if (box.isInside(event.mouseButton.x, event.mouseButton.y)) {
 				runStack();
+				mClock.restart();
 			}
 			break;
 		}
@@ -54,9 +55,9 @@ void Game::run()
 	sf::Time timePool = sf::Time::Zero;
 	while (window.isOpen())
 	{
-		processEvents();
 		timePool += mClock.restart();
 		while (timePool >= timePerFrame) {
+			processEvents(mClock);
 			timePool -= timePerFrame;
 			update(timePerFrame);
 			render();

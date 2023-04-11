@@ -139,6 +139,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BackButton.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Edge.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -161,6 +162,7 @@
     <ClCompile Include="TypingBox.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BackButton.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Game.h" />

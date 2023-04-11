@@ -10,6 +10,7 @@
 #include "DataStructure.h"
 #include "MultipleChoice.h"
 #include "MediaControl.h"
+#include "BackButton.h"
 
 struct Stage {
 protected:
@@ -36,6 +37,7 @@ protected:
 	std::vector <std::vector <int>> numValue;
 
 	IngameSettings ingameSettings;
+	BackButton backButton;
 
 	ColorTheme theme;
 	sf::RenderWindow& window;
@@ -47,7 +49,7 @@ public:
 		ColorTheme theme = LightTheme, DataStructure* ds = nullptr);
 	void setDS(DataStructure* newDS);
 	void updateModeBox(int newMode);
-	void handleMousePressed(double x, double y);
+	bool handleMousePressed(double x, double y);
 	void handleMouseMove(double x, double y);
 	void handleMouseReleased(double x, double y);
 	void handleKeyPressed(int key);

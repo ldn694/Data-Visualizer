@@ -135,7 +135,7 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 	},
 	{ //TriangleButtonNormal
 		ColorBox(PastelBlueColor, BlackColor, BlackColor),
-		ColorBox(GreyColor, TaupeGrayColor, WhiteSmokeColor)
+		ColorBox(NyanzaColor, TaupeGrayColor, WhiteSmokeColor)
 	},
 	{ //Typing_Box
 		ColorBox(BlackColor, WhiteColor, WhiteColor),
@@ -171,6 +171,9 @@ const sf::Color choicesOuterCircleColor[numColorTheme] = { DarkBrownColor,  Eeri
 const sf::Color choicesInnerCircleColor[numColorTheme] = { OrangeColor, EmeraldColor };
 
 const sf::Color warningColor[numColorTheme] = { RedColor, RedColor };
+
+const sf::Color backButtonNormalOutlineColor[numColorTheme] = { BlackColor, TaupeGrayColor };
+const sf::Color backButtonNormalFillColor[numColorTheme] = { DarkPinkColor, GrapeColor };
 
 std::string intToString(int a);
 int stringToInt(std::string a);
