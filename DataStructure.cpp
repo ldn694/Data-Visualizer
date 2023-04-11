@@ -56,14 +56,12 @@ DataStructure::DataStructure(double radius, double outlineSize, double lineThick
 		}
 		double curY = y + outlineSize;
 		for (int j = 1; j <= numStep[i]; j++) {
-			sf::Text text;
-			text.setString(codes[i][j]);
-			text.setFont(*codeFont);
-			text.setCharacterSize(charSize);
-			text.setPosition(x + outlineSize, curY);
-			text.setFillColor(codeNormalViewColor[theme]);
+			codeText[i][j].setString(codes[i][j]);
+			codeText[i][j].setFont(*codeFont);
+			codeText[i][j].setCharacterSize(charSize);
+			codeText[i][j].setPosition(x + outlineSize, curY);
+			codeText[i][j].setFillColor(codeNormalViewColor[theme]);
 			curY += stepY;
-			codeText[i][j] = text;
 		}
 	}
 	codeBoard = sf::RectangleShape(sf::Vector2f(width, height));
@@ -183,6 +181,11 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 		}
 	}
 	theme = newTheme;
+	for (int i = 0; i < numOperation; i++) {
+		for (int j = 1; j <= numStep[i]; j++) {
+			codeText[i][j].setFillColor(codeNormalViewColor[theme]);
+		}
+	}
 }
 
 void DataStructure::setSpeed(double newSpeed) {
@@ -305,6 +308,11 @@ void DataStructure::doNothing(std::vector <Animation>& animationList) {
 void DataStructure::setCurOperation(int val) {
 	curOperation = val;
 	curStep = 0;
+	for (int i = 0; i < numOperation; i++) {
+		for (int j = 1; j <= numStep[i]; j++) {
+			codeText[i][j].setFillColor(codeNormalViewColor[theme]);
+		}
+	}
 }
 
 void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time time) {

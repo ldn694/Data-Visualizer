@@ -131,7 +131,7 @@ void StackStage::update(sf::Time deltaT) {
 }
 
 void StackStage::render() {
-	window.clear(theme == LightTheme ? MilkColor: SlightlyBlackColor);
+	window.clear(theme == LightTheme ? MilkColor: EerieBlackColor);
 	ds.draw(window);
 	//std::cout << "drawed ds\n";
 	draw();

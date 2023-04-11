@@ -22,7 +22,7 @@ const sf::Color DarkCyanColor(14, 131, 136);
 const sf::Color LightYellowColor(255, 217, 61);
 const sf::Color DarkBrownColor(79, 32, 13);
 const sf::Color MilkColor(246, 241, 233);
-const sf::Color SlightlyBlackColor(30, 30, 30);
+const sf::Color EerieBlackColor(30, 30, 30);
 const sf::Color NavyColor(0, 72, 124);
 const sf::Color LightNavyColor(62, 102, 128);
 const sf::Color DarkBlueColor(28, 130, 173);
@@ -33,6 +33,13 @@ const sf::Color PastelBlueColor(191, 215, 234);
 const sf::Color DarkYellowGreenColor(142, 168, 4);
 const sf::Color BuffColor(216, 164, 127);
 const sf::Color BrightPinkColor(238, 75, 106);
+const sf::Color GrapeColor(101, 0, 164);
+const sf::Color TaupeGrayColor(147, 145, 150);
+const sf::Color TiffanyBlueColor(162, 232, 221);
+const sf::Color EmeraldColor(50, 222, 138);
+const sf::Color CaribbeanCurrentColor(0, 108, 103);
+const sf::Color NyanzaColor(207, 255, 229);
+const sf::Color WhiteSmokeColor(245, 245, 245);
 
 const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;
@@ -116,52 +123,52 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 {
 	{ //CommandBoxNormal
 		ColorBox(DarkPinkColor, BlackColor, BlackColor),
-		ColorBox(NavyColor, WhiteColor, WhiteColor),
+		ColorBox(GrapeColor, TaupeGrayColor, WhiteSmokeColor),
 	},
 	{ //CommandBoxSelected
 		ColorBox(DarkOrangeColor, BlackColor, BlackColor),
-		ColorBox(DarkBlueColor, WhiteColor, WhiteColor),
+		ColorBox(CaribbeanCurrentColor, TaupeGrayColor, WhiteSmokeColor),
 	},
 	{ //GoBoxNormal
 		ColorBox(SlightlyGreenColor, BlackColor, WhiteColor),
-		ColorBox(DarkGreenColor, WhiteColor, WhiteColor)
+		ColorBox(NyanzaColor, TaupeGrayColor, BlackColor)
 	},
 	{ //TriangleButtonNormal
 		ColorBox(PastelBlueColor, BlackColor, BlackColor),
-		ColorBox(GreyColor, WhiteColor, WhiteColor)
+		ColorBox(GreyColor, TaupeGrayColor, WhiteSmokeColor)
 	},
 	{ //Typing_Box
 		ColorBox(BlackColor, WhiteColor, WhiteColor),
-		ColorBox(WhiteColor, WhiteColor, WhiteColor)
+		ColorBox(EerieBlackColor, TaupeGrayColor, WhiteColor)
 	},
 	{ //MediaBox
 		ColorBox(DarkPinkColor, BlackColor, BlackColor),
-		ColorBox(DarkPinkColor, WhiteColor, WhiteColor)
+		ColorBox(GrapeColor, TaupeGrayColor, WhiteColor)
 	}, 
 	{ //CodeOuterBox
 		ColorBox(BuffColor, BlackColor, BlackColor),
-		ColorBox(BuffColor, WhiteColor, WhiteColor)
+		ColorBox(DarkBlueColor, TaupeGrayColor, WhiteSmokeColor)
 	},
 	{ //WarningBox
 		ColorBox(LightYellowColor, RedColor, BlackColor),
-		ColorBox(LightYellowColor, RedColor, WhiteColor)
+		ColorBox(EmeraldColor, RedColor, EerieBlackColor)
 	}
 };
 
-const sf::Color codeNormalViewColor[numColorTheme] = { BlackColor, BlackColor };
-const sf::Color codeHightlightViewColor[numColorTheme] = { WhiteColor, WhiteColor };
+const sf::Color codeNormalViewColor[numColorTheme] = { BlackColor, WhiteSmokeColor };
+const sf::Color codeHightlightViewColor[numColorTheme] = { WhiteColor, EerieBlackColor };
 const sf::Color codeHighlightBackGroundColor[numColorTheme]{ BrightPinkColor, DarkCyanColor };
 
-const sf::Color scrubberZipColor[numColorTheme] = {LightYellowColor, LightYellowColor };
-const sf::Color scrubberPassedColor[numColorTheme] = { OrangeColor, OrangeColor };
-const sf::Color scrubberRemainColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
+const sf::Color scrubberZipColor[numColorTheme] = {LightYellowColor, CaribbeanCurrentColor };
+const sf::Color scrubberPassedColor[numColorTheme] = { OrangeColor, EmeraldColor };
+const sf::Color scrubberRemainColor[numColorTheme] = { DarkBrownColor, TaupeGrayColor };
 
-const sf::Color playButtonCircleColor[numColorTheme] = { LightYellowColor, LightYellowColor };
-const sf::Color playButtonTriangleColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
+const sf::Color playButtonCircleColor[numColorTheme] = { LightYellowColor, EmeraldColor };
+const sf::Color playButtonTriangleColor[numColorTheme] = { DarkBrownColor, EerieBlackColor };
 
-const sf::Color choicesColor[numColorTheme] = {BlackColor, DarkBrownColor};
-const sf::Color choicesOuterCircleColor[numColorTheme] = { DarkBrownColor, DarkBrownColor };
-const sf::Color choicesInnerCircleColor[numColorTheme] = { OrangeColor, OrangeColor };
+const sf::Color choicesColor[numColorTheme] = {BlackColor, WhiteSmokeColor};
+const sf::Color choicesOuterCircleColor[numColorTheme] = { DarkBrownColor,  EerieBlackColor };
+const sf::Color choicesInnerCircleColor[numColorTheme] = { OrangeColor, EmeraldColor };
 
 const sf::Color warningColor[numColorTheme] = { RedColor, RedColor };
 
