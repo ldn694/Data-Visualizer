@@ -46,6 +46,10 @@ struct DataStructure {
 	std::vector <std::vector <sf::Text> > codeText;
 	double xAnnouncement, yAnnouncement, widthAnnouncement, heightAnnouncement;
 	sf::Font* announcementFont;
+	double xError, yError, widthError, heightError;
+	std::string error;
+	sf::Font* errorFont;
+	sf::Time errorTime;
 	std::vector <int> numStep;
 	int numOperation, curStep = 0, curOperation = 0;
 	int curFrame = 0;
@@ -53,8 +57,10 @@ struct DataStructure {
 	DataStructure(double radius = 0, double outlineSize = 0, double lineThickness = 0,
 		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected, sf::Font* font = nullptr, 
 		std::vector <std::vector <std::string> > codes = {}, double x = 0, double y = 0, double width = 0, double height = 0, sf::Font* codeFont = nullptr,
-		double xAnnouncement = 0, double yAnnouncement = 0, double widthAnnouncement = 0, double heightAnnouncement = 0, sf::Font *announcementFont = nullptr);
+		double xAnnouncement = 0, double yAnnouncement = 0, double widthAnnouncement = 0, double heightAnnouncement = 0, sf::Font *announcementFont = nullptr,
+		double xError = 0, double yError = 0, double widthError = 0, double heightError = 0, sf::Font* errorFont = nullptr);
 	void resetAnimation();
+	void setError(bool val, std::string newError = "");
 	void setTheme(ColorTheme theme);
 	void setSpeed(double newSpeed);
 	void setNodeColor(std::vector <Animation> &animationList, std::vector <int> nodes, ColorTheme theme, ColorNodeType type);

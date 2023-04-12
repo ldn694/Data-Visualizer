@@ -81,3 +81,43 @@ void RotatePoint(double& x, double& y, double cx, double cy, double angle) {
 	x = rotatedX;
 	y = rotatedY;
 }
+
+sf::Text CompressWords(std::string cur, double x, double y, double width, double height, sf::Font* font, double characterSize, sf::Color color) {
+	std::string resText, tmp;
+	sf::Text tmpText;
+	tmpText.setFont(*font);
+	tmpText.setCharacterSize(characterSize);
+	std::vector <std::string> words;
+	cur = cur + " ";
+	for (char x : cur) {
+		if (x == ' ') {
+			words.push_back(tmp);
+			tmp.clear();
+		}
+		else {
+			tmp.push_back(x);
+		}
+	}
+	cur.clear();
+	tmp.clear();
+	for (int i = 0; i < words.size(); i++) {
+		tmp = cur + " " + words[i];
+		tmpText.setString(tmp);
+		if (tmpText.getLocalBounds().width > width) {
+			resText = resText + cur + "\n";
+			cur = words[i];
+		}
+		else {
+			cur = tmp;
+		}
+	}
+	resText = resText + cur;
+	while (!resText.empty() && resText[0] == ' ') {
+		resText.erase(0, 1);
+	}
+	tmpText.setString(resText);
+	tmpText.setOrigin(tmpText.getLocalBounds().left + tmpText.getLocalBounds().width / 2.0f, tmpText.getLocalBounds().top + tmpText.getLocalBounds().height / 2.0f);
+	tmpText.setPosition(x + width / 2.0f, y + height / 2.0f);
+	tmpText.setFillColor(color);
+	return tmpText;
+}

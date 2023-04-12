@@ -54,14 +54,17 @@ const sf::Time infTime = sf::seconds(1000000.f);
 const sf::Time stepTime = sf::seconds(0.3f);
 const sf::Time delayTime = sf::seconds(0.2f);
 const sf::Time flickeringTime = sf::seconds(0.5f);
+const sf::Time errorDisplayTime = sf::seconds(1.0f);
 
 const double heightBox = 100;
 const double widthBox = 250;
 const double outlineBox = 5;
 const double speedList[] = { 0.25, 0.5, 1.0, 2.0, 4.0 };
 const double sizeLetterAnnouncement = 25;
+const double sizeLetterError = 25;
 
 const int maxLetter = 4;
+const int maxSizeData = 15;
 
 const double heightScrubber = 20;
 const double zipWidth = 15;
@@ -96,10 +99,10 @@ struct ColorNode {
 const ColorNode colorNode[numColorTheme][numColorNodeType] =
 {
 	{
-		ColorNode(WhiteColor, BlackColor, BlackColor, RedColor),
-		ColorNode(OrangeColor, OrangeColor, WhiteColor, RedColor),
-		ColorNode(WhiteColor, OrangeColor, OrangeColor, RedColor),
-		ColorNode(LightGreenColor, LightGreenColor, WhiteColor, RedColor)
+		ColorNode(MilkColor, BlackColor, BlackColor, RedColor),
+		ColorNode(OrangeColor, OrangeColor, MilkColor, RedColor),
+		ColorNode(MilkColor, OrangeColor, OrangeColor, RedColor),
+		ColorNode(LightGreenColor, LightGreenColor, MilkColor, RedColor)
 	} ,
 	{
 		ColorNode(BlackColor, WhiteColor, WhiteColor, OrangeColor),
@@ -179,6 +182,8 @@ const sf::Color backButtonNormalFillColor[numColorTheme] = { DarkPinkColor, Grap
 const sf::Color announcementFillColor[numColorTheme] = { DarkOrangeColor , CaribbeanCurrentColor };
 const sf::Color announcementTextColor[numColorTheme] = { BlackColor, WhiteColor };
 
+const sf::Color errorTextColor[numColorTheme] = { RedColor, EmeraldColor };
+
 std::string intToString(int a);
 int stringToInt(std::string a);
 
@@ -204,3 +209,5 @@ double area(double x1, double y1, double x2, double y2, double x3, double y3);
 bool isInsideTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double x, double y);
 
 void RotatePoint(double& x, double& y, double cx, double cy, double angle);
+
+sf::Text CompressWords(std::string cur, double x, double y, double width, double height, sf::Font* font, double characterSize, sf::Color color); //return cur with \n so that the width of sf::Text is not greater than width

@@ -46,7 +46,7 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 		{
 			{
 				{},
-				{{0, 10}},
+				{{0, 15}},
 				{{0, 99}}
 			},
 			{

@@ -31,7 +31,8 @@ Stack::Stack(double radius, double outlineSize, double lineThickness,
 				"return head.item"
 			}
 		}, WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 3, widthBox * 2, heightBox * 3, font(fontType::Consolas),
-		WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 4, widthBox * 2, heightBox, font(fontType::Consolas))  {}
+		WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 4, widthBox * 2, heightBox, font(fontType::Consolas),
+		0, HEIGHT_RES - heightBox * 4, widthBox * 2, heightBox, font(fontType::Arial))  {}
 
 int Stack::getSize() {
 	return (int)stack.size();
@@ -114,6 +115,10 @@ void Stack::createRandom(int n, std::vector <int> values) {
 }
 
 void Stack::push(int value) {
+	if (getSize() + 1 > maxSizeData) {
+		setError(true, "Maximmum size of " + intToString(maxSizeData) + " reached!");
+		return;
+	}
 	int id = getEmptyID();
 	resetAnimation();
 	if (getSize() == 0) {
