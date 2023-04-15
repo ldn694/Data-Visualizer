@@ -19,8 +19,9 @@ private:
 	void render();
 	void handlePlayerInput();
 	void runStack();
+	void runQueue();
 private:
 	ColorTheme theme;
 	sf::RenderWindow window;
-	Box box;
+	Box stackBox, queueBox;
 };

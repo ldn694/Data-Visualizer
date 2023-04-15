@@ -152,6 +152,8 @@
     <ClCompile Include="Node.cpp" />
     <ClCompile Include="DataStructure.cpp" />
     <ClCompile Include="PlayButton.cpp" />
+    <ClCompile Include="Queue.cpp" />
+    <ClCompile Include="QueueStage.cpp" />
     <ClCompile Include="Scrubber.cpp" />
     <ClCompile Include="SinglyLinkedList.cpp" />
     <ClCompile Include="Stack.cpp" />
@@ -174,6 +176,8 @@
     <ClInclude Include="MyShape.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="PlayButton.h" />
+    <ClInclude Include="Queue.h" />
+    <ClInclude Include="QueueStage.h" />
     <ClInclude Include="Scrubber.h" />
     <ClInclude Include="SinglyLinkedList.h" />
     <ClInclude Include="Stack.h" />

@@ -12,7 +12,6 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	backButton(0, 0, widthBox / 4, widthBox / 4),
 	ds(_ds)
 {
-	std::cout << "start initiating stage\n";
 	numOperation = operationName.size();
 	operationBox.resize(numOperation);
 	curOperation = 0;
@@ -68,7 +67,6 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	if (numOperation && numMode[0]) {
 		updateModeBox(0);
 	}
-	std::cout << "done initiating stage\n";
 }
 
 void Stage::setDS(DataStructure* newDS) {

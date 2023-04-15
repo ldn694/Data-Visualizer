@@ -95,11 +95,8 @@ void DataStructure::setError(bool val, std::string newError) {
 
 void DataStructure::setTheme(ColorTheme newTheme) {
 	defaultGraph.setTheme(theme, newTheme);
-	std::cout << "Done default\n";
 	curGraph.setTheme(theme, newTheme);
-	std::cout << "Done cur\n";
 	mainGraph.setTheme(theme, newTheme);
-	std::cout << "Done main\n";
 	for (int i = 0; i < (int)listFrame.size(); i++) {
 		listFrame[i].graph.setTheme(theme, newTheme);
 		for (int j = 0; j < (int)listFrame[i].nextStep.size(); j++) {

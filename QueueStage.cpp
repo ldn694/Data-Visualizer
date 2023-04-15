@@ -1,15 +1,15 @@
 #include <iostream>
-#include "StackStage.h"
+#include "QueueStage.h"
 #include "Template.h"
 
-StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSize, double lineThickness,
+QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSize, double lineThickness,
 	ColorTheme theme, EdgeType edgeType) :
-	Stage(window, { "Create", "Push", "Pop", "Peek" }, 
-		{ 
+	Stage(window, { "Create", "Enqueue", "Dequeue", "Peek" },
+		{
 			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom"},
 			{"Random", "v = ? "},
 			{""},
-			{""}
+			{"Front", "Back"}
 		},
 		{
 			{
@@ -27,6 +27,7 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 				{}
 			},
 			{
+				{},
 				{}
 			}
 		},
@@ -46,6 +47,7 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 				{}
 			},
 			{
+				{},
 				{}
 			}
 		},
@@ -65,16 +67,17 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 				{}
 			},
 			{
+				{},
 				{}
 			}
 		},
 		theme)
 {
-	ds = Stack(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
+	ds = Queue(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
 	setDS(&ds);
 }
 
-bool StackStage::processEvents() {
+bool QueueStage::processEvents() {
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
@@ -113,21 +116,26 @@ bool StackStage::processEvents() {
 						}
 					}
 				}
-				if (operationName[curOperation] == "Pop") {
-					ds.pop();
+				if (operationName[curOperation] == "Dequeue") {
+					ds.dequeue();
 				}
 				if (operationName[curOperation] == "Peek") {
-					ds.peek();
+					if (modeString == "Front") {
+						ds.peekFront();
+					}
+					if (modeString == "Back") {
+						ds.peekBack();
+					}
 				}
-				if (operationName[curOperation] == "Push") {
+				if (operationName[curOperation] == "Enqueue") {
 					if (modeString == "v =") {
 						int val = valueTypingBox[0].getProperInt();
 						if (val != -1) {
-							ds.push(val);
+							ds.enqueue(val);
 						}
 					}
 					else {
-						ds.push(-1);
+						ds.enqueue(-1);
 					}
 				}
 				operating = false;
@@ -147,19 +155,19 @@ bool StackStage::processEvents() {
 	return false;
 }
 
-void StackStage::update(sf::Time deltaT) {
+void QueueStage::update(sf::Time deltaT) {
 	ds.update(deltaT);
 	stageUpdate(deltaT);
 }
 
-void StackStage::render() {
-	window.clear(theme == LightTheme ? MilkColor: EerieBlackColor);
+void QueueStage::render() {
+	window.clear(theme == LightTheme ? MilkColor : EerieBlackColor);
 	ds.draw(window);
 	draw();
 	window.display();
 }
 
-void StackStage::run() {
+void QueueStage::run() {
 	sf::Clock mClock;
 	sf::Time timePool = sf::Time::Zero;
 	while (window.isOpen())
