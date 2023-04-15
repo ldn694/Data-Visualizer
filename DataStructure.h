@@ -42,21 +42,22 @@ struct DataStructure {
 	std::deque <std::tuple<int, sf::Time, sf::Time, bool> > frameQueue;
 	bool isAnimating;
 	ColorTheme theme;
-	std::vector <std::vector <std::string> > codes;
-	std::vector <std::vector <sf::Text> > codeText;
+	std::vector <std::vector <std::vector <std::string> > > codes;
+	std::vector <std::vector <std::vector <sf::Text> > > codeText;
 	double xAnnouncement, yAnnouncement, widthAnnouncement, heightAnnouncement;
 	sf::Font* announcementFont;
 	double xError, yError, widthError, heightError;
 	std::string error;
 	sf::Font* errorFont;
 	sf::Time errorTime;
-	std::vector <int> numStep;
-	int numOperation, curStep = 0, curOperation = 0;
+	std::vector <int> numMode;
+	std::vector <std::vector <int> > numStep;
+	int numOperation, curStep = 0, curMode = 0, curOperation = 0;
 	int curFrame = 0;
 	sf::RectangleShape codeBoard;
 	DataStructure(double radius = 0, double outlineSize = 0, double lineThickness = 0,
 		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected, sf::Font* font = nullptr, 
-		std::vector <std::vector <std::string> > codes = {}, double x = 0, double y = 0, double width = 0, double height = 0, sf::Font* codeFont = nullptr,
+		std::vector < std::vector <std::vector <std::string> > > codes = {}, double x = 0, double y = 0, double width = 0, double height = 0, sf::Font* codeFont = nullptr,
 		double xAnnouncement = 0, double yAnnouncement = 0, double widthAnnouncement = 0, double heightAnnouncement = 0, sf::Font *announcementFont = nullptr,
 		double xError = 0, double yError = 0, double widthError = 0, double heightError = 0, sf::Font* errorFont = nullptr);
 	void resetAnimation();
@@ -75,6 +76,7 @@ struct DataStructure {
 	void setEdgeColor(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorNodeType type);
 	void doNothing(std::vector <Animation>& animationList);
 	void setCurOperation(int val);
+	void setCurMode(int val);
 	void update(sf::Time deltaT);
 	void updateAnimation(Graph& graph, Animation animation, sf::Time time = sf::seconds(0.f));
 	void addAnimations(std::vector <Animation> animationList, sf::Time time, int line, std::string announcement = "");

@@ -2,7 +2,7 @@
 
 MediaControl::MediaControl(double _x, double _y, double _width, double _height, DataStructure* _ds) :
 	x(_x), y(_y), width(_width), height(_height), ds(_ds),
-	scrubber(x, y, width, height / 4, zipWidth),
+	scrubber(x, y + (height / 4 - height / 6) / 2, width, height / 6, zipWidth),
 	playButton(x + width * 0.5, y + height * 0.75, height / 4),
 	prevButton("Images/backward.png", x + width * 2 / 6, y + height * 0.75, height / 4, height / 4, playButtonCircleColor),
 	nextButton("Images/forward.png", x + width * 4 / 6, y + height * 0.75, height / 4, height / 4, playButtonCircleColor),

@@ -65,6 +65,7 @@ const double sizeLetterError = 25;
 
 const int maxLetter = 4;
 const int maxSizeData = 15;
+const int maxValueData = 99;
 
 const double heightScrubber = 20;
 const double zipWidth = 15;
@@ -163,12 +164,12 @@ const sf::Color codeNormalViewColor[numColorTheme] = { BlackColor, WhiteSmokeCol
 const sf::Color codeHightlightViewColor[numColorTheme] = { WhiteColor, EerieBlackColor };
 const sf::Color codeHighlightBackGroundColor[numColorTheme]{ BrightPinkColor, DarkCyanColor };
 
-const sf::Color scrubberZipColor[numColorTheme] = {LightYellowColor, CaribbeanCurrentColor };
-const sf::Color scrubberPassedColor[numColorTheme] = { OrangeColor, EmeraldColor };
-const sf::Color scrubberRemainColor[numColorTheme] = { DarkBrownColor, TaupeGrayColor };
+const sf::Color scrubberZipColor[numColorTheme] = { RedColor, CaribbeanCurrentColor };
+const sf::Color scrubberPassedColor[numColorTheme] = { RedColor, EmeraldColor };
+const sf::Color scrubberRemainColor[numColorTheme] = { BlackColor, TaupeGrayColor };
 
-const sf::Color playButtonCircleColor[numColorTheme] = { LightYellowColor, EmeraldColor };
-const sf::Color playButtonTriangleColor[numColorTheme] = { DarkBrownColor, EerieBlackColor };
+const sf::Color playButtonCircleColor[numColorTheme] = { DarkBrownColor, EmeraldColor };
+const sf::Color playButtonTriangleColor[numColorTheme] = { DarkOrangeColor, EerieBlackColor };
 
 const sf::Color choicesColor[numColorTheme] = {BlackColor, WhiteSmokeColor};
 const sf::Color choicesOuterCircleColor[numColorTheme] = { DarkBrownColor,  EerieBlackColor };
@@ -197,6 +198,7 @@ void MovePoint(double& x1, double& y1, double x2, double y2, double dist);
 void MovePointParallel(double& x, double& y, double x1, double y1, double x2, double y2); //move point A(x, y) to a A'(x', y') so that AA' is parallel to BC in which B is (x1, y1) and C is (x2, y2) and |AA'|=|BC|
 
 const std::string fontName[] = { "Fonts/arial.ttf", "Fonts/Consolas.ttf", "Fonts/CartoGothic.otf", "Fonts/DejaVuSans.ttf", "Fonts/Genshin.ttf", "Fonts/CSGO.ttf", "Fonts/Prototype.ttf"};
+const std::string fontAlternativeName[] = { "..\\..\\Fonts\\Arial.ttf", "..\\..\\Fonts\\Consolas.ttf", "..\\..\\Fonts\\CartoGothic.otf", "..\\..\\Fonts\\DejaVuSans.ttf", "..\\..\\Fonts\\Genshin.ttf", "..\\..\\Fonts\\CSGO.ttf", "..\\..\\Fonts\\Prototype.ttf" };
 const int numFont = 7;
 enum fontType {
 	Arial, Consolas, CartoGothic, DejaVu, Genshin, CSGO, Prototype

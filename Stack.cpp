@@ -6,32 +6,59 @@
 #include "Stack.h"
 
 Stack::Stack(double radius, double outlineSize, double lineThickness,
-	ColorTheme _theme, EdgeType edgeType, sf::Font* _font) : 
-	DataStructure(radius, outlineSize, lineThickness, _theme, edgeType, _font, 
+	ColorTheme _theme, EdgeType edgeType, sf::Font* _font) :
+	DataStructure(radius, outlineSize, lineThickness, _theme, edgeType, _font,
 		{
 			{
+				{
 				""
+				},
+				{
+				""
+				},
+				{
+				""
+				},
+				{
+				""
+				},
+				{
+				""
+				}
 			},
 			{
-				"",
-				"Vertex vtx = new Vertex(v)",
-				"vtx.next = head",
-				"head = vtx"
+				{
+					"",
+					"Vertex vtx = new Vertex(v)",
+					"vtx.next = head",
+					"head = vtx",
+				},
+				{
+					"",
+					"Vertex vtx = new Vertex(v)",
+					"vtx.next = head",
+					"head = vtx",
+				}
 			},
 			{
-				"",
-				"if empty, do nothing",
-				"temp = head",
-				"head = head.next",
-				"delete temp"
+				{
+					"",
+					"if empty, do nothing",
+					"temp = head",
+					"head = head.next",
+					"delete temp"
+				}
 			},
 			{
+				{
 				"",
 				"if empty, return NOT_FOUND",
 				"return head.item"
+				}
 			}
-		}, WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 3, widthBox * 2, heightBox * 3, font(fontType::Consolas),
-		WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 4, widthBox * 2, heightBox, font(fontType::Consolas),
+		}, 
+		WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 3, widthBox * 2, heightBox * 3, font(fontType::Consolas),
+		WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 4 - outlineBox * 2, widthBox * 2, heightBox, font(fontType::Consolas),
 		0, HEIGHT_RES - heightBox * 4, widthBox * 2, heightBox, font(fontType::Arial))  {}
 
 int Stack::getSize() {
@@ -71,9 +98,12 @@ int Stack::getEmptyID() {
 	return id;
 }
 
-void Stack::createRandom(int n, std::vector <int> values) {
+void Stack::createRandom(int n, std::vector <int> values, bool sorted) {
 	if (n == -1) {
-		n = rand() % 10 + 1;
+		n = rand() % maxSizeData + 1;
+	}
+	if (!values.empty() && values[0] < 0) {
+		return;
 	}
 	stack.clear();
 	mainGraph = defaultGraph;
@@ -86,8 +116,16 @@ void Stack::createRandom(int n, std::vector <int> values) {
 	Node defaultNode = defaultGraph.getDefaultNode();
 	double x = (WIDTH_RES - (defaultNode.getRadius() * (5 * n - 5))) / 2;
 	double y = HEIGHT_RES / 3;
+	std::vector <int> valueList;
 	for (int i = 0; i < n; i++) {
 		int value = (values.empty() ? rand() % 100 + 1 : values[i]);
+		valueList.push_back(value);
+	}
+	if (sorted) {
+		std::sort(valueList.begin(), valueList.end());
+	}
+	for (int i = 0; i < n; i++) {
+		int value = valueList[i];
 		stack.push_back({ i, value,  (i < n - 1 ? i + 1 : -1) });
 		nodeList.push_back(i);
 		nodeInfo.push_back({ value, x, y });
@@ -119,6 +157,9 @@ void Stack::push(int value) {
 		setError(true, "Maximmum size of " + intToString(maxSizeData) + " reached!");
 		return;
 	}
+	if (value < 0) {
+		value = rand() % (maxValueData + 1);
+	}
 	int id = getEmptyID();
 	resetAnimation();
 	if (getSize() == 0) {
@@ -128,10 +169,16 @@ void Stack::push(int value) {
 		stack.push_back({ id, value, -1 });
 		addVariables(animationList, { id }, { "vtx" });
 		addAnimations(animationList, stepTime, 1, "Create new vertex to store value " + intToString(value));
+
+		animationList.clear();
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 2, "head is currently null, so vtx->next points to null");
+
 		animationList.clear();
 		addVariables(animationList, { id }, { "head" });
 		setNodeColor(animationList, { id }, theme, highlight2);
-		addAnimations(animationList, stepTime, 3, "Head is currently null, so head now points to vtx");
+		addAnimations(animationList, stepTime, 3, "Now head points to vtx");
+
 		animationList.clear();
 		setNodeColor(animationList, { id }, theme, normal);
 		deleteVariables(animationList, { id }, { "vtx" });

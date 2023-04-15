@@ -2,7 +2,7 @@
 #include "Scrubber.h"
 
 Scrubber::Scrubber(double _x, double _y, double _width, double _height, double _zipWidth, DataStructure* _ds):
-	x(_x), y(_y), width(_width), height(_height), zipWidth(_zipWidth), ds(_ds), isChangingFrame(false) {}
+	x(_x), y(_y), width(_width), height(_height), zipWidth(_zipWidth), ds(_ds), isChangingFrame(false), isHovering(false) {}
 
 void Scrubber::setDS(DataStructure* newDS) {
 	ds = newDS;
@@ -35,6 +35,12 @@ void Scrubber::handleMousePressed(double mouseX, double mouseY) {
 }
 
 void Scrubber::handleMouseMove(double mouseX, double mouseY) {
+	if (mouseX < x || mouseX > x + width || mouseY < y || mouseY > y + height) {
+		isHovering = false;
+	}
+	else {
+		isHovering = true;
+	}
 	if (!isChangingFrame) {
 		return;
 	}
@@ -63,18 +69,23 @@ void Scrubber::handleKeyPressed(int key) {
 }
 
 void Scrubber::draw(sf::RenderWindow& window, ColorTheme theme) {
-	sf::RectangleShape bar(sf::Vector2f(width, height));
-	bar.setPosition(x, y);
+	double curHeight = (isHovering || isChangingFrame) ? height : height * 0.7;
+	sf::RectangleShape bar(sf::Vector2f(width, curHeight));
+	bar.setOrigin(0, curHeight / 2);
+	bar.setPosition(x, y + height / 2);
 	bar.setFillColor(scrubberRemainColor[theme]);
 	window.draw(bar);
 	double stepWidth = width / (ds->listFrame.size() - 1);
-	sf::RectangleShape passedBar(sf::Vector2f(stepWidth * ds->curFrame, height));
-	passedBar.setPosition(x, y);
+	sf::RectangleShape passedBar(sf::Vector2f(stepWidth * ds->curFrame, curHeight));
+	passedBar.setOrigin(0, curHeight / 2);
+	passedBar.setPosition(x, y + height / 2);
 	passedBar.setFillColor(scrubberPassedColor[theme]);
 	window.draw(passedBar);
-	sf::RectangleShape zip(sf::Vector2f(zipWidth, height * 1.2));
-	zip.setOrigin(sf::Vector2f(zipWidth / 2, height * 0.6));
-	zip.setPosition(x + stepWidth * ds->curFrame, y + height * 0.5);
-	zip.setFillColor(scrubberZipColor[theme]);
-	window.draw(zip);
+	if (isHovering || isChangingFrame) {
+		sf::CircleShape zip(height * 0.8);
+		zip.setOrigin(zip.getLocalBounds().left + zip.getLocalBounds().width / 2, zip.getLocalBounds().top + zip.getLocalBounds().height / 2);
+		zip.setPosition(x + stepWidth * ds->curFrame, y + height * 0.5);
+		zip.setFillColor(scrubberZipColor[theme]);
+		window.draw(zip);
+	}
 }

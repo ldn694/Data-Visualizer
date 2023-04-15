@@ -6,18 +6,21 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 	ColorTheme theme, EdgeType edgeType) :
 	Stage(window, { "Create", "Push", "Pop", "Peek" }, 
 		{ 
-			{"Random", "n = ?", "Custom"},
-			{"v = ?"},
+			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom"},
+			{"Random", "v = ? "},
 			{""},
 			{""}
 		},
 		{
 			{
 				{},
+				{},
+				{},
 				{"n ="},
 				{"v[] ="}
 			},
 			{
+				{},
 				{"v ="}
 			},
 			{
@@ -30,10 +33,13 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 		{
 			{
 				{},
+				{},
+				{},
 				{singleNumber},
 				{multipleNumber}
 			},
 			{
+				{},
 				{singleNumber}
 			},
 			{
@@ -46,11 +52,14 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 		{
 			{
 				{},
-				{{0, 15}},
-				{{0, 99}}
+				{},
+				{},
+				{{0, maxSizeData}},
+				{{0, maxValueData}}
 			},
 			{
-				{{0, 99}}
+				{},
+				{{0, maxValueData}}
 			},
 			{
 				{}
@@ -61,6 +70,7 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 		},
 		theme)
 {
+	std::cout << "done initiating stackstage\n";
 	ds = Stack(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
 	setDS(&ds);
 }
@@ -82,10 +92,16 @@ bool StackStage::processEvents() {
 				ds.setIsAnimating(true);
 				std::string modeString = modeName[curOperation][curMode];
 				if (operationName[curOperation] == "Create") {
+					if (modeString == "Empty") {
+						ds.createRandom(0, {});
+					}
 					if (modeString == "Random") {
 						ds.createRandom();
 					}
-					if (modeString == "n = ?") {
+					if (modeString == "Random Sorted") {
+						ds.createRandom(-1, {}, true);
+					}
+					if (modeString == "Fixed Size") {
 						int val = valueTypingBox[0].getProperInt();
 						if (val != -1) {
 							ds.createRandom(val);
@@ -94,6 +110,10 @@ bool StackStage::processEvents() {
 					if (modeString == "Custom") {
 						std::vector <int> values = valueTypingBox[0].getListInt();
 						if (!values.empty()) {
+							for (int i : values) {
+								std::cout << i << " ";
+							}
+							std::cout << "\n";
 							ds.createRandom(values.size(), values);
 						}
 					}
@@ -105,9 +125,14 @@ bool StackStage::processEvents() {
 					ds.peek();
 				}
 				if (operationName[curOperation] == "Push") {
-					int val = valueTypingBox[0].getProperInt();
-					if (val != -1) {
-						ds.push(val);
+					if (modeString == "v =") {
+						int val = valueTypingBox[0].getProperInt();
+						if (val != -1) {
+							ds.push(val);
+						}
+					}
+					else {
+						ds.push(-1);
 					}
 				}
 				operating = false;

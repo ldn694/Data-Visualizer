@@ -10,7 +10,7 @@
 
 DataStructure::DataStructure(double radius, double outlineSize, double lineThickness,
 	ColorTheme _theme, EdgeType idEdgeType, sf::Font* font, 
-	std::vector <std::vector <std::string> > _codes, double x, double y, double width, double height, sf::Font* codeFont,
+	std::vector <std::vector <std::vector <std::string> > > _codes, double x, double y, double width, double height, sf::Font* codeFont,
 	double _xAnnouncement, double _yAnnouncement, double _widthAnnouncement, double _heightAnnouncement, sf::Font* _announcementFont,
 	double _xError, double _yError, double _widthError, double _heightError, sf::Font* _errorFont) :
 	theme(_theme), codes(_codes),
@@ -27,46 +27,52 @@ DataStructure::DataStructure(double radius, double outlineSize, double lineThick
 	
 	numOperation = codes.size();
 	numStep.resize(numOperation);
+	numMode.resize(numOperation);
 	for (int i = 0; i < numOperation; i++) {
-		assert(!codes[i].empty());
-		assert(codes[0][0] == "");
-		numStep[i] = codes[i].size() - 1;
+		numMode[i] = codes[i].size();
+		numStep[i].resize(numMode[i]);
+		for (int j = 0; j < numMode[i]; j++) {
+			numStep[i][j] = codes[i][j].size() - 1;
+		}
 	}
 	codeText.resize(numOperation);
 	for (int i = 0; i < numOperation; i++) {
-		codeText[i].resize(numStep[i] + 1);
-		double stepY = height / numStep[i];
-		double outlineSize = height / numStep[i] * 0.2f;
-		double maxHeight = height / numStep[i] * 0.6f;
-		double charSize = 10000.f;
-		for (int j = 1; j <= numStep[i]; j++) {
-			double l = 0, r = maxHeight, res = 0;
-			for (int cnt = 0; cnt < 60; cnt++) {
-				double mid = (l + r) / 2.0f;
-				sf::Text text;
-				text.setString(codes[i][j]);
-				text.setFont(*codeFont);
-				text.setCharacterSize(mid);
-				if (text.getLocalBounds().width <= width - outlineSize * 2) {
-					res = mid;
-					l = mid;
+		codeText[i].resize(numMode[i]);
+		for (int j = 0; j < numMode[i]; j++) {
+			codeText[i][j].resize(numStep[i][j] + 1);
+			double stepY = height / numStep[i][j];
+			double outlineSize = height / numStep[i][j] * 0.2f;
+			double maxHeight = height / numStep[i][j] * 0.6f;
+			double charSize = 10000.f;
+			for (int k = 1; k <= numStep[i][j]; k++) {
+				double l = 0, r = maxHeight, res = 0;
+				for (int cnt = 0; cnt < 60; cnt++) {
+					double mid = (l + r) / 2.0f;
+					sf::Text text;
+					text.setString(codes[i][j][k]);
+					text.setFont(*codeFont);
+					text.setCharacterSize(mid);
+					if (text.getLocalBounds().width <= width - outlineSize * 2) {
+						res = mid;
+						l = mid;
+					}
+					else {
+						r = mid;
+					}
 				}
-				else {
-					r = mid;
+				if (charSize - res > epsilonDouble) {
+					charSize = res;
 				}
 			}
-			if (charSize - res > epsilonDouble) {
-				charSize = res;
+			double curY = y + outlineSize;
+			for (int k = 1; k <= numStep[i][j]; k++) {
+				codeText[i][j][k].setString(codes[i][j][k]);
+				codeText[i][j][k].setFont(*codeFont);
+				codeText[i][j][k].setCharacterSize(charSize);
+				codeText[i][j][k].setPosition(x + outlineSize, curY);
+				codeText[i][j][k].setFillColor(codeNormalViewColor[theme]);
+				curY += stepY;
 			}
-		}
-		double curY = y + outlineSize;
-		for (int j = 1; j <= numStep[i]; j++) {
-			codeText[i][j].setString(codes[i][j]);
-			codeText[i][j].setFont(*codeFont);
-			codeText[i][j].setCharacterSize(charSize);
-			codeText[i][j].setPosition(x + outlineSize, curY);
-			codeText[i][j].setFillColor(codeNormalViewColor[theme]);
-			curY += stepY;
 		}
 	}
 	codeBoard = sf::RectangleShape(sf::Vector2f(width, height));
@@ -194,8 +200,10 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 	}
 	theme = newTheme;
 	for (int i = 0; i < numOperation; i++) {
-		for (int j = 1; j <= numStep[i]; j++) {
-			codeText[i][j].setFillColor(codeNormalViewColor[theme]);
+		for (int j = 0; j < numMode[i]; j++) {
+			for (int k = 1; k <= numStep[i][j]; k++) {
+				codeText[i][j][k].setFillColor(codeNormalViewColor[theme]);
+			}
 		}
 	}
 }
@@ -320,11 +328,28 @@ void DataStructure::doNothing(std::vector <Animation>& animationList) {
 void DataStructure::setCurOperation(int val) {
 	errorTime = sf::seconds(0.f);
 	curOperation = val;
+	curMode = 0;
 	curStep = 0;
 	curFrame = 0;
 	for (int i = 0; i < numOperation; i++) {
-		for (int j = 1; j <= numStep[i]; j++) {
-			codeText[i][j].setFillColor(codeNormalViewColor[theme]);
+		for (int j = 0; j < numMode[i]; j++) {
+			for (int k = 1; k <= numStep[i][j]; k++) {
+				codeText[i][j][k].setFillColor(codeNormalViewColor[theme]);
+			}
+		}
+	}
+}
+
+void DataStructure::setCurMode(int val) {
+	errorTime = sf::seconds(0.f);
+	curMode = val;
+	curStep = 0;
+	curFrame = 0;
+	for (int i = 0; i < numOperation; i++) {
+		for (int j = 0; j < numMode[i]; j++) {
+			for (int k = 1; k <= numStep[i][j]; k++) {
+				codeText[i][j][k].setFillColor(codeNormalViewColor[theme]);
+			}
 		}
 	}
 }
@@ -594,25 +619,25 @@ void DataStructure::draw(sf::RenderWindow& window) {
 	sf::FloatRect codeBoardRect = codeBoard.getGlobalBounds();
 	Box tmpBox(codeBoardRect.left, codeBoardRect.top, codeBoardRect.width, codeBoardRect.height, {CodeOuterBox});
 	tmpBox.draw(window, theme);
-	if (codes[curOperation][curStep] != "") {
+	if (codes[curOperation][curMode][curStep] != "") {
 		double width = codeBoard.getGlobalBounds().width;
 		double height = codeBoard.getGlobalBounds().height;
 		double left = codeBoard.getGlobalBounds().left;
 		double top = codeBoard.getGlobalBounds().top;
-		double stepY = height / numStep[curOperation];
-		double outlineSize = height / numStep[curOperation] * 0.2f;
+		double stepY = height / numStep[curOperation][curMode];
+		double outlineSize = height / numStep[curOperation][curMode] * 0.2f;
 		sf::RectangleShape highlightRect(sf::Vector2f(width,  stepY));
 		highlightRect.setPosition(left, top + (curStep - 1) * stepY);
 		highlightRect.setFillColor(codeHighlightBackGroundColor[theme]);
 		window.draw(highlightRect);
 	}
-	for (int i = 1; i <= numStep[curOperation]; i++) {
+	for (int i = 1; i <= numStep[curOperation][curMode]; i++) {
 		if (i == curStep) {
-			codeText[curOperation][i].setFillColor(codeHightlightViewColor[theme]);
+			codeText[curOperation][curMode][i].setFillColor(codeHightlightViewColor[theme]);
 		}
-		window.draw(codeText[curOperation][i]);
+		window.draw(codeText[curOperation][curMode][i]);
 		if (i == curStep) {
-			codeText[curOperation][i].setFillColor(codeNormalViewColor[theme]);
+			codeText[curOperation][curMode][i].setFillColor(codeNormalViewColor[theme]);
 		}
 	}
 	if (!listFrame.empty()) {

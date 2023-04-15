@@ -10,7 +10,9 @@ int main()
 	listFont.resize(numFont);
 	for (int i = 0; i < numFont; i++) {
 		if (!listFont[i].loadFromFile(fontName[i])) {
-			assert(false);
+			if (!listFont[i].loadFromFile(fontAlternativeName[i])) {
+				assert(false);
+			}
 		}
 	}
 	sf::ContextSettings settings;
