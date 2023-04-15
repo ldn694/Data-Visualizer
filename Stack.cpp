@@ -29,31 +29,39 @@ Stack::Stack(double radius, double outlineSize, double lineThickness,
 			{
 				{
 					"",
-					"Vertex vtx = new Vertex(v)",
-					"vtx.next = head",
-					"head = vtx",
+					"Vertex* vtx = new Vertex(v);",
+					"if (head == NULL) {",
+					"	head = vtx;",
+					"} else {",
+					"	vtx->next = head;",
+					"	head = vtx;",
+					"}"
 				},
 				{
 					"",
-					"Vertex vtx = new Vertex(v)",
-					"vtx.next = head",
-					"head = vtx",
+					"Vertex* vtx = new Vertex(v);",
+					"if (head == NULL) {",
+					"	head = vtx;",
+					"} else {",
+					"	vtx->next = head;",
+					"	head = vtx;",
+					"}"
 				}
 			},
 			{
 				{
 					"",
-					"if empty, do nothing",
-					"temp = head",
-					"head = head.next",
-					"delete temp"
+					"if (head == NULL) return;",
+					"Vertex* temp = head;",
+					"head = head->next;",
+					"delete temp;"
 				}
 			},
 			{
 				{
-				"",
-				"if empty, return NOT_FOUND",
-				"return head.item"
+					"",
+					"if (head == NULL) return;",
+					"return head->value;"
 				}
 			}
 		}, 
@@ -172,12 +180,12 @@ void Stack::push(int value) {
 
 		animationList.clear();
 		doNothing(animationList);
-		addAnimations(animationList, stepTime, 2, "head is currently null, so vtx->next points to null");
+		addAnimations(animationList, stepTime, 2, "head is currently null (empty stack), so the condition is true");
 
 		animationList.clear();
 		addVariables(animationList, { id }, { "head" });
 		setNodeColor(animationList, { id }, theme, highlight2);
-		addAnimations(animationList, stepTime, 3, "Now head points to vtx");
+		addAnimations(animationList, stepTime, 3, "head points to vtx");
 
 		animationList.clear();
 		setNodeColor(animationList, { id }, theme, normal);
@@ -194,8 +202,12 @@ void Stack::push(int value) {
 	addAnimations(animationList, stepTime, 1, "Create new vertex to store value " + intToString(value));
 
 	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 2, "head is not null (stack not empty), so the condition is false");
+
+	animationList.clear();
 	addEdge(animationList, id, head, theme, highlight);
-	addAnimations(animationList, stepTime, 2, "vtx.next points to head");
+	addAnimations(animationList, stepTime, 5, "vtx.next points to head");
 
 
 	animationList.clear();
@@ -203,7 +215,7 @@ void Stack::push(int value) {
 	setEdgeColor(animationList, id, head, theme, normal);
 	addVariables(animationList, { id }, { "head" });
 	deleteVariables(animationList, { getHeadID() }, { "head" });
-	addAnimations(animationList, stepTime, 3, "head points to vtx");
+	addAnimations(animationList, stepTime, 6, "head points to vtx");
 
 	animationList.clear();
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -211,9 +223,6 @@ void Stack::push(int value) {
 	stack.insert(stack.begin(), {id, value, head});
 	moveNode(animationList, id, (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2, HEIGHT_RES / 3);
 	mergeMoveNode(animationList);
-	addAnimations(animationList, stepTime, 3, "Re-layout for visualization");
-
-	animationList.clear();
 	setNodeColor(animationList, { id }, theme, normal);
 	deleteVariables(animationList, { id }, { "vtx" });
 	addAnimations(animationList, stepTime, 0, "Re-layout for visualization");
@@ -242,10 +251,11 @@ void Stack::pop() {
 	if (getSize() == 1) {
 		setNodeColor(animationList, { head }, theme, highlight);
 		addVariables(animationList, { head }, { "temp" });
-		addAnimations(animationList, stepTime, 2, "temp points to head");
+		addAnimations(animationList, stepTime, 2, "Created pointer temp pointing to head");
 
 		animationList.clear();
 		doNothing(animationList);
+		deleteVariables(animationList, { head }, { "head" });
 		addAnimations(animationList, stepTime, 3, "head->next is null, so head is now also null (empty stack)");
 
 		animationList.clear();
@@ -256,7 +266,7 @@ void Stack::pop() {
 	else {
 		setNodeColor(animationList, { head }, theme, highlight);
 		addVariables(animationList, { head }, { "temp" });
-		addAnimations(animationList, stepTime, 2, "temp points to head");
+		addAnimations(animationList, stepTime, 2, "Created pointer temp pointing to head");
 
 		animationList.clear();
 		setEdgeColor(animationList, head, stack[1].id, theme, highlight2);
