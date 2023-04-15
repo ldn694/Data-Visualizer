@@ -33,12 +33,8 @@ Edge::Edge(double x1, double y1, double x2, double y2, double thickness,
 	color(_color), type(_type) {
 	MovePoint(x1, y1, x2, y2, shortenStart);
 	MovePoint(x2, y2, x1, y1, shortenGoal);
-	if (type == EdgeType::SinglyDirected) {
+	if (type == EdgeType::SinglyDirected || type == EdgeType::DoublyDirected) {
 		MovePoint(x2, y2, x1, y1, thickness * 0.5);
-	}
-	if (type == EdgeType::DoublyDirected) {
-		MovePoint(x2, y2, x1, y1, thickness * 0.5);
-		//MovePoint(x1, y1, x2, y2, thickness * 0.5);
 	}
 	double hypo = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 	double dx = ((y2 - y1) * (thickness / 2.0) / hypo);
@@ -47,25 +43,22 @@ Edge::Edge(double x1, double y1, double x2, double y2, double thickness,
 	double X1 = x2 - dx, Y1 = y2 + dy;
 	double X2 = x2 + dx, Y2 = y2 - dy;
 	double X3 = x1 + dx, Y3 = y1 - dy;
-	//std::cout << "(" << X0 << "," << Y0 << ") (" << X1 << "," << Y1 << ") (" << X2 << "," << Y2 << ") (" << X3 << "," << Y3 << ")\n";
-	//std::cout << "(" << x1 << "," << y1 << ") (" << x2 << "," << y2 << ")\n";
 	if (type == EdgeType::DoublyDirected) {       
 		double diff = shortenGoal - sqrt(shortenGoal * shortenGoal - 4 * thickness * thickness);
 		MovePoint(X3, Y3, X0, Y0, -2 * thickness);
 		MovePoint(X2, Y2, X1, Y1, -2 * thickness);
 		MovePoint(X1, Y1, X2, Y2, 2 * thickness);
 		MovePoint(X0, Y0, X3, Y3, 2 * thickness);
-		//std::cout << "changed to (" << X0 << "," << Y0 << ") (" << X1 << "," << Y1 << ") (" << X2 << "," << Y2 << ") (" << X3 << "," << Y3 << ")\n";
 		MovePoint(x1, y1, X3, Y3, 2 * thickness);
 		MovePoint(x2, y2, X2, Y2, 2 * thickness);
 		MovePoint(X2, Y2, X3, Y3, -diff);
 		MovePoint(X1, Y1, X0, Y0, -diff);
-		MovePoint(X3, Y3, X2, Y2, -diff);
-		MovePoint(X0, Y0, X1, Y1, -diff);
+		MovePoint(X3, Y3, X2, Y2, -2 * diff);
+		MovePoint(X0, Y0, X1, Y1, -2 * diff);
 		MovePoint(x1, y1, x2, y2, -diff);
 		MovePoint(x2, y2, x1, y1, -diff);
-		//std::cout << "changed to (" << x1 << "," << y1 << ") (" << x2 << "," << y2 << ")\n";
 	}
+	MovePoint(x2, y2, x1, y1, -thickness * 0.5);
 	forwardPointer = TrianglePointer(x1, y1, x2, y2, thickness, color);
 	points[0] = sf::Vertex(sf::Vector2f(X0, Y0), color);
 	points[1] = sf::Vertex(sf::Vector2f(X1, Y1), color);

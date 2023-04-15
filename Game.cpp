@@ -15,7 +15,7 @@ Game::Game(sf::ContextSettings settings)
 }
 
 void Game::runStack() {
-	StackStage stack(window, 20, 5, 3, theme, DoublyDirected);
+	StackStage stack(window, 20, 5, 4, theme, DoublyDirected);
 	stack.run();
 }
 
