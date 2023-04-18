@@ -105,93 +105,115 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 				if (tmp.work.colors.empty()) {
 					continue;
 				}
-				sf::Color hereColor = tmp.work.colors[0];
-				int resType = -1;
-				for (int type = 0; type < numColorNodeType; type++) {
-					if (colorNode[theme][type].fillColor == hereColor) {
-						resType = type;
-						break;
+				std::vector <sf::Color> listColor;
+				for (int k = 0; k < tmp.work.colors.size(); k++) {
+					sf::Color hereColor = tmp.work.colors[k];
+					int resType = -1;
+					for (int type = 0; type < numColorNodeType; type++) {
+						if (colorNode[theme][type].fillColor == hereColor) {
+							resType = type;
+							break;
+						}
 					}
+					assert(resType != -1);
+					listColor.push_back(colorNode[newTheme][resType].fillColor);
 				}
-				assert(resType != -1);
-				tmp.work.colors = { colorNode[newTheme][resType].fillColor };
+				tmp.work.colors = listColor;
 			}
 			if (tmp.type == OutlineColorNode) {
 				if (tmp.work.colors.empty()) {
 					continue;
 				}
-				sf::Color hereColor = tmp.work.colors[0];
-				int resType = -1;
-				for (int type = 0; type < numColorNodeType; type++) {
-					if (colorNode[theme][type].outlineColor == hereColor) {
-						resType = type;
-						break;
+				std::vector <sf::Color> listColor;
+				for (int k = 0; k < tmp.work.colors.size(); k++) {
+					sf::Color hereColor = tmp.work.colors[k];
+					int resType = -1;
+					for (int type = 0; type < numColorNodeType; type++) {
+						if (colorNode[theme][type].outlineColor == hereColor) {
+							resType = type;
+							break;
+						}
 					}
+					assert(resType != -1);
+					listColor.push_back(colorNode[newTheme][resType].outlineColor);
 				}
-				assert(resType != -1);
-				tmp.work.colors = { colorNode[newTheme][resType].outlineColor };
+				tmp.work.colors = listColor;
 			}
 			if (tmp.type == ValueColorNode) {
 				if (tmp.work.colors.empty()) {
 					continue;
 				}
-				sf::Color hereColor = tmp.work.colors[0];
-				int resType = -1;
-				for (int type = 0; type < numColorNodeType; type++) {
-					if (colorNode[theme][type].valueColor == hereColor) {
-						resType = type;
-						break;
+				std::vector <sf::Color> listColor;
+				for (int k = 0; k < tmp.work.colors.size(); k++) {
+					sf::Color hereColor = tmp.work.colors[k];
+					int resType = -1;
+					for (int type = 0; type < numColorNodeType; type++) {
+						if (colorNode[theme][type].valueColor == hereColor) {
+							resType = type;
+							break;
+						}
 					}
+					assert(resType != -1);
+					listColor.push_back(colorNode[newTheme][resType].valueColor);
 				}
-				assert(resType != -1);
-				tmp.work.colors = { colorNode[newTheme][resType].valueColor };
+				tmp.work.colors = listColor;
 			}
 			if (tmp.type == VariableColorNode) {
 				if (tmp.work.colors.empty()) {
 					continue;
 				}
-				sf::Color hereColor = tmp.work.colors[0];
-				int resType = -1;
-				for (int type = 0; type < numColorNodeType; type++) {
-					if (colorNode[theme][type].variableColor == hereColor) {
-						resType = type;
-						break;
+				std::vector <sf::Color> listColor;
+				for (int k = 0; k < tmp.work.colors.size(); k++) {
+					sf::Color hereColor = tmp.work.colors[k];
+					int resType = -1;
+					for (int type = 0; type < numColorNodeType; type++) {
+						if (colorNode[theme][type].variableColor == hereColor) {
+							resType = type;
+							break;
+						}
 					}
+					assert(resType != -1);
+					listColor.push_back(colorNode[newTheme][resType].variableColor);
 				}
-				assert(resType != -1);
-				tmp.work.colors = { colorNode[newTheme][resType].variableColor };
+				tmp.work.colors = listColor;
 			}
 			if (tmp.type == EdgeColor) {
 				if (tmp.work.colors.empty()) {
 					continue;
 				}
-				sf::Color hereColor = tmp.work.colors[0];
-				int resType = -1;
-				for (int type = 0; type < numColorNodeType; type++) {
-					if (colorNode[theme][type].outlineColor == hereColor) {
-						resType = type;
-						break;
+				std::vector <sf::Color> listColor;
+				for (int k = 0; k < tmp.work.colors.size(); k++) {
+					sf::Color hereColor = tmp.work.colors[k];
+					int resType = -1;
+					for (int type = 0; type < numColorNodeType; type++) {
+						if (colorNode[theme][type].outlineColor == hereColor) {
+							resType = type;
+							break;
+						}
 					}
+					assert(resType != -1);
+					listColor.push_back(colorNode[newTheme][resType].outlineColor);
 				}
-				assert(resType != -1);
-				tmp.work.colors = { colorNode[newTheme][resType].outlineColor };
+				tmp.work.colors = listColor;
 			}
 			if (tmp.type == AddEdge) {
 				if (tmp.work.colors.empty()) {
 					continue;
 				}
-				sf::Color hereColor = tmp.work.colors[0];
-				int resType = -1;
-				for (int type = 0; type < numColorNodeType; type++) {
-					if (colorNode[theme][type].outlineColor == hereColor) {
-						resType = type;
-						break;
+				std::vector <sf::Color> listColor;
+				for (int k = 0; k < tmp.work.colors.size(); k++) {
+					sf::Color hereColor = tmp.work.colors[k];
+					int resType = -1;
+					for (int type = 0; type < numColorNodeType; type++) {
+						if (colorNode[theme][type].outlineColor == hereColor) {
+							resType = type;
+							break;
+						}
 					}
+					assert(resType != -1);
+					listColor.push_back(colorNode[newTheme][resType].outlineColor);
 				}
-				assert(resType != -1);
-				for (int i = 0; i < (int)tmp.work.colors.size(); i++) {
-					tmp.work.colors[i] = colorNode[newTheme][resType].outlineColor;
-				}
+				tmp.work.colors = listColor;
 			}
 		}
 	}

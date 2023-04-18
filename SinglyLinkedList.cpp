@@ -544,7 +544,7 @@ void SinglyLinkedList::insertMiddle(int i, int v) {
 			sll[i - 1].dNext = id;
 			sll.insert(sll.begin() + i, { id, v, sll[i].id });
 			setNodeColor(animationList, getIDList(0, getSize() - 1), theme, normal);
-			setEdgeColor(animationList, getEdgeID(0, getSize() - 1), theme, normal);
+			setEdgeColor(animationList, getEdgeID(0, i + 1), theme, normal);
 			addAnimations(animationList, stepTime, 7, "The function stops here.");
 			break;
 		}
