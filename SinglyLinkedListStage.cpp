@@ -165,6 +165,11 @@ bool SinglyLinkedListStage::processEvents() {
 						}
 					}
 				}
+				if (operationName[curOperation] == "Remove") {
+					if (modeString == "i = 0 (head)") {
+						ds.removeFront();
+					}
+				}
 				operating = false;
 			}
 			break;

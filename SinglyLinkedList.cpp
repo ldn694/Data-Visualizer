@@ -572,6 +572,62 @@ void SinglyLinkedList::insertMiddle(int i, int v) {
 	animateAllFrame();
 }
 
+void SinglyLinkedList::removeFront() {
+	std::vector <Animation> animationList;
+	Node defaultNode = defaultGraph.getDefaultNode();
+	resetAnimation();
+	
+	if (getSize() == 0) {
+		animationList.clear();
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 1, "List is empty (head == NULL), the function stops here.");
+		animateAllFrame();
+		return;
+	}
+	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 1, "List is not empty (head != NULL), proceed to the next step.");
+
+	animationList.clear();
+	addVariables(animationList, { getHeadID() }, { "temp" });
+	setNodeColor(animationList, { getHeadID() }, theme, highlight);
+	addAnimations(animationList, stepTime, 2, "Created pointer temp pointing to head");
+
+	if (getSize() == 1) {
+		animationList.clear();
+		deleteVariables(animationList, { getHeadID() }, { "head" });
+		addAnimations(animationList, stepTime, 3, "head now points to head->next, which is NULL. List is now empty.");
+
+		animationList.clear();
+		deleteVariables(animationList, { getTailID() }, { "tail" });
+		addAnimations(animationList, stepTime, 4, "head is now NULL (empty list), so tail is now also NULL");
+	}
+	else {
+		animationList.clear();
+		deleteVariables(animationList, { getHeadID() }, { "head" });
+		addVariables(animationList, { getID(1) }, { "head" });
+		setNodeColor(animationList, { getID(1) }, theme, highlight2);
+		setEdgeColor(animationList, { {getHeadID(), getID(1)} }, theme, highlight2);
+		addAnimations(animationList, stepTime, 3, "head now points to head->next");
+
+		animationList.clear();
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 4, "head is not NULL, so the condition is false. Proceed to next step");
+	}
+	animationList.clear();
+	deleteNode(animationList, { getHeadID() });
+	addAnimations(animationList, stepTime, 5, "delete temp");
+
+	sll.erase(sll.begin());
+	if (getSize() > 0) {
+		animationList.clear();
+		setNodeColor(animationList, { getHeadID() }, theme, normal);
+		translateNode(animationList, getIDList(0, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
+		addAnimations(animationList, stepTime, 0, "Re-format for visualization");
+	}
+	animateAllFrame();
+}
+
 void SinglyLinkedList::removeBack() {
 	resetAnimation();
 	std::vector <Animation> animationList;
