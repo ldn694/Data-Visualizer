@@ -85,7 +85,7 @@ void Stage::updateModeBox(int newMode) {
 	}
 	valueTypingBox.resize(numValue[curOperation][curMode]);
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
-		valueTypingBox[i] = BigTypingBox(0, HEIGHT_RES - heightBox, 2 * widthBox / numValue[curOperation][curMode], heightBox, widthBox / 3, outlineBox, valueName[curOperation][curMode][i],
+		valueTypingBox[i] = BigTypingBox(2 * widthBox / numValue[curOperation][curMode] * i, HEIGHT_RES - heightBox, 2 * widthBox / numValue[curOperation][curMode], heightBox, widthBox / 3, outlineBox, valueName[curOperation][curMode][i],
 			0, HEIGHT_RES - heightBox * 3 - 50, widthBox * 2, 50,
 			typingMode[curOperation][curMode][i], font(fontType::Prototype), typingModeMaxCharacter[typingMode[curOperation][curMode][i]], valueBound[curOperation][curMode][i].first, valueBound[curOperation][curMode][i].second);
 	}

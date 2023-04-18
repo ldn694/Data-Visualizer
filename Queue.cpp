@@ -221,12 +221,12 @@ void Queue::enqueue(int value) {
 	addAnimations(animationList, stepTime, 2, "head is not null (queue not empty), so the condition is false");
 
 	animationList.clear();
-	addEdge(animationList, tail, id, theme, highlight);
+	addEdge(animationList, { {tail, id} }, theme, highlight);
 	addAnimations(animationList, stepTime, 5, "tail->next now points to vtx");
 
 	animationList.clear();
 	setNodeColor(animationList, { id }, theme, highlight2);
-	setEdgeColor(animationList, tail, id, theme, normal);
+	setEdgeColor(animationList, { {tail, id} }, theme, normal);
 	addVariables(animationList, { id }, { "tail" });
 	deleteVariables(animationList, { getTailID() }, { "tail" });
 	addAnimations(animationList, stepTime, 6, "tail now points to vtx");
@@ -278,7 +278,7 @@ void Queue::dequeue() {
 
 		animationList.clear();
 		deleteNode(animationList, head);
-		addAnimations(animationList, stepTime, 4, "Delete temp, the queue is empty");
+		addAnimations(animationList, stepTime, 5, "Delete temp, the queue is empty");
 		
 		animationList.clear();
 		setNodeColor(animationList, { head }, theme, normal);
@@ -290,7 +290,7 @@ void Queue::dequeue() {
 		addAnimations(animationList, stepTime, 2, "Created new pointer temp pointing to head");
 
 		animationList.clear();
-		setEdgeColor(animationList, head, queue[1].id, theme, highlight2);
+		setEdgeColor(animationList, { {head, queue[1].id} }, theme, highlight2);
 		setNodeColor(animationList, { queue[1].id }, theme, highlight2);
 		deleteVariables(animationList, { head }, { "head" });
 		addVariables(animationList, { queue[1].id }, { "head" });

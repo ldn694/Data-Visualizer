@@ -65,6 +65,7 @@ struct DataStructure {
 	void setTheme(ColorTheme theme);
 	void setSpeed(double newSpeed);
 	void setNodeColor(std::vector <Animation> &animationList, std::vector <int> nodes, ColorTheme theme, ColorNodeType type);
+	void setNodeColor(std::vector <Animation>& animationList, std::vector <int> nodes, ColorTheme theme, std::vector <ColorNodeType> type);
 	void addNode(std::vector <Animation>& animationList, int pos, int value, double x, double y);
 	void deleteNode(std::vector <Animation>& animationList, int pos);
 	void translateNode(std::vector <Animation>& animationList, std::vector <int> nodes, double dx, double dy);
@@ -72,8 +73,9 @@ struct DataStructure {
 	void mergeMoveNode(std::vector <Animation>& animationList);
 	void addVariables(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <std::string> variableList);
 	void deleteVariables(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <std::string> variableList);
-	void addEdge(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorNodeType type);
-	void setEdgeColor(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorNodeType type);
+	void addEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
+	void setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
+	void switchEdge(std::vector <Animation>& animationList, std::vector <std::tuple <int, int, int> > edgeList);
 	void doNothing(std::vector <Animation>& animationList);
 	void setCurOperation(int val);
 	void setCurMode(int val);

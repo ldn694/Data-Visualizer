@@ -35,10 +35,6 @@ void TypingBox::setWarning() {
 	}
 	if (typingMode == multipleNumber) {
 		std::vector <int> tmp = getListInt();
-		/*for (int i = 0; i < tmp.size(); i++) {
-			std::cout << tmp[i] << " ";
-		}
-		std::cout << "\n";*/
 		if (!tmp.empty() && tmp[0] == -1) {
 			displayingWarning = true;
 			warning = "Illegar character found, character must be space or in [";

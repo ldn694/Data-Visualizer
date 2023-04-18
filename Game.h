@@ -2,10 +2,6 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
-#include "Graph.h"
-#include "DataStructure.h"
-#include "Stack.h"
-#include "SinglyLinkedList.h"
 #include "Box.h"
 
 struct Game
@@ -20,8 +16,9 @@ private:
 	void handlePlayerInput();
 	void runStack();
 	void runQueue();
+	void runSLL();
 private:
 	ColorTheme theme;
 	sf::RenderWindow window;
-	Box stackBox, queueBox;
+	Box stackBox, queueBox, sllBox;
 };

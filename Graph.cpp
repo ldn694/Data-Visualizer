@@ -200,18 +200,9 @@ void Graph::addNode(int u, int value, double x, double y) {
 	newNode.setValue(value);
 	newNode.setXY(x, y);
 	listNode[u] = newNode;
-	//std::cout << "added u = " << u << " value = " << value << " size = " << (int)listNode.size() << "\n";
 }
 
 void Graph::addNode(int u, int value, double x, double y, sf::Time time) {
-	/*int fakeID = getFakeID();
-	addNode(u, value, x, y);
-	listNode[u].setDisplay(false);
-	addNode(fakeID, value, x, y);
-	listNode[fakeID].setRadius(0.f);
-	listNode[fakeID].setOutline(0.f);
-	listNode[fakeID].addZooming(defaultNode.getRadius(), defaultNode.getOutlineSize(), time);
-	nodeAddQueue.push_back(NodeAnimation({ FakeNode(u, fakeID) }, time, time));*/
 	addNode(u, value, x, y);
 	listNode[u].setRadius(0.f);
 	listNode[u].setOutline(0.f);
@@ -230,17 +221,6 @@ void Graph::addNodes(std::vector <std::tuple <int, int, double, double> > nodes)
 void Graph::addNodes(std::vector <std::tuple <int, int, double, double> > nodes, sf::Time time) {
 	std::vector <FakeNode> nodeList;
 	for (auto& nComp : nodes) {
-		/*int fakeID = getFakeID();
-		int u = std::get<0>(nComp), value = std::get<1>(nComp);
-		double x = std::get<2>(nComp), y = std::get<3>(nComp);
-		addNode(u, value, x, y);
-		listNode[u].setDisplay(false);
-		addNode(fakeID, value, x, y);
-		listNode[fakeID].setRadius(0.f);
-		listNode[fakeID].setOutline(0.f);
-		listNode[fakeID].addZooming(defaultNode.getRadius(), defaultNode.getOutlineSize(), time);
-		nodeList.push_back(FakeNode(u, fakeID));*/
-
 		int u = std::get<0>(nComp), value = std::get<1>(nComp);
 		double x = std::get<2>(nComp), y = std::get<3>(nComp);
 		addNode(u, value, x, y);
@@ -294,7 +274,6 @@ void Graph::deleteNode(int pos) {
 			}
 		}
 	}
-	//std::cout << "deleted pos = " << pos << " size = " << (int)listNode.size() << "\n";
 }
 
 void Graph::deleteNode(int pos, sf::Time time) {
@@ -313,7 +292,6 @@ void Graph::deleteNode(int pos, sf::Time time) {
 		if (fakeIDList.find(u) != fakeIDList.end()) {
 			continue;
 		}
-		//std::cout << u << " ";
 		auto here = findV(u, pos);
 		if (here != adj[u].end()) {
 			edges.push_back({ u, here->v });
@@ -736,7 +714,6 @@ void Graph::deleteEdge(int u, int v) {
 			break;
 		}
 		adj[u].erase(here);
-		//std::cout << "deleted " << u << " " << v << "\n";
 	}
 }
 
@@ -882,8 +859,8 @@ void Graph::switchEdges(std::vector <std::tuple<int, int, int>> edgesSwitch, sf:
 		addNode(fakeID, 0, listNode[v].getX(), listNode[v].getY());
 		listNode[fakeID].setDisplay(false);
 		addEdge(u, fakeID, findV(u, v)->color);
-		switchEdge(u, v, newv);
 		edgeSwitchList.push_back(FakeEdgeSwitch(u, v, newv, fakeID));
+		switchEdge(u, v, newv);
 	}
 	edgeSwitchQueue.push_back(EdgeSwitchAnimation(edgeSwitchList, time, time));
 }

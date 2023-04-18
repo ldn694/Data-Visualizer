@@ -226,6 +226,7 @@ Node::Node(double _x, double _y, int _value,
 	shape.setPointCount(pointCountCircle);
 	shape.setOrigin(radius, radius);
 	shape.setPosition(x, y);
+	shape.setRotation(45.0f);
 }
 
 void Node::setValue(int newValue) {

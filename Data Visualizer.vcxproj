@@ -156,6 +156,7 @@
     <ClCompile Include="QueueStage.cpp" />
     <ClCompile Include="Scrubber.cpp" />
     <ClCompile Include="SinglyLinkedList.cpp" />
+    <ClCompile Include="SinglyLinkedListStage.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="StackStage.cpp" />
     <ClCompile Include="Stage.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="QueueStage.h" />
     <ClInclude Include="Scrubber.h" />
     <ClInclude Include="SinglyLinkedList.h" />
+    <ClInclude Include="SinglyLinkedListStage.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="StackStage.h" />
     <ClInclude Include="Stage.h" />

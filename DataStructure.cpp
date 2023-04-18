@@ -214,6 +214,40 @@ bool cmpAnimation(const Animation& a, const Animation& b) {
 	return a.type < b.type;
 }
 
+void DataStructure::setNodeColor(std::vector <Animation>& animationList, std::vector <int> nodes, ColorTheme theme, std::vector <ColorNodeType> type)
+{
+	assert(nodes.size() == type.size());
+	Animation tmp;
+	tmp.type = FillColorNode;
+	tmp.element.nodes = nodes;
+	tmp.work.colors.clear();
+	for (int i = 0; i < (int)nodes.size(); i++) {
+		tmp.work.colors.push_back(colorNode[theme][type[i]].fillColor);
+	}
+	animationList.push_back(tmp);
+	tmp.type = OutlineColorNode;
+	tmp.element.nodes = nodes;
+	tmp.work.colors.clear();
+	for (int i = 0; i < (int)nodes.size(); i++) {
+		tmp.work.colors.push_back(colorNode[theme][type[i]].outlineColor);
+	}
+	animationList.push_back(tmp);
+	tmp.type = ValueColorNode;
+	tmp.element.nodes = nodes;
+	tmp.work.colors.clear();
+	for (int i = 0; i < (int)nodes.size(); i++) {
+		tmp.work.colors.push_back(colorNode[theme][type[i]].valueColor);
+	}
+	animationList.push_back(tmp);
+	tmp.type = VariableColorNode;
+	tmp.element.nodes = nodes;
+	tmp.work.colors.clear();
+	for (int i = 0; i < (int)nodes.size(); i++) {
+		tmp.work.colors.push_back(colorNode[theme][type[i]].variableColor);
+	}
+	animationList.push_back(tmp);
+}
+
 void DataStructure::setNodeColor(std::vector <Animation>& animationList, std::vector <int> nodes, ColorTheme theme, ColorNodeType type)
 {
 	Animation tmp;
@@ -300,19 +334,29 @@ void DataStructure::deleteVariables(std::vector <Animation>& animationList, std:
 	animationList.push_back(tmp);
 }
 
-void DataStructure::addEdge(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorNodeType type) {
+void DataStructure::addEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type) {
 	Animation tmp;
 	tmp.type = AddEdge;
-	tmp.element.edges = { {u, v} };
-	tmp.work.colors = { colorNode[theme][type].outlineColor };
+	tmp.element.edges = edges;
+	tmp.work.colors = std::vector <sf::Color>(edges.size(), colorNode[theme][type].outlineColor);
 	animationList.push_back(tmp);
 }
 
-void DataStructure::setEdgeColor(std::vector <Animation>& animationList, int u, int v, ColorTheme theme, ColorNodeType type) {
+void DataStructure::setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type) {
 	Animation tmp;
 	tmp.type = EdgeColor;
-	tmp.element.edges = { {u, v} };
-	tmp.work.colors = { colorNode[theme][type].outlineColor };
+	tmp.element.edges = edges;
+	tmp.work.colors = std::vector <sf::Color>(edges.size(), colorNode[theme][type].outlineColor);
+	animationList.push_back(tmp);
+}
+
+void DataStructure::switchEdge(std::vector <Animation>& animationList, std::vector <std::tuple <int, int, int> > edgeList) {
+	Animation tmp;
+	tmp.type = SwitchEdge;
+	for (int i = 0; i < edgeList.size(); i++) {
+		tmp.element.edges.push_back({ std::get<0>(edgeList[i]), std::get<1>(edgeList[i]) });
+		tmp.work.goalNode.push_back(std::get<2>(edgeList[i]));
+	}
 	animationList.push_back(tmp);
 }
 

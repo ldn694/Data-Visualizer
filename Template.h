@@ -45,7 +45,7 @@ const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;
 
 const int maxID = int(1e9);
-const int pointCountCircle = 50;
+const int pointCountCircle = 30;
 const double epsilonDouble = 1.f / 1000000.f;
 const double PI = 3.14159265358979323846;
 const sf::Time epsilonTime = sf::seconds(1.f / 1000000.f);
@@ -79,7 +79,7 @@ enum ColorTheme {
 };
 
 enum ColorNodeType {
-	normal, highlight, lowlight, highlight2
+	normal, highlight, lowlight, highlight2, highlight3
 };
 
 enum TypingBoxMode {
@@ -87,7 +87,7 @@ enum TypingBoxMode {
 };
 
 const int numColorTheme = 2;
-const int numColorNodeType = 4;
+const int numColorNodeType = 5;
 const int numTypingBoxMode = 3;
 
 const int  typingModeMaxCharacter[numTypingBoxMode] = { 3, 20, 20 };
@@ -103,13 +103,15 @@ const ColorNode colorNode[numColorTheme][numColorNodeType] =
 		ColorNode(MilkColor, BlackColor, BlackColor, RedColor),
 		ColorNode(OrangeColor, OrangeColor, MilkColor, RedColor),
 		ColorNode(MilkColor, OrangeColor, OrangeColor, RedColor),
-		ColorNode(LightGreenColor, LightGreenColor, MilkColor, RedColor)
+		ColorNode(LightGreenColor, LightGreenColor, MilkColor, RedColor),
+		ColorNode(BlueColor, BlueColor, MilkColor, RedColor)
 	} ,
 	{
 		ColorNode(BlackColor, WhiteColor, WhiteColor, OrangeColor),
 		ColorNode(YellowColor, YellowColor, BlackColor, OrangeColor),
 		ColorNode(BlackColor, YellowColor, YellowColor, OrangeColor),
-		ColorNode(GreenColor, GreenColor, BlackColor, OrangeColor)
+		ColorNode(GreenColor, GreenColor, BlackColor, OrangeColor),
+		ColorNode(BlueColor, BlueColor, MilkColor, RedColor)
 	}
 };
 

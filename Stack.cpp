@@ -206,13 +206,13 @@ void Stack::push(int value) {
 	addAnimations(animationList, stepTime, 2, "head is not null (stack not empty), so the condition is false");
 
 	animationList.clear();
-	addEdge(animationList, id, head, theme, highlight);
+	addEdge(animationList, { {id, head} }, theme, highlight);
 	addAnimations(animationList, stepTime, 5, "vtx.next points to head");
 
 
 	animationList.clear();
 	setNodeColor(animationList, { id }, theme, highlight2);
-	setEdgeColor(animationList, id, head, theme, normal);
+	setEdgeColor(animationList, { {id, head} }, theme, normal);
 	addVariables(animationList, { id }, { "head" });
 	deleteVariables(animationList, { getHeadID() }, { "head" });
 	addAnimations(animationList, stepTime, 6, "head points to vtx");
@@ -269,7 +269,7 @@ void Stack::pop() {
 		addAnimations(animationList, stepTime, 2, "Created pointer temp pointing to head");
 
 		animationList.clear();
-		setEdgeColor(animationList, head, stack[1].id, theme, highlight2);
+		setEdgeColor(animationList, { {head, stack[1].id} }, theme, highlight2);
 		setNodeColor(animationList, { stack[1].id }, theme, highlight2);
 		deleteVariables(animationList, { head }, { "head" });
 		addVariables(animationList, { stack[1].id }, { "head" });
