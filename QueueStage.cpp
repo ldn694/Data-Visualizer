@@ -90,56 +90,6 @@ bool QueueStage::processEvents() {
 			if (handleMousePressed(event.mouseButton.x, event.mouseButton.y)) {
 				return true;
 			}
-			if (operating) {
-				ds.setIsAnimating(true);
-				std::string modeString = modeName[curOperation][curMode];
-				if (operationName[curOperation] == "Create") {
-					if (modeString == "Empty") {
-						ds.createRandom(0, {});
-					}
-					if (modeString == "Random") {
-						ds.createRandom();
-					}
-					if (modeString == "Random Sorted") {
-						ds.createRandom(-1, {}, true);
-					}
-					if (modeString == "Fixed Size") {
-						int val = valueTypingBox[0].getProperInt();
-						if (val != -1) {
-							ds.createRandom(val);
-						}
-					}
-					if (modeString == "Custom") {
-						std::vector <int> values = valueTypingBox[0].getListInt();
-						if (!values.empty()) {
-							ds.createRandom(values.size(), values);
-						}
-					}
-				}
-				if (operationName[curOperation] == "Dequeue") {
-					ds.dequeue();
-				}
-				if (operationName[curOperation] == "Peek") {
-					if (modeString == "Front") {
-						ds.peekFront();
-					}
-					if (modeString == "Back") {
-						ds.peekBack();
-					}
-				}
-				if (operationName[curOperation] == "Enqueue") {
-					if (modeString == "v =") {
-						int val = valueTypingBox[0].getProperInt();
-						if (val != -1) {
-							ds.enqueue(val);
-						}
-					}
-					else {
-						ds.enqueue(-1);
-					}
-				}
-				operating = false;
-			}
 			break;
 		case sf::Event::KeyPressed:
 			handleKeyPressed(int(event.key.code));
@@ -151,6 +101,56 @@ bool QueueStage::processEvents() {
 			handleMouseReleased(event.mouseButton.x, event.mouseButton.y);
 			break;
 		}
+	}
+	if (operating) {
+		ds.setIsAnimating(true);
+		std::string modeString = modeName[curOperation][curMode];
+		if (operationName[curOperation] == "Create") {
+			if (modeString == "Empty") {
+				ds.createRandom(0, {});
+			}
+			if (modeString == "Random") {
+				ds.createRandom();
+			}
+			if (modeString == "Random Sorted") {
+				ds.createRandom(-1, {}, true);
+			}
+			if (modeString == "Fixed Size") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.createRandom(val);
+				}
+			}
+			if (modeString == "Custom") {
+				std::vector <int> values = valueTypingBox[0].getListInt();
+				if (!values.empty()) {
+					ds.createRandom(values.size(), values);
+				}
+			}
+		}
+		if (operationName[curOperation] == "Dequeue") {
+			ds.dequeue();
+		}
+		if (operationName[curOperation] == "Peek") {
+			if (modeString == "Front") {
+				ds.peekFront();
+			}
+			if (modeString == "Back") {
+				ds.peekBack();
+			}
+		}
+		if (operationName[curOperation] == "Enqueue") {
+			if (modeString == "v =") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.enqueue(val);
+				}
+			}
+			else {
+				ds.enqueue(-1);
+			}
+		}
+		operating = false;
 	}
 	return false;
 }

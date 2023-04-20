@@ -87,51 +87,6 @@ bool StackStage::processEvents() {
 			if (handleMousePressed(event.mouseButton.x, event.mouseButton.y)) {
 				return true;
 			}
-			if (operating) {
-				ds.setIsAnimating(true);
-				std::string modeString = modeName[curOperation][curMode];
-				if (operationName[curOperation] == "Create") {
-					if (modeString == "Empty") {
-						ds.createRandom(0, {});
-					}
-					if (modeString == "Random") {
-						ds.createRandom();
-					}
-					if (modeString == "Random Sorted") {
-						ds.createRandom(-1, {}, true);
-					}
-					if (modeString == "Fixed Size") {
-						int val = valueTypingBox[0].getProperInt();
-						if (val != -1) {
-							ds.createRandom(val);
-						}
-					}
-					if (modeString == "Custom") {
-						std::vector <int> values = valueTypingBox[0].getListInt();
-						if (!values.empty()) {
-							ds.createRandom(values.size(), values);
-						}
-					}
-				}
-				if (operationName[curOperation] == "Pop") {
-					ds.pop();
-				}
-				if (operationName[curOperation] == "Peek") {
-					ds.peek();
-				}
-				if (operationName[curOperation] == "Push") {
-					if (modeString == "v =") {
-						int val = valueTypingBox[0].getProperInt();
-						if (val != -1) {
-							ds.push(val);
-						}
-					}
-					else {
-						ds.push(-1);
-					}
-				}
-				operating = false;
-			}
 			break;
 		case sf::Event::KeyPressed:
 			handleKeyPressed(int(event.key.code));
@@ -143,6 +98,51 @@ bool StackStage::processEvents() {
 			handleMouseReleased(event.mouseButton.x, event.mouseButton.y);
 			break;
 		}
+	}
+	if (operating) {
+		ds.setIsAnimating(true);
+		std::string modeString = modeName[curOperation][curMode];
+		if (operationName[curOperation] == "Create") {
+			if (modeString == "Empty") {
+				ds.createRandom(0, {});
+			}
+			if (modeString == "Random") {
+				ds.createRandom();
+			}
+			if (modeString == "Random Sorted") {
+				ds.createRandom(-1, {}, true);
+			}
+			if (modeString == "Fixed Size") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.createRandom(val);
+				}
+			}
+			if (modeString == "Custom") {
+				std::vector <int> values = valueTypingBox[0].getListInt();
+				if (!values.empty()) {
+					ds.createRandom(values.size(), values);
+				}
+			}
+		}
+		if (operationName[curOperation] == "Pop") {
+			ds.pop();
+		}
+		if (operationName[curOperation] == "Peek") {
+			ds.peek();
+		}
+		if (operationName[curOperation] == "Push") {
+			if (modeString == "v =") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.push(val);
+				}
+			}
+			else {
+				ds.push(-1);
+			}
+		}
+		operating = false;
 	}
 	return false;
 }
