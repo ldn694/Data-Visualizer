@@ -809,6 +809,132 @@ void SinglyLinkedList::removeMiddle(int i) {
 	animateAllFrame();
 }
 
+void SinglyLinkedList::updateFront(int v) {
+	resetAnimation();
+	std::vector <Animation> animationList;
+	Node defaultNode = defaultGraph.getDefaultNode();
+
+	if (getSize() == 0) {
+		animationList.clear();
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 1, "List is empty. No action is performed.");
+		animateAllFrame();
+		return;
+	}
+
+	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 1, "List is not empty. Proceed to next step.");
+
+	animationList.clear();
+	setNodeColor(animationList, { getHeadID() }, theme, highlight);
+	setNodeValue(animationList, { getHeadID() }, { v });
+	addAnimations(animationList, stepTime, 2, "head->value is now updated to " + intToString(v) + ".");
+	sll[0].value = v;
+
+	animationList.clear();
+	setNodeColor(animationList, { getHeadID() }, theme, normal);
+	addAnimations(animationList, stepTime, 0, "Re-format for visualization.");
+
+	animateAllFrame();
+}
+
+void SinglyLinkedList::updateBack(int v) {
+	resetAnimation();
+	std::vector <Animation> animationList;
+	Node defaultNode = defaultGraph.getDefaultNode();
+
+	if (getSize() == 0) {
+		animationList.clear();
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 1, "List is empty. No action is performed.");
+		animateAllFrame();
+		return;
+	}
+
+	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 1, "List is not empty. Proceed to next step.");
+
+	animationList.clear();
+	setNodeColor(animationList, { getTailID() }, theme, highlight);
+	setNodeValue(animationList, { getTailID() }, { v });
+	addAnimations(animationList, stepTime, 2, "head->value is now updated to " + intToString(v) + ".");
+	sll.back().value = v;
+
+	animationList.clear();
+	setNodeColor(animationList, { getTailID() }, theme, normal);
+	addAnimations(animationList, stepTime, 0, "Re-format for visualization.");
+
+	animateAllFrame();
+}
+
+void SinglyLinkedList::updateMiddle(int i, int v) {
+	if (getSize() < 3) {
+		setError(true, "There is no position in the middle!");
+		return;
+	}
+	if (i < 1 || i > getSize() - 2) {
+		setError(true, "i must be in [1, " + intToString(getSize() - 2) + "]!");
+		return;
+	}
+	resetAnimation();
+	std::vector <Animation> animationList;
+	Node defaultNode = defaultGraph.getDefaultNode();
+
+	animationList.clear();
+	addVariables(animationList, { getHeadID() }, { "cur", "k = 0" });
+	setNodeColor(animationList, { getHeadID() }, theme, highlight);
+	addAnimations(animationList, stepTime, 1, "Create pointer cur pointing to head and assign k = 0.");
+
+	int k = 0;
+	while (true) {
+		if (k >= getSize()) {
+			animationList.clear();
+			setNodeColor(animationList, getIDList(0, i), theme, normal);
+			setEdgeColor(animationList, getEdgeID(0, i), theme, normal);
+			addAnimations(animationList, stepTime, 2, "We have finished traversed the list (cur == NULL). The loop stops here.");
+			animateAllFrame();
+			break;
+		}
+		else {
+			animationList.clear();
+			doNothing(animationList);
+			addAnimations(animationList, stepTime, 2, "We have not finished traversed the list (cur != NULL). The loop continues.");
+			animateAllFrame();
+			if (k == i) {
+				animationList.clear();
+				doNothing(animationList);
+				addAnimations(animationList, stepTime, 3, "k == i == " + intToString(i) + ", so the condition is true. We found the position " + intToString(i) + ".");
+
+				animationList.clear();
+				setNodeColor(animationList, { getID(i) }, theme, highlight2);
+				setNodeValue(animationList, { getID(i) }, { v });
+				addAnimations(animationList, stepTime, 4, "cur->value is now updated to " + intToString(v) + ".");
+
+				animationList.clear();
+				setNodeColor(animationList, getIDList(0, i), theme, normal);
+				setEdgeColor(animationList, getEdgeID(0, i), theme, normal);
+				deleteVariables(animationList, { getID(i) }, { "cur", "k = " + intToString(k) });
+				addAnimations(animationList, stepTime, 5, "The function stops here.");
+				animateAllFrame();
+				return;
+			}
+			else {
+				animationList.clear();
+				deleteVariables(animationList, { getID(k) }, { "cur", "k = " + intToString(k) });
+				addVariables(animationList, { getID(k + 1) }, {"cur", "k = " + intToString(k + 1)});
+				if (k + 1 < getSize()) {
+					setNodeColor(animationList, { getID(k), getID(k + 1) }, theme, { lowlight, highlight });
+					setEdgeColor(animationList, { {getID(k), getID(k + 1)} }, theme, highlight);
+				}
+				addAnimations(animationList, stepTime, 7, "cur now points to cur->next and increase k by 1.");
+				k++;
+			}
+		}
+	}
+}
+
 void SinglyLinkedList::peekFront() {
 	resetAnimation();
 	std::vector <Animation> animationList;

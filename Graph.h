@@ -105,6 +105,7 @@ public:
 	void setNodesValueColor(std::vector <std::pair<int, sf::Color>> nodes);
 	void setNodesValueColor(std::vector <std::pair<int, sf::Color>> nodes, sf::Time time);
 	void updateNodeValueColor(sf::Time deltaT);
+	void setNodeValue(int pos, int v);
 	void setNodeVariableColor(int pos, sf::Color color);
 	void setNodesVariableColor(std::vector <std::pair<int, sf::Color>> nodes);
 	void addEdge(int u, int v, sf::Color color);

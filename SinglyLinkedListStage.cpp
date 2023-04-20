@@ -200,6 +200,27 @@ bool SinglyLinkedListStage::processEvents() {
 				}
 			}
 		}
+		if (operationName[curOperation] == "Update") {
+			if (modeString == "i = 0 (head)") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.updateFront(val);
+				}
+			}
+			if (modeString == "i = n - 1 (tail)") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.updateBack(val);
+				}
+			}
+			if (modeString == "i = 1..n - 2 (middle)") {
+				int pos = valueTypingBox[0].getProperInt();
+				int val = valueTypingBox[1].getProperInt();
+				if (pos != -1 && val != -1) {
+					ds.updateMiddle(pos, val);
+				}
+			}
+		}
 		operating = false;
 	}
 	return false;

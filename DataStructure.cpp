@@ -340,6 +340,14 @@ void DataStructure::moveNode(std::vector <Animation>& animationList, int pos, do
 	animationList.push_back(tmp);
 }
 
+void DataStructure::setNodeValue(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <int> values) {
+	Animation tmp;
+	tmp.type = ValueNode;
+	tmp.element.nodes = nodes;
+	tmp.work.values = values;
+	animationList.push_back(tmp);
+}
+
 void DataStructure::addVariables(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <std::string> variableList) {
 	Animation tmp;
 	tmp.type = AddVariable;
@@ -500,6 +508,14 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 			for (std::string variable : animation.work.variables) {
 				graph.deleteNodeVariable(u, variable);
 			}
+		}
+	}
+	if (animation.type == ValueNode) {
+		if (animation.element.nodes.size() != animation.work.values.size()) {
+			assert(false);
+		}
+		for (int i = 0; i < animation.element.nodes.size(); i++) {
+			graph.setNodeValue(animation.element.nodes[i], animation.work.values[i]);
 		}
 	}
 	if (animation.type == FillColorNode) {

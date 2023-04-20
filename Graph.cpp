@@ -600,6 +600,10 @@ void Graph::updateNodeValueColor(sf::Time deltaT) {
 	}
 }
 
+void Graph::setNodeValue(int pos, int v) {
+	listNode[pos].setValue(v);
+}
+
 void Graph::setNodeVariableColor(int pos, sf::Color color) {
 	listNode[pos].setVariableColor(color);
 }

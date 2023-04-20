@@ -194,9 +194,6 @@ void Stage::handleMouseReleased(double x, double y) {
 }
 
 void Stage::draw() {
-	for (int i = 0; i < numOperation; i++) {
-		operationBox[i].draw(window, theme);
-	}
 	outerGoBox.draw(window, theme);
 	goBox.draw(window, theme);
 	for (int i = 0; i < numOperation; i++) {
@@ -216,6 +213,9 @@ void Stage::draw() {
 		emptyBox.draw(window, theme);
 	}
 	readFromFile.draw(window, theme);
+	for (int i = 0; i < numOperation; i++) {
+		operationBox[i].draw(window, theme);
+	}
 	ingameSettings.draw(window, theme);
 	backButton.draw(window, theme);
 }

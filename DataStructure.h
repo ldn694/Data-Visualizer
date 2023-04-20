@@ -6,7 +6,7 @@
 #include "Box.h"
 
 enum AnimationType {
-	AddNode, AddEdge, MoveNode, TranslateNode, MergeMoveNode,
+	AddNode, AddEdge, MoveNode, TranslateNode, MergeMoveNode, ValueNode,
 	FillColorNode, OutlineColorNode, ValueColorNode, VariableColorNode,
 	AddVariable, DeleteVariable,
 	EdgeColor, SwitchEdge,
@@ -25,6 +25,7 @@ struct Animation {
 		std::vector <std::pair<double, double> > coordinates;
 		std::vector <int> goalNode;
 		std::vector <sf::Color> colors;
+		std::vector <int> values;
 	} work;
 };
 
@@ -71,6 +72,7 @@ struct DataStructure {
 	void translateNode(std::vector <Animation>& animationList, std::vector <int> nodes, double dx, double dy);
 	void moveNode(std::vector <Animation>& animationList, int pos, double x, double y);
 	void mergeMoveNode(std::vector <Animation>& animationList);
+	void setNodeValue(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <int> values);
 	void addVariables(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <std::string> variableList);
 	void deleteVariables(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <std::string> variableList);
 	void addEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
