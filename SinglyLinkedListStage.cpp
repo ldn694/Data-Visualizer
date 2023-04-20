@@ -6,7 +6,7 @@ SinglyLinkedListStage::SinglyLinkedListStage(sf::RenderWindow& window, double ra
 	ColorTheme theme, EdgeType edgeType) :
 	Stage(window, { "Create", "Search", "Insert", "Remove", "Update" },
 		{
-			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom"},
+			{"Empty", "Random", "Random Sorted", "Fixed Size", "Manual", "Upload From File"},
 			{"v = ?"},
 			{"i = 0 (head)", "i = n (after tail)", "i = 1..n - 1 (middle)"},
 			{"i = 0 (head)", "i = n - 1 (tail)", "i = 1..n - 2 (middle)"},
@@ -18,7 +18,8 @@ SinglyLinkedListStage::SinglyLinkedListStage(sf::RenderWindow& window, double ra
 				{},
 				{},
 				{"n ="},
-				{"v[] ="}
+				{"v[] ="},
+				{}
 			},
 			{
 				{"v ="}
@@ -45,7 +46,8 @@ SinglyLinkedListStage::SinglyLinkedListStage(sf::RenderWindow& window, double ra
 				{},
 				{},
 				{singleNumber},
-				{multipleNumber}
+				{multipleNumber},
+				{}
 			},
 			{
 				{singleNumber}
@@ -72,7 +74,8 @@ SinglyLinkedListStage::SinglyLinkedListStage(sf::RenderWindow& window, double ra
 				{},
 				{},
 				{{0, maxSizeData}},
-				{{0, maxValueData}}
+				{{0, maxValueData}},
+				{}
 			},
 			{
 				{{0, maxValueData}}
@@ -112,66 +115,6 @@ bool SinglyLinkedListStage::processEvents() {
 			if (handleMousePressed(event.mouseButton.x, event.mouseButton.y)) {
 				return true;
 			}
-			if (operating) {
-				ds.setIsAnimating(true);
-				std::string modeString = modeName[curOperation][curMode];
-				if (operationName[curOperation] == "Create") {
-					if (modeString == "Empty") {
-						ds.createRandom(0, {});
-					}
-					if (modeString == "Random") {
-						ds.createRandom();
-					}
-					if (modeString == "Random Sorted") {
-						ds.createRandom(-1, {}, true);
-					}
-					if (modeString == "Fixed Size") {
-						int val = valueTypingBox[0].getProperInt();
-						if (val != -1) {
-							ds.createRandom(val);
-						}
-					}
-					if (modeString == "Custom") {
-						std::vector <int> values = valueTypingBox[0].getListInt();
-						if (!values.empty()) {
-							ds.createRandom(values.size(), values);
-						}
-					}
-				}
-				if (operationName[curOperation] == "Search") {
-					int val = valueTypingBox[0].getProperInt();
-					if (val != -1) {
-						ds.search(val);
-					}
-				}
-				if (operationName[curOperation] == "Insert") {
-					if (modeString == "i = 0 (head)") {
-						int val = valueTypingBox[0].getProperInt();
-						if (val != -1) {
-							ds.insertFront(val);
-						}
-					}
-					if (modeString == "i = n (after tail)") {
-						int val = valueTypingBox[0].getProperInt();
-						if (val != -1) {
-							ds.insertBack(val);
-						}
-					}
-					if (modeString == "i = 1..n - 1 (middle)") {
-						int pos = valueTypingBox[0].getProperInt();
-						int val = valueTypingBox[1].getProperInt();
-						if (pos != -1 && val != -1) {
-							ds.insertMiddle(pos, val);
-						}
-					}
-				}
-				if (operationName[curOperation] == "Remove") {
-					if (modeString == "i = 0 (head)") {
-						ds.removeFront();
-					}
-				}
-				operating = false;
-			}
 			break;
 		case sf::Event::KeyPressed:
 			handleKeyPressed(int(event.key.code));
@@ -183,6 +126,81 @@ bool SinglyLinkedListStage::processEvents() {
 			handleMouseReleased(event.mouseButton.x, event.mouseButton.y);
 			break;
 		}
+	}
+	if (operating) {
+		ds.setIsAnimating(true);
+		std::string modeString = modeName[curOperation][curMode];
+		if (operationName[curOperation] == "Create") {
+			if (modeString == "Empty") {
+				ds.createRandom(0, {});
+			}
+			if (modeString == "Random") {
+				ds.createRandom();
+			}
+			if (modeString == "Random Sorted") {
+				ds.createRandom(-1, {}, true);
+			}
+			if (modeString == "Fixed Size") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.createRandom(val);
+				}
+			}
+			if (modeString == "Manual") {
+				std::vector <int> values = valueTypingBox[0].getListInt();
+				if (!values.empty()) {
+					ds.createRandom(values.size(), values);
+				}
+			}
+			if (modeString == "Upload From File") {
+				std::vector <int> values = readFromFile.getListInt();
+				if (!values.empty()) {
+					ds.createRandom(values.size(), values);
+				}
+			}
+		}
+		if (operationName[curOperation] == "Search") {
+			int val = valueTypingBox[0].getProperInt();
+			if (val != -1) {
+				ds.search(val);
+			}
+		}
+		if (operationName[curOperation] == "Insert") {
+			if (modeString == "i = 0 (head)") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.insertFront(val);
+				}
+			}
+			if (modeString == "i = n (after tail)") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.insertBack(val);
+				}
+			}
+			if (modeString == "i = 1..n - 1 (middle)") {
+				int pos = valueTypingBox[0].getProperInt();
+				int val = valueTypingBox[1].getProperInt();
+				if (pos != -1 && val != -1) {
+					ds.insertMiddle(pos, val);
+				}
+			}
+		}
+		if (operationName[curOperation] == "Remove") {
+			if (modeString == "i = 0 (head)") {
+				ds.removeFront();
+			}
+			if (modeString == "i = n - 1 (tail)") {
+				ds.removeBack();
+			}
+			if (modeString == "i = 1..n - 2 (middle)") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.removeMiddle(val);
+				}
+			}
+		}
+		operating = false;
 	}
 	return false;
 }

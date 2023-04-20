@@ -82,7 +82,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\C++\SFML-2.5.1\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib; sfml-window-d.lib; sfml-system-d.lib; sfml-audio-d.lib;</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-d.lib; sfml-window-d.lib; sfml-system-d.lib; sfml-audio-d.lib;Comdlg32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -101,7 +101,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\C++\SFML-2.5.1\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>winmm.lib; opengl32.lib; freetype.lib; sfml-graphics-s.lib; sfml-window-s.lib; sfml-system-s.lib; sfml-audio-s.lib;</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib; opengl32.lib; freetype.lib; sfml-graphics-s.lib; sfml-window-s.lib; sfml-system-s.lib; sfml-audio-s.lib;Comdlg32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -116,7 +116,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\C++\SFML-2.5.1\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib; sfml-window-d.lib; sfml-system-d.lib; sfml-audio-d.lib;</AdditionalDependencies>
+      <AdditionalDependencies>sfml-graphics-d.lib; sfml-window-d.lib; sfml-system-d.lib; sfml-audio-d.lib;Comdlg32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -135,7 +135,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\C++\SFML-2.5.1\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>winmm.lib; opengl32.lib; freetype.lib; sfml-graphics-s.lib; sfml-window-s.lib; sfml-system-s.lib; sfml-audio-s.lib;</AdditionalDependencies>
+      <AdditionalDependencies>winmm.lib; opengl32.lib; freetype.lib; sfml-graphics-s.lib; sfml-window-s.lib; sfml-system-s.lib; sfml-audio-s.lib;Comdlg32.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -154,6 +154,7 @@
     <ClCompile Include="PlayButton.cpp" />
     <ClCompile Include="Queue.cpp" />
     <ClCompile Include="QueueStage.cpp" />
+    <ClCompile Include="ReadFromFile.cpp" />
     <ClCompile Include="Scrubber.cpp" />
     <ClCompile Include="SinglyLinkedList.cpp" />
     <ClCompile Include="SinglyLinkedListStage.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="PlayButton.h" />
     <ClInclude Include="Queue.h" />
     <ClInclude Include="QueueStage.h" />
+    <ClInclude Include="ReadFromFile.h" />
     <ClInclude Include="Scrubber.h" />
     <ClInclude Include="SinglyLinkedList.h" />
     <ClInclude Include="SinglyLinkedListStage.h" />

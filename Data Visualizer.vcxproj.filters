@@ -87,6 +87,9 @@
     <ClCompile Include="SinglyLinkedListStage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ReadFromFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h">
@@ -156,6 +159,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SinglyLinkedListStage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadFromFile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

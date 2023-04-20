@@ -1,5 +1,21 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <windows.h>
+#include <commdlg.h>
+#include <shlobj.h>
+#include <fstream>
+#include <iostream>
+#include <locale>
+#include <codecvt>
+
+namespace SFML {
+	typedef sf::RectangleShape Rectangle;
+	// Alternatively, you can use "using Rectangle = sf::RectangleShape;" in C++11 or later.
+}
+
+namespace WinAPI {
+	typedef ::RECT Rectangle;
+}
 
 const int WIDTH_RES = 1600;
 const int HEIGHT_RES = 900;
@@ -40,6 +56,7 @@ const sf::Color EmeraldColor(50, 222, 138);
 const sf::Color CaribbeanCurrentColor(0, 108, 103);
 const sf::Color NyanzaColor(207, 255, 229);
 const sf::Color WhiteSmokeColor(245, 245, 245);
+const sf::Color AntiFlashWhiteColor(235, 235, 235);
 
 const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;
@@ -116,10 +133,10 @@ const ColorNode colorNode[numColorTheme][numColorNodeType] =
 };
 
 enum ColorBoxType {
-	CommandBoxNormal, CommandBoxSelected, GoBoxNormal, TriangleButtonNormal, Typing_Box, MediaBox, CodeOuterBox, WarningBox
+	CommandBoxNormal, CommandBoxSelected, GoBoxNormal, TriangleButtonNormal, Typing_Box, MediaBox, CodeOuterBox, WarningBox, UploadBox
 };
 
-const int numColorBoxType = 8;
+const int numColorBoxType = 9;
 
 struct ColorBox {
 	sf::Color fillColor, outlineColor, textColor;
@@ -151,7 +168,7 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 	{ //MediaBox
 		ColorBox(DarkPinkColor, BlackColor, BlackColor),
 		ColorBox(GrapeColor, TaupeGrayColor, WhiteColor)
-	}, 
+	},
 	{ //CodeOuterBox
 		ColorBox(BuffColor, BlackColor, BlackColor),
 		ColorBox(DarkBlueColor, TaupeGrayColor, WhiteSmokeColor)
@@ -159,6 +176,10 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 	{ //WarningBox
 		ColorBox(LightYellowColor, RedColor, BlackColor),
 		ColorBox(EmeraldColor, RedColor, EerieBlackColor)
+	},
+	{ //UploadBox
+		ColorBox(AntiFlashWhiteColor, BlackColor, BlackColor),
+		ColorBox(AntiFlashWhiteColor, BlackColor, BlackColor)
 	}
 };
 
@@ -184,6 +205,9 @@ const sf::Color backButtonNormalFillColor[numColorTheme] = { DarkPinkColor, Grap
 
 const sf::Color announcementFillColor[numColorTheme] = { DarkOrangeColor , CaribbeanCurrentColor };
 const sf::Color announcementTextColor[numColorTheme] = { BlackColor, WhiteColor };
+
+const sf::Color warningFillColor[numColorTheme] = { YellowColor , CaribbeanCurrentColor };
+const sf::Color warningTextColor[numColorTheme] = { BlackColor, WhiteColor };
 
 const sf::Color errorTextColor[numColorTheme] = { RedColor, EmeraldColor };
 

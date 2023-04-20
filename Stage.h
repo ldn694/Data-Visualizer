@@ -11,6 +11,7 @@
 #include "MultipleChoice.h"
 #include "MediaControl.h"
 #include "BackButton.h"
+#include "ReadFromFile.h"
 
 struct Stage {
 protected:
@@ -34,6 +35,9 @@ protected:
 	std::vector <std::vector <std::vector <TypingBoxMode> > > typingMode;
 	std::vector <std::vector <std::vector <std::pair <int, int> > > > valueBound;
 	std::vector <BigTypingBox> valueTypingBox;
+
+	ReadFromFile readFromFile;
+
 	std::vector <std::vector <int>> numValue;
 
 	IngameSettings ingameSettings;

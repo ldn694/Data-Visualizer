@@ -75,6 +75,7 @@ struct DataStructure {
 	void deleteVariables(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <std::string> variableList);
 	void addEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
 	void setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
+	void setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, std::vector <ColorNodeType> type);
 	void switchEdge(std::vector <Animation>& animationList, std::vector <std::tuple <int, int, int> > edgeList);
 	void doNothing(std::vector <Animation>& animationList);
 	void setCurOperation(int val);

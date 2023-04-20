@@ -62,10 +62,10 @@ void Box::draw(sf::RenderWindow& window, ColorTheme theme) {
 	Text.setString(text);
 	Text.setCharacterSize(textSize);
 	Text.setFillColor(cur.textColor);
+	Text.setStyle(sf::Text::Bold);
 	sf::FloatRect textRect = Text.getLocalBounds();
 	Text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
 	Text.setPosition(x1 + width / 2.0f, y1 + height / 2.0f);
-	Text.setStyle(sf::Text::Bold);
 	window.draw(Text);
 }
 

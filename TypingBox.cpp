@@ -220,23 +220,14 @@ void TypingBox::draw(sf::RenderWindow& window, ColorTheme theme) {
 		window.draw(vtx, 2, sf::Lines);
 	}
 	if (displayingWarning) {
-		double l = 0.f, r = 50.f;
-		for (int cnt = 0; cnt < 60; cnt++) {
-			double mid = (l + r) / 2;
-			sf::Text text;
-			text.setFont(*font);
-			text.setString(warning);
-			text.setCharacterSize(mid);
-			sf::FloatRect textRect = text.getLocalBounds();
-			if (textRect.width <= widthWarning && textRect.height <= heightWarning * 0.75) {
-				l = mid;
-			}
-			else {
-				r = mid;
-			}
-		}
-		Box warningBox(xWarning, yWarning - outlineBox * 2, widthWarning, heightWarning, { WarningBox }, warning, font, l, false, 0.f);
-		warningBox.draw(window, theme);
+		sf::RectangleShape tmpRect(sf::Vector2f(widthWarning, heightWarning));
+		tmpRect.setPosition(xWarning, yWarning);
+		tmpRect.setFillColor(warningFillColor[theme]);
+		window.draw(tmpRect);
+		sf::Text WarningText = CompressWords(warning,
+			xWarning, yWarning, widthWarning, heightWarning,
+			font, 25, warningTextColor[theme]);
+		window.draw(WarningText);
 	}
 }
 

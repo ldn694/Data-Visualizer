@@ -24,6 +24,9 @@ SinglyLinkedList::SinglyLinkedList(double radius, double outlineSize, double lin
 				},
 				{
 				""
+				},
+				{
+				""
 				}
 			},
 			{	//Search
@@ -88,14 +91,14 @@ SinglyLinkedList::SinglyLinkedList(double radius, double outlineSize, double lin
 					"Vertex* cur = head, aft = cur->next;",
 					"if (aft == NULL) {",
 					"	head = tail = NULL;",
-					"	delete(cur);",
+					"	delete cur;",
 					"	return;",
 					"}",
 					"while (aft->next != NULL) {",
 					"	cur = cur->next; aft = aft->next;",
 					"}",
-					"cur->next = NULL;",
-					"delete aft; tail = cur;"
+					"delete aft; tail = cur;",
+					"cur->next = NULL;"
 				},
 				{	//Remove middle
 					"",
@@ -629,73 +632,180 @@ void SinglyLinkedList::removeFront() {
 }
 
 void SinglyLinkedList::removeBack() {
-	resetAnimation();
 	std::vector <Animation> animationList;
+	Node defaultNode = defaultGraph.getDefaultNode();
+	resetAnimation();
+
 	if (getSize() == 0) {
+		animationList.clear();
 		doNothing(animationList);
-		addAnimations(animationList, stepTime, 1, "List is empty, no action is performed");
+		addAnimations(animationList, stepTime, 1, "List is empty (head == NULL), the function stops here.");
+		animateAllFrame();
+		return;
+	}
+	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 1, "List is not empty (head != NULL), proceed to the next step.");
+
+	if (getSize() == 1) {
+		animationList.clear();
+		addVariables(animationList, { getHeadID() }, { "cur" });
+		setNodeColor(animationList, { getHeadID() }, theme, highlight);
+		addAnimations(animationList, stepTime, 2, "Created 2 pointer cur, aft. cur points to head while aft points to head->next (which is NULL).");
 
 		animationList.clear();
 		doNothing(animationList);
-		addAnimations(animationList, stepTime, 0);
+		addAnimations(animationList, stepTime, 3, "aft is NULL, so the condition is true");
+
+		animationList.clear();
+		deleteVariables(animationList, { getHeadID() }, { "head", "tail" });
+		addAnimations(animationList, stepTime, 4, "head and tail now both point to NULL (empty list)");
+
+		animationList.clear();
+		deleteNode(animationList, { getHeadID() });
+		addAnimations(animationList, stepTime, 5, "delete cur");
+
+		animationList.clear();
+		doNothing(animationList);
+		sll.pop_back();
+		addAnimations(animationList, stepTime, 6, "The function stops here. The list is now empty.");
 
 		animateAllFrame();
 		return;
 	}
-	doNothing(animationList);
-	addAnimations(animationList, stepTime, 1, "sll is not empty, proceed to next step");
 	animationList.clear();
-	int head = getHeadID();
+	addVariables(animationList, { getHeadID() }, { "cur" });
+	setNodeColor(animationList, { getHeadID(), getID(1) }, theme, { highlight, highlight2 });
+	addVariables(animationList, { getID(1) }, { "aft" });
+	setEdgeColor(animationList, { {getHeadID(), getID(1)} }, theme, highlight2);
+	addAnimations(animationList, stepTime, 2, "Created 2 pointer cur, aft. cur points to head while aft points to head->next.");
+
+	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 3, "aft is not NULL, so the condition is false.");
+
+	int i = 0;
+	while (true) {
+		if (i + 2 >= getSize()) {
+			animationList.clear();
+			doNothing(animationList);
+			addAnimations(animationList, stepTime, 8, "aft->next is NULL (aft == tail), so the condition is false and the loop stops.");
+			break;
+		}
+		animationList.clear();
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 8, "aft->next is not NULL, so the condition is true and the loop continues.");
+
+		animationList.clear();
+		deleteVariables(animationList, { getID(i) }, { "cur" });
+		deleteVariables(animationList, { getID(i + 1) }, { "aft" });
+		addVariables(animationList, { getID(i + 1) }, { "cur" });
+		addVariables(animationList, { getID(i + 2) }, { "aft" });
+		setNodeColor(animationList, { getID(i), getID(i + 1), getID(i + 2) }, theme, { lowlight, highlight, highlight2 });
+		setEdgeColor(animationList, { {getID(i), getID(i + 1)}, {getID(i + 1), getID(i + 2)} }, theme, { highlight, normal });
+		addAnimations(animationList, stepTime, 9, "cur points to cur->next, aft points to aft->next.");
+		i++;
+	}
+	animationList.clear();
+	deleteNode(animationList, { getTailID() });
+	translateNode(animationList, getIDList(0, getSize() - 1), 2.5 * defaultNode.getRadius(), 0);
+	addVariables(animationList, { getID(getSize() - 2) }, { "tail" });
+	addAnimations(animationList, stepTime, 11, "delete aft, tail now points to cur.");
+
+	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 12, "cur->next (which is now also tail->next) now points to NULL.");
+	sll.pop_back();
+	sll.back().dNext = -1;
+
+	animationList.clear();
+	setNodeColor(animationList, getIDList(0, getSize() - 1), theme, normal);
+	setEdgeColor(animationList, getEdgeID(0, getSize() - 1), theme, normal);
+	deleteVariables(animationList, { getTailID() }, { "cur" });
+	addAnimations(animationList, stepTime, 0, "Re-format for visualizing.");
+
+	animateAllFrame();
+}
+
+void SinglyLinkedList::removeMiddle(int i) {
+	if (getSize() < 3) {
+		setError(true, "There is no position in the middle!");
+		return;
+	}
+	if (i < 1 || i > getSize() - 2) {
+		setError(true, "i must be in [1, " + intToString(getSize() - 2) + "]!");
+		return;
+	}
+	resetAnimation();
+	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
-	if (getSize() == 1) {
-		setNodeColor(animationList, { head }, theme, highlight);
-		addVariables(animationList, { head }, { "temp" });
-		addAnimations(animationList, stepTime, 2, "Created new pointer temp pointing to head");
 
-		animationList.clear();
-		deleteVariables(animationList, { head }, { "head" });
-		addAnimations(animationList, stepTime, 3, "head->next is null, so head is now also null (empty list)");
+	animationList.clear();
+	addVariables(animationList, { getHeadID() }, { "cur", "k = 0" });
+	setNodeColor(animationList, { getHeadID() }, theme, highlight);
+	addAnimations(animationList, stepTime, 1, "Created pointer cur pointing to head and assign k = 0.");
+	int k = 0;
 
+	while (true) {
+		if (k >= getSize()) {
+			animationList.clear();
+			doNothing(animationList);
+			addAnimations(animationList, stepTime, 2, "cur now equals to NULL, we finished traversing the list and now stop the loop.");
+			break;
+		}
 		animationList.clear();
 		doNothing(animationList);
-		deleteVariables(animationList, { head }, { "tail" });
-		addAnimations(animationList, stepTime, 4, "List is now empty, so tail is also null");
+		addAnimations(animationList, stepTime, 2, "cur is not NULL, we have not finished traversing the list.");
+		if (k == i - 1) {
+			animationList.clear();
+			doNothing(animationList);
+			addAnimations(animationList, stepTime, 3, "k equals to i - 1 (k == i - 1 == " + intToString(i - 1) + "), so the condition is true.");
 
-		animationList.clear();
-		deleteNode(animationList, head);
-		addAnimations(animationList, stepTime, 5, "Delete temp, the list is empty");
+			animationList.clear();
+			addVariables(animationList, { getID(i) }, { "aft" });
+			setNodeColor(animationList, { getID(i) }, theme, highlight2);
+			moveNode(animationList, getID(i), (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2 + 5 * i * defaultNode.getRadius(), HEIGHT_RES / 2);
+			translateNode(animationList, getIDList(i + 1, getSize() - 1), -2.5 * defaultNode.getRadius(), 0);
+			mergeMoveNode(animationList);
+			translateNode(animationList, getIDList(0, i - 1), 2.5 * defaultNode.getRadius(), 0);
+			mergeMoveNode(animationList);
+			addAnimations(animationList, stepTime, 4, "Created pointer aft pointing to cur->next.");
 
-		animationList.clear();
-		setNodeColor(animationList, { head }, theme, normal);
-		addAnimations(animationList, stepTime, 0, "Re-layout for visualization");
-	}
-	else {
-		setNodeColor(animationList, { head }, theme, highlight);
-		addVariables(animationList, { head }, { "temp" });
-		addAnimations(animationList, stepTime, 2, "Created new pointer temp pointing to head");
+			animationList.clear();
+			switchEdge(animationList, { {getID(i - 1), getID(i), getID(i + 1)} });
+			setNodeColor(animationList, { getID(i + 1) }, theme, highlight3);
+			addAnimations(animationList, stepTime, 5, "cur->next now points to aft->next");
 
-		animationList.clear();
-		setEdgeColor(animationList, { {head, sll[1].id} }, theme, highlight2);
-		setNodeColor(animationList, { sll[1].id }, theme, highlight2);
-		deleteVariables(animationList, { head }, { "head" });
-		addVariables(animationList, { sll[1].id }, { "head" });
-		addAnimations(animationList, stepTime, 3, "head now points to head->next");
+			animationList.clear();
+			deleteNode(animationList, getID(i));
+			addAnimations(animationList, stepTime, 6, "delete aft");
+			sll.erase(sll.begin() + i);
 
+			animationList.clear();
+			setNodeColor(animationList, getIDList(0, getSize() - 1), theme, normal);
+			setEdgeColor(animationList, getEdgeID(0, getSize() - 1), theme, normal);
+			deleteVariables(animationList, { getID(k) }, { "k = " + intToString(k), "cur" });
+			addAnimations(animationList, stepTime, 7, "The function stops here.");
+			animateAllFrame();
+			return;
+		}
 		animationList.clear();
 		doNothing(animationList);
-		addAnimations(animationList, stepTime, 4, "List is not empty (head != null), proceed to next step");
+		addAnimations(animationList, stepTime, 3, "k does not equal to i - 1, so the condition is false.");
 
 		animationList.clear();
-		deleteNode(animationList, head);
-		translateNode(animationList, getIDList(1, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
-		addAnimations(animationList, stepTime, 5, "delete temp");
+		deleteVariables(animationList, { getID(k) }, { "k = " + intToString(k), "cur"});
+		addVariables(animationList, { getID(k + 1) }, { "k = " + intToString(k + 1), "cur"});
+		setNodeColor(animationList, { getID(k), getID(k + 1) }, theme, { lowlight, highlight });
+		setEdgeColor(animationList, { { getID(k), getID(k + 1) } }, theme, highlight);
+		addAnimations(animationList, stepTime, 9, "cur now points to cur->next, increase k by 1.");
+		k++;
 	}
-	sll.erase(sll.begin());
-	if (getSize() > 0) {
-		animationList.clear();
-		setNodeColor(animationList, { getHeadID() }, theme, normal);
-		addAnimations(animationList, stepTime, 0, "Re-layout for visualization");
-	}
+
+	animationList.clear();
+	setNodeColor(animationList, getIDList(0, getSize() - 1), theme, normal);
+	setEdgeColor(animationList, { getEdgeID(0, getSize() - 1) }, theme, normal);
+	addAnimations(animationList, stepTime, 0, "Re-format for visualization.");
 	animateAllFrame();
 }
 

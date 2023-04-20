@@ -10,6 +10,8 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	window(_window), operationName(_operationName), modeName(_modeName), valueName(_valueName), typingMode(_typingMode), valueBound(_valueBound), theme(_theme),
 	ingameSettings(widthBox * 2, HEIGHT_RES - heightBox * 3, WIDTH_RES - widthBox * 4, heightBox * 3),
 	backButton(0, 0, widthBox / 4, widthBox / 4),
+	readFromFile(widthBox / 2, HEIGHT_RES - heightBox * 3 / 4, widthBox, heightBox / 2,
+				0, HEIGHT_RES - heightBox * 4 - outlineBox * 2, widthBox * 2, heightBox, font(fontType::Prototype), maxSizeData, 0, maxValueData),
 	ds(_ds)
 {
 	numOperation = operationName.size();
@@ -83,11 +85,19 @@ void Stage::updateModeBox(int newMode) {
 	if (ds != nullptr) {
 		ds->setCurMode(curMode);
 	}
-	valueTypingBox.resize(numValue[curOperation][curMode]);
-	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
-		valueTypingBox[i] = BigTypingBox(2 * widthBox / numValue[curOperation][curMode] * i, HEIGHT_RES - heightBox, 2 * widthBox / numValue[curOperation][curMode], heightBox, widthBox / 3, outlineBox, valueName[curOperation][curMode][i],
-			0, HEIGHT_RES - heightBox * 3 - 50, widthBox * 2, 50,
-			typingMode[curOperation][curMode][i], font(fontType::Prototype), typingModeMaxCharacter[typingMode[curOperation][curMode][i]], valueBound[curOperation][curMode][i].first, valueBound[curOperation][curMode][i].second);
+	if (modeName[curOperation][curMode] == "Upload From File") {
+		valueTypingBox.clear();
+		readFromFile.reset();
+		readFromFile.setDisplaying(true);
+	}
+	else {
+		readFromFile.reset();
+		valueTypingBox.resize(numValue[curOperation][curMode]);
+		for (int i = 0; i < numValue[curOperation][curMode]; i++) {
+			valueTypingBox[i] = BigTypingBox(2 * widthBox / numValue[curOperation][curMode] * i, HEIGHT_RES - heightBox, 2 * widthBox / numValue[curOperation][curMode], heightBox, widthBox / 3, outlineBox, valueName[curOperation][curMode][i],
+				0, HEIGHT_RES - heightBox * 4 - outlineBox * 2, widthBox * 2, heightBox,
+				typingMode[curOperation][curMode][i], font(fontType::Prototype), typingModeMaxCharacter[typingMode[curOperation][curMode][i]], valueBound[curOperation][curMode][i].first, valueBound[curOperation][curMode][i].second);
+		}
 	}
 }
 
@@ -158,16 +168,21 @@ bool Stage::handleMousePressed(double x, double y) {
 	if (themeCode != -1) {
 		setTheme(ColorTheme(themeCode));
 	}
+	readFromFile.handleMousePressed(x, y);
 	return backButton.handleMousePressed(x, y);
 }
 
 void Stage::handleKeyPressed(int key) {
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
-		if (valueTypingBox[i].isReading()) {
+		if (valueTypingBox[i].isReading())
+		{
 			valueTypingBox[i].readKey(key);
 		}
 	}
 	ingameSettings.handleKeyPressed(key);
+	if (key == int(sf::Keyboard::Enter)) {
+		operating = true;
+	}
 }
 
 void Stage::handleMouseMove(double x, double y) {
@@ -200,6 +215,7 @@ void Stage::draw() {
 		Box emptyBox(0, HEIGHT_RES - heightBox, widthBox * 2, heightBox, { CommandBoxNormal });
 		emptyBox.draw(window, theme);
 	}
+	readFromFile.draw(window, theme);
 	ingameSettings.draw(window, theme);
 	backButton.draw(window, theme);
 }

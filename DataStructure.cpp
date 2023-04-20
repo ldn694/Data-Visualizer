@@ -372,6 +372,16 @@ void DataStructure::setEdgeColor(std::vector <Animation>& animationList, std::ve
 	animationList.push_back(tmp);
 }
 
+void DataStructure::setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, std::vector <ColorNodeType> type) {
+	Animation tmp;
+	tmp.type = EdgeColor;
+	tmp.element.edges = edges;
+	for (int i = 0; i < type.size(); i++) {
+		tmp.work.colors.push_back(colorNode[theme][type[i]].outlineColor);
+	}
+	animationList.push_back(tmp);
+}
+
 void DataStructure::switchEdge(std::vector <Animation>& animationList, std::vector <std::tuple <int, int, int> > edgeList) {
 	Animation tmp;
 	tmp.type = SwitchEdge;
