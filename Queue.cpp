@@ -11,19 +11,22 @@ Queue::Queue(double radius, double outlineSize, double lineThickness,
 		{
 			{
 				{
-				""
+					""
 				},
 				{
-				""
+					""
 				},
 				{
-				""
+					""
 				},
 				{
-				""
+					""
 				},
 				{
-				""
+					""
+				},
+				{
+					""
 				}
 			},
 			{
@@ -95,7 +98,7 @@ int Queue::getTailID() {
 	return queue.back().id;
 }
 
-std::vector <int> Queue::getIDList(int l, int r) {
+std::vector <int> Queue::getListID(int l, int r) {
 	std::vector <int> id;
 	for (int i = l; i <= r; i++) {
 		id.push_back(queue[i].id);
@@ -233,7 +236,7 @@ void Queue::enqueue(int value) {
 
 	animationList.clear();
 	Node defaultNode = defaultGraph.getDefaultNode();
-	translateNode(animationList, getIDList(0, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
+	translateNode(animationList, getListID(0, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
 	queue.push_back({id, value, tail});
 	moveNode(animationList, id, WIDTH_RES - (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2, HEIGHT_RES / 3);
 	mergeMoveNode(animationList);
@@ -302,7 +305,7 @@ void Queue::dequeue() {
 
 		animationList.clear();
 		deleteNode(animationList, head);
-		translateNode(animationList, getIDList(1, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
+		translateNode(animationList, getListID(1, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
 		addAnimations(animationList, stepTime, 5, "delete temp");
 	}
 	queue.erase(queue.begin());

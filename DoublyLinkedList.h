@@ -1,14 +1,16 @@
 #pragma once
+
+#pragma once
 #include "DataStructure.h"
-struct SinglyLinkedList : public DataStructure {
+struct DoublyLinkedList : public DataStructure {
 private:
 	struct Data {
-		int id, value, dNext;
+		int id, value, dNext, dPrev;
 	};
-	std::vector <Data> sll;
+	std::vector <Data> dll;
 
 public:
-	SinglyLinkedList(double radius = 0, double outlineSize = 0, double lineThickness = 0,
+	DoublyLinkedList(double radius = 0, double outlineSize = 0, double lineThickness = 0,
 		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected, sf::Font* font = nullptr);
 	int getEmptyID();
 	int getSize();
@@ -33,3 +35,4 @@ public:
 	void peekFront();
 	void peekBack();
 };
+

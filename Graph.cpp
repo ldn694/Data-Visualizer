@@ -182,7 +182,7 @@ void Graph::draw(sf::RenderWindow& window) {
 			double y2 = listNode[v].getY();
 			double shorten = defaultNode.getRadius() + defaultNode.getOutlineSize();
 			double hypo = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
-			if (hypo - shorten * 2 >= epsilonDouble) {
+			if (hypo - shorten * 2 - (edgeType != Undirected ? 0.5 * lineThickness : 0) >= epsilonDouble) {
 				Edge edge(x1, y1, x2, y2, lineThickness, lineColor, edgeType, shorten, shorten);
 				edge.draw(window);
 			}
@@ -822,9 +822,6 @@ void Graph::switchEdge(int u, int v, int newv) {
 		return;
 	}
 	auto here = findV(u, v);
-	if (here == adj[u].end()) {
-		return;
-	}
 	EdgeInfo tmp = *here;
 	tmp.v = newv;
 	adj[u].erase(here);

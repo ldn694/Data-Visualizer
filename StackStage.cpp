@@ -6,7 +6,7 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 	ColorTheme theme, EdgeType edgeType) :
 	Stage(window, { "Create", "Push", "Pop", "Peek" }, 
 		{ 
-			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom"},
+			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom", "Upload File"},
 			{"Random", "v = ? "},
 			{""},
 			{""}
@@ -17,7 +17,8 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 				{},
 				{},
 				{"n ="},
-				{"v[] ="}
+				{"v[] ="},
+				{}
 			},
 			{
 				{},
@@ -36,7 +37,8 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 				{},
 				{},
 				{singleNumber},
-				{multipleNumber}
+				{multipleNumber},
+				{}
 			},
 			{
 				{},
@@ -55,7 +57,8 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 				{},
 				{},
 				{{0, maxSizeData}},
-				{{0, maxValueData}}
+				{{0, maxValueData}},
+				{}
 			},
 			{
 				{},
@@ -120,6 +123,12 @@ bool StackStage::processEvents() {
 			}
 			if (modeString == "Custom") {
 				std::vector <int> values = valueTypingBox[0].getListInt();
+				if (!values.empty()) {
+					ds.createRandom(values.size(), values);
+				}
+			}
+			if (modeString == "Upload File") {
+				std::vector <int> values = readFromFile.getListInt();
 				if (!values.empty()) {
 					ds.createRandom(values.size(), values);
 				}

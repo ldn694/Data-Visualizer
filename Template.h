@@ -234,6 +234,8 @@ sf::Font* font(fontType id);
 
 double area(double x1, double y1, double x2, double y2, double x3, double y3);
 
+double dist(double x1, double y1, double x2, double y2);
+
 bool isInsideTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double x, double y);
 
 void RotatePoint(double& x, double& y, double cx, double cy, double angle);

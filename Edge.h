@@ -15,6 +15,7 @@ private:
 	sf::Color color;
 	double thickness;
 public:
+	bool valid;
 	TrianglePointer(double x1 = 0.f, double y1 = 0.f, double x2 = 0.f, double y2 = 0.f, double thickness = 0.f,
 		sf::Color _color = BlackColor);
 	void draw(sf::RenderWindow& window);

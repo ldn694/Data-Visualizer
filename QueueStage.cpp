@@ -6,7 +6,7 @@ QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSi
 	ColorTheme theme, EdgeType edgeType) :
 	Stage(window, { "Create", "Enqueue", "Dequeue", "Peek" },
 		{
-			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom"},
+			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom", "Upload File"},
 			{"Random", "v = ? "},
 			{""},
 			{"Front", "Back"}
@@ -17,7 +17,8 @@ QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSi
 				{},
 				{},
 				{"n ="},
-				{"v[] ="}
+				{"v[] ="},
+				{}
 			},
 			{
 				{},
@@ -37,7 +38,8 @@ QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSi
 				{},
 				{},
 				{singleNumber},
-				{multipleNumber}
+				{multipleNumber},
+				{}
 			},
 			{
 				{},
@@ -57,7 +59,8 @@ QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSi
 				{},
 				{},
 				{{0, maxSizeData}},
-				{{0, maxValueData}}
+				{{0, maxValueData}},
+				{}
 			},
 			{
 				{},
@@ -123,6 +126,12 @@ bool QueueStage::processEvents() {
 			}
 			if (modeString == "Custom") {
 				std::vector <int> values = valueTypingBox[0].getListInt();
+				if (!values.empty()) {
+					ds.createRandom(values.size(), values);
+				}
+			}
+			if (modeString == "Upload File") {
+				std::vector <int> values = readFromFile.getListInt();
 				if (!values.empty()) {
 					ds.createRandom(values.size(), values);
 				}

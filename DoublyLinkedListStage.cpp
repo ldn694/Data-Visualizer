@@ -1,8 +1,8 @@
 #include <iostream>
-#include "SinglyLinkedListStage.h"
+#include "DoublyLinkedListStage.h"
 #include "Template.h"
 
-SinglyLinkedListStage::SinglyLinkedListStage(sf::RenderWindow& window, double radius, double outlineSize, double lineThickness,
+DoublyLinkedListStage::DoublyLinkedListStage(sf::RenderWindow& window, double radius, double outlineSize, double lineThickness,
 	ColorTheme theme, EdgeType edgeType) :
 	Stage(window, { "Create", "Search", "Insert", "Remove", "Update" },
 		{
@@ -98,11 +98,11 @@ SinglyLinkedListStage::SinglyLinkedListStage(sf::RenderWindow& window, double ra
 		},
 		theme)
 {
-	ds = SinglyLinkedList(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
+	ds = DoublyLinkedList(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
 	setDS(&ds);
 }
 
-bool SinglyLinkedListStage::processEvents() {
+bool DoublyLinkedListStage::processEvents() {
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
@@ -226,19 +226,19 @@ bool SinglyLinkedListStage::processEvents() {
 	return false;
 }
 
-void SinglyLinkedListStage::update(sf::Time deltaT) {
+void DoublyLinkedListStage::update(sf::Time deltaT) {
 	ds.update(deltaT);
 	stageUpdate(deltaT);
 }
 
-void SinglyLinkedListStage::render() {
+void DoublyLinkedListStage::render() {
 	window.clear(theme == LightTheme ? MilkColor : EerieBlackColor);
 	ds.draw(window);
 	draw();
 	window.display();
 }
 
-void SinglyLinkedListStage::run() {
+void DoublyLinkedListStage::run() {
 	sf::Clock mClock;
 	sf::Time timePool = sf::Time::Zero;
 	while (window.isOpen())

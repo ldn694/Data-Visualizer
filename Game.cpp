@@ -3,6 +3,7 @@
 #include <cassert>
 #include "Game.h"
 #include "SinglyLinkedListStage.h"
+#include "DoublyLinkedListStage.h"
 #include "StackStage.h"
 #include "QueueStage.h"
 #include "Template.h"
@@ -13,6 +14,7 @@ Game::Game(sf::ContextSettings settings)
 	stackBox = Box(100, 500, 200, 300, { CommandBoxNormal }, "Stack", font(fontType::Prototype), 50, NO_BORDER, 5);
 	queueBox = Box(400, 500, 200, 300, { CommandBoxNormal }, "Queue", font(fontType::Prototype), 50, NO_BORDER, 5);
 	sllBox = Box(700, 500, 200, 300, { CommandBoxNormal }, "SLL", font(fontType::Prototype), 50, NO_BORDER, 5);
+	dllBox = Box(1000, 500, 200, 300, { CommandBoxNormal }, "DLL", font(fontType::Prototype), 50, NO_BORDER, 5);
 	theme = LightTheme;
 }
 
@@ -29,6 +31,11 @@ void Game::runQueue() {
 void Game::runSLL() {
 	SinglyLinkedListStage sll(window, 20, 5, 4, theme, SinglyDirected);
 	sll.run();
+}
+
+void Game::runDLL() {
+	DoublyLinkedListStage dll(window, 20, 5, 4, theme, DoublyDirected);
+	dll.run();
 }
 
 void Game::processEvents(sf::Clock& mClock)
@@ -54,6 +61,10 @@ void Game::processEvents(sf::Clock& mClock)
 				runSLL();
 				mClock.restart();
 			}
+			if (dllBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
+				runDLL();
+				mClock.restart();
+			}
 			break;
 		}
 	}
@@ -70,6 +81,7 @@ void Game::render()
 	stackBox.draw(window, theme); 
 	queueBox.draw(window, theme);
 	sllBox.draw(window, theme);
+	dllBox.draw(window, theme);
 	window.display();
 }
 

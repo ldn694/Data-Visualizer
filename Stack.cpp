@@ -11,19 +11,22 @@ Stack::Stack(double radius, double outlineSize, double lineThickness,
 		{
 			{
 				{
-				""
+					""
 				},
 				{
-				""
+					""
 				},
 				{
-				""
+					""
 				},
 				{
-				""
+					""
 				},
 				{
-				""
+					""
+				},
+				{
+					""
 				}
 			},
 			{
@@ -81,7 +84,7 @@ int Stack::getHeadID() {
 	return stack[0].id;
 }
 
-std::vector <int> Stack::getIDList(int l, int r) {
+std::vector <int> Stack::getListID(int l, int r) {
 	std::vector <int> id;
 	for (int i = l; i <= r; i++) {
 		id.push_back(stack[i].id);
@@ -219,7 +222,7 @@ void Stack::push(int value) {
 
 	animationList.clear();
 	Node defaultNode = defaultGraph.getDefaultNode();
-	translateNode(animationList, getIDList(0, getSize() - 1), 2.5f * defaultNode.getRadius(), 0);
+	translateNode(animationList, getListID(0, getSize() - 1), 2.5f * defaultNode.getRadius(), 0);
 	stack.insert(stack.begin(), {id, value, head});
 	moveNode(animationList, id, (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2, HEIGHT_RES / 3);
 	mergeMoveNode(animationList);
@@ -260,7 +263,7 @@ void Stack::pop() {
 
 		animationList.clear();
 		deleteNode(animationList, head);
-		translateNode(animationList, getIDList(1, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
+		translateNode(animationList, getListID(1, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
 		addAnimations(animationList, stepTime, 4, "delete temp, now stack is empty");
 	}
 	else {
@@ -277,7 +280,7 @@ void Stack::pop() {
 
 		animationList.clear();
 		deleteNode(animationList, head);
-		translateNode(animationList, getIDList(1, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
+		translateNode(animationList, getListID(1, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
 		addAnimations(animationList, stepTime, 4, "delete temp");
 	}
 	stack.erase(stack.begin());

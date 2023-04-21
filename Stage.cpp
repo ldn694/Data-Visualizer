@@ -85,7 +85,7 @@ void Stage::updateModeBox(int newMode) {
 	if (ds != nullptr) {
 		ds->setCurMode(curMode);
 	}
-	if (modeName[curOperation][curMode] == "Upload From File") {
+	if (modeName[curOperation][curMode] == "Upload File") {
 		valueTypingBox.clear();
 		readFromFile.reset();
 		readFromFile.setDisplaying(true);

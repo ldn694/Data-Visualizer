@@ -13,6 +13,11 @@ TrianglePointer::TrianglePointer(double x1, double y1, double x2, double y2, dou
 	//now move (x3, y3) a distance of 2 * thickness, (x3, y3) is the midpoint of the hypotenuse of the triangle
 	MovePoint(x3, y3, x1, y1, 2 * thickness);
 	double hypo = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+	if (hypo < 2 * thickness) {
+		valid = false;
+		return;
+	}
+	valid = true;
 	double dx = ((y2 - y1) * thickness / hypo);
 	double dy = ((x2 - x1) * thickness / hypo);
 	points[0] = sf::Vertex(sf::Vector2f(x2, y2), color);
@@ -43,7 +48,7 @@ Edge::Edge(double x1, double y1, double x2, double y2, double thickness,
 	double X1 = x2 - dx, Y1 = y2 + dy;
 	double X2 = x2 + dx, Y2 = y2 - dy;
 	double X3 = x1 + dx, Y3 = y1 - dy;
-	if (type == EdgeType::DoublyDirected) {       
+	if (type == EdgeType::DoublyDirected) {
 		double diff = shortenGoal - sqrt(shortenGoal * shortenGoal - 4 * thickness * thickness);
 		MovePoint(X3, Y3, X0, Y0, -2 * thickness);
 		MovePoint(X2, Y2, X1, Y1, -2 * thickness);
@@ -69,7 +74,7 @@ Edge::Edge(double x1, double y1, double x2, double y2, double thickness,
 void Edge::draw(sf::RenderWindow& window) {
 	window.draw(points, 4, sf::Quads);
 	if (type == EdgeType::SinglyDirected || type == EdgeType::DoublyDirected) {
-		forwardPointer.draw(window);
+		if (forwardPointer.valid) forwardPointer.draw(window);
 	}
 	if (type == EdgeType::DoublyDirected) {
 		//backwardPointer.draw(window);

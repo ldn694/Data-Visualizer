@@ -16,7 +16,7 @@ public:
 	int getTailValue();
 	int getHeadID();
 	int getTailID();
-	std::vector <int> getIDList(int l = 0, int r = 0);
+	std::vector <int> getListID(int l = 0, int r = 0);
 	void createRandom(int n = -1, std::vector <int> values = {}, bool sorted = false);
 	void enqueue(int value);
 	void dequeue();

@@ -372,6 +372,24 @@ void DataStructure::addEdge(std::vector <Animation>& animationList, std::vector 
 	animationList.push_back(tmp);
 }
 
+void DataStructure::addEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, std::vector <ColorNodeType> type) {
+	assert(edges.size() == type.size());
+	Animation tmp;
+	tmp.type = AddEdge;
+	tmp.element.edges = edges;
+	for (int i = 0; i < edges.size(); i++) {
+		tmp.work.colors.push_back(colorNode[theme][type[i]].outlineColor);
+	}
+	animationList.push_back(tmp);
+}
+
+void DataStructure::deleteEdge(std::vector <Animation>& animationList, std::vector < std::pair <int, int> > edges) {
+	Animation tmp;
+	tmp.type = DeleteEdge;
+	tmp.element.edges = edges;
+	animationList.push_back(tmp);
+}
+
 void DataStructure::setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type) {
 	Animation tmp;
 	tmp.type = EdgeColor;
@@ -381,6 +399,7 @@ void DataStructure::setEdgeColor(std::vector <Animation>& animationList, std::ve
 }
 
 void DataStructure::setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, std::vector <ColorNodeType> type) {
+	assert(edges.size() == type.size());
 	Animation tmp;
 	tmp.type = EdgeColor;
 	tmp.element.edges = edges;
