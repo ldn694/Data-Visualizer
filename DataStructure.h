@@ -6,7 +6,8 @@
 #include "Box.h"
 
 enum AnimationType {
-	AddNode, AddEdge, MoveNode, TranslateNode, MergeMoveNode, ValueNode,
+	AddNode, AddEdge, AddCircularEdge,
+	MoveNode, TranslateNode, MergeMoveNode, ValueNode,
 	FillColorNode, OutlineColorNode, ValueColorNode, VariableColorNode,
 	AddVariable, DeleteVariable,
 	EdgeColor, SwitchEdge,
@@ -77,6 +78,7 @@ struct DataStructure {
 	void deleteVariables(std::vector <Animation>& animationList, std::vector <int> nodes, std::vector <std::string> variableList);
 	void addEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
 	void addEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, std::vector <ColorNodeType> type);
+	void addCircularEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
 	void deleteEdge(std::vector <Animation>& animationList, std::vector < std::pair <int, int> > edges);
 	void setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
 	void setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, std::vector <ColorNodeType> type);

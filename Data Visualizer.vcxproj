@@ -141,6 +141,9 @@
   <ItemGroup>
     <ClCompile Include="BackButton.cpp" />
     <ClCompile Include="Box.cpp" />
+    <ClCompile Include="CircularEdge.cpp" />
+    <ClCompile Include="CircularLinkedList.cpp" />
+    <ClCompile Include="CircularLinkedListStage.cpp" />
     <ClCompile Include="DoublyLinkedList.cpp" />
     <ClCompile Include="DoublyLinkedListStage.cpp" />
     <ClCompile Include="Edge.cpp" />
@@ -170,6 +173,9 @@
   <ItemGroup>
     <ClInclude Include="BackButton.h" />
     <ClInclude Include="Box.h" />
+    <ClInclude Include="CircularEdge.h" />
+    <ClInclude Include="CircularLinkedList.h" />
+    <ClInclude Include="CircularLinkedListStage.h" />
     <ClInclude Include="DoublyLinkedList.h" />
     <ClInclude Include="DoublyLinkedListStage.h" />
     <ClInclude Include="Edge.h" />

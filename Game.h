@@ -18,8 +18,9 @@ private:
 	void runQueue();
 	void runSLL();
 	void runDLL();
+	void runCLL();
 private:
 	ColorTheme theme;
 	sf::RenderWindow window;
-	Box stackBox, queueBox, sllBox, dllBox;
+	Box stackBox, queueBox, sllBox, dllBox, cllBox;
 };

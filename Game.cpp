@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "SinglyLinkedListStage.h"
 #include "DoublyLinkedListStage.h"
+#include "CircularLinkedListStage.h"
 #include "StackStage.h"
 #include "QueueStage.h"
 #include "Template.h"
@@ -15,6 +16,7 @@ Game::Game(sf::ContextSettings settings)
 	queueBox = Box(400, 500, 200, 300, { CommandBoxNormal }, "Queue", font(fontType::Prototype), 50, NO_BORDER, 5);
 	sllBox = Box(700, 500, 200, 300, { CommandBoxNormal }, "SLL", font(fontType::Prototype), 50, NO_BORDER, 5);
 	dllBox = Box(1000, 500, 200, 300, { CommandBoxNormal }, "DLL", font(fontType::Prototype), 50, NO_BORDER, 5);
+	cllBox = Box(1300, 500, 200, 300, { CommandBoxNormal }, "CLL", font(fontType::Prototype), 50, NO_BORDER, 5);
 	theme = LightTheme;
 }
 
@@ -36,6 +38,11 @@ void Game::runSLL() {
 void Game::runDLL() {
 	DoublyLinkedListStage dll(window, 20, 5, 4, theme, DoublyDirected);
 	dll.run();
+}
+
+void Game::runCLL() {
+	CircularLinkedListStage cll(window, 20, 5, 4, theme, SinglyDirected);
+	cll.run();
 }
 
 void Game::processEvents(sf::Clock& mClock)
@@ -65,6 +72,10 @@ void Game::processEvents(sf::Clock& mClock)
 				runDLL();
 				mClock.restart();
 			}
+			if (cllBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
+				runCLL();
+				mClock.restart();
+			}
 			break;
 		}
 	}
@@ -82,6 +93,7 @@ void Game::render()
 	queueBox.draw(window, theme);
 	sllBox.draw(window, theme);
 	dllBox.draw(window, theme);
+	cllBox.draw(window, theme);
 	window.display();
 }
 

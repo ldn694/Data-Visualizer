@@ -215,6 +215,25 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 				}
 				tmp.work.colors = listColor;
 			}
+			if (tmp.type == AddCircularEdge) {
+				if (tmp.work.colors.empty()) {
+					continue;
+				}
+				std::vector <sf::Color> listColor;
+				for (int k = 0; k < tmp.work.colors.size(); k++) {
+					sf::Color hereColor = tmp.work.colors[k];
+					int resType = -1;
+					for (int type = 0; type < numColorNodeType; type++) {
+						if (colorNode[theme][type].outlineColor == hereColor) {
+							resType = type;
+							break;
+						}
+					}
+					assert(resType != -1);
+					listColor.push_back(colorNode[newTheme][resType].outlineColor);
+				}
+				tmp.work.colors = listColor;
+			}
 		}
 	}
 	theme = newTheme;
@@ -367,6 +386,14 @@ void DataStructure::deleteVariables(std::vector <Animation>& animationList, std:
 void DataStructure::addEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type) {
 	Animation tmp;
 	tmp.type = AddEdge;
+	tmp.element.edges = edges;
+	tmp.work.colors = std::vector <sf::Color>(edges.size(), colorNode[theme][type].outlineColor);
+	animationList.push_back(tmp);
+}
+
+void DataStructure::addCircularEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type) {
+	Animation tmp;
+	tmp.type = AddCircularEdge;
 	tmp.element.edges = edges;
 	tmp.work.colors = std::vector <sf::Color>(edges.size(), colorNode[theme][type].outlineColor);
 	animationList.push_back(tmp);
@@ -616,6 +643,24 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 		}
 		else {
 			graph.addEdges(edgeList, time);
+		}
+	}
+	if (animation.type == AddCircularEdge) {
+		if (animation.element.edges.size() != animation.work.colors.size()) {
+			assert(false);
+		}
+		std::vector <std::tuple <int, int, sf::Color> > edgeList;
+		for (int i = 0; i < (int)animation.element.edges.size(); i++) {
+			auto e = animation.element.edges[i];
+			int u = e.first, v = e.second;
+			sf::Color color = animation.work.colors[i];
+			edgeList.push_back({ u, v, color });
+		}
+		if (time < epsilonTime) {
+			graph.addCircularEdges(edgeList);
+		}
+		else {
+			graph.addCircularEdges(edgeList, time);
 		}
 	}
 	if (animation.type == DeleteEdge) {

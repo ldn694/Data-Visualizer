@@ -253,10 +253,6 @@ void Queue::dequeue() {
 		doNothing(animationList);
 		addAnimations(animationList, stepTime, 1, "Queue is empty, no action is performed");
 
-		animationList.clear();
-		doNothing(animationList);
-		addAnimations(animationList, stepTime, 0);
-
 		animateAllFrame();
 		return;
 	}
@@ -325,10 +321,6 @@ void Queue::peekFront() {
 		doNothing(animationList);
 		addAnimations(animationList, stepTime, 1, "Queue is empty, no action is performed");
 
-		animationList.clear();
-		doNothing(animationList);
-		addAnimations(animationList, stepTime, 0);
-
 		animateAllFrame();
 		return;
 	}
@@ -355,10 +347,6 @@ void Queue::peekBack() {
 		animationList.clear();
 		doNothing(animationList);
 		addAnimations(animationList, stepTime, 1, "Queue is empty, no action is performed");
-
-		animationList.clear();
-		doNothing(animationList);
-		addAnimations(animationList, stepTime, 0);
 
 		animateAllFrame();
 		return;

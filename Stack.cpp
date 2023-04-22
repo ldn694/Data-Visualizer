@@ -239,10 +239,6 @@ void Stack::pop() {
 		doNothing(animationList);
 		addAnimations(animationList, stepTime, 1, "Stack is empty, no action is performed");
 
-		animationList.clear();
-		doNothing(animationList);
-		addAnimations(animationList, stepTime, 0);
-
 		animateAllFrame();
 		return;
 	}
@@ -299,10 +295,6 @@ void Stack::peek() {
 		animationList.clear();
 		doNothing(animationList);
 		addAnimations(animationList, stepTime, 1, "Stack is empty, no action is performed");
-
-		animationList.clear();
-		doNothing(animationList);
-		addAnimations(animationList, stepTime, 0);
 
 		animateAllFrame();
 		return;

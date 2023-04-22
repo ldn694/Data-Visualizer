@@ -219,7 +219,15 @@ double dist2p(double x1, double y1, double x2, double y2);
 sf::Time min(const sf::Time& a, const sf::Time& b);
 sf::Time max(const sf::Time& a, const sf::Time& b);
 
+double area(double x1, double y1, double x2, double y2, double x3, double y3);
+
+bool isInsideTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double x, double y);
+
+void RotatePoint(double& x, double& y, double cx, double cy, double angle);
+
 void MovePoint(double& x1, double& y1, double x2, double y2, double dist);
+
+void MovePointUpward(double& x1, double& y1, double x2, double y2, double h);
 
 void MovePointParallel(double& x, double& y, double x1, double y1, double x2, double y2); //move point A(x, y) to a A'(x', y') so that AA' is parallel to BC in which B is (x1, y1) and C is (x2, y2) and |AA'|=|BC|
 
@@ -231,13 +239,5 @@ enum fontType {
 };
 extern std::vector <sf::Font> listFont;
 sf::Font* font(fontType id);
-
-double area(double x1, double y1, double x2, double y2, double x3, double y3);
-
-double dist(double x1, double y1, double x2, double y2);
-
-bool isInsideTriangle(double x1, double y1, double x2, double y2, double x3, double y3, double x, double y);
-
-void RotatePoint(double& x, double& y, double cx, double cy, double angle);
 
 sf::Text CompressWords(std::string cur, double x, double y, double width, double height, sf::Font* font, double characterSize, sf::Color color); //return cur with \n so that the width of sf::Text is not greater than width

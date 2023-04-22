@@ -9,11 +9,31 @@
 #include "Template.h"
 #include "Node.h"
 #include "Edge.h"
+#include "CircularEdge.h"
 
 //-------------------------------------------------------
 //Graph
 
 bool Graph::cmpEdgeInfo:: operator() (const EdgeInfo& a, const EdgeInfo& b) const {
+	if (a.priority != b.priority) {
+		return a.priority > b.priority;
+	}
+	if (a.v != b.v) {
+		return a.v < b.v;
+	}
+	if (a.color.r != b.color.r) {
+		return a.color.r < b.color.r;
+	}
+	if (a.color.g != b.color.g) {
+		return a.color.g < b.color.g;
+	}
+	if (a.color.b != b.color.b) {
+		return a.color.b < b.color.b;
+	}
+	return a.color.a < b.color.a;
+}
+
+bool Graph::cmpCircularEdgeInfo:: operator() (const CircularEdgeInfo& a, const CircularEdgeInfo& b) const {
 	if (a.priority != b.priority) {
 		return a.priority > b.priority;
 	}
@@ -41,10 +61,16 @@ Graph::NodeAnimation::NodeAnimation(std::vector <FakeNode> _nodes, sf::Time _tot
 Graph::EdgeInfo::EdgeInfo(int _v, sf::Color _color, bool _display, int _priority):
 	v(_v), color(_color), display(_display), priority(_priority) {}
 
+Graph::CircularEdgeInfo::CircularEdgeInfo(int _v, sf::Color _color, double _progress, int _priority) :
+	v(_v), color(_color), progress(_progress), priority(_priority) {}
+
 Graph::FakeEdge::FakeEdge(int _u, int _v, int _fakeIDu, int _fakeIDv, int _fakeIDtmp) :
 	u(_u), v(_v), fakeIDu(_fakeIDu), fakeIDv(_fakeIDv), fakeIDtmp(_fakeIDtmp) {}
 
 Graph::EdgeAnimation::EdgeAnimation(std::vector <FakeEdge> _edges, sf::Time _totalTime, sf::Time _remainTime) :
+	edges(_edges), totalTime(_totalTime), remainTime(_remainTime) {}
+
+Graph::CircularEdgeAnimation::CircularEdgeAnimation(std::vector <std::pair<int, int> > _edges, sf::Time _totalTime, sf::Time _remainTime) :
 	edges(_edges), totalTime(_totalTime), remainTime(_remainTime) {}
 
 Graph::FakeEdgeSwitch::FakeEdgeSwitch(int _u, int _v, int _newv, int _fakeID) :
@@ -86,6 +112,17 @@ auto Graph::findV(int u, int v) {
 	return here;
 }
 
+auto Graph::findCircularV(int u, int v) {
+	auto here = circularAdj[u].end();
+	for (auto cur = circularAdj[u].begin(); cur != circularAdj[u].end(); cur++) {
+		if (cur->v == v) {
+			here = cur;
+			break;
+		}
+	}
+	return here;
+}
+
 void Graph::toggleEdgeDisplay(int u, int v, bool display) {
 	auto here = findV(u, v);
 	if (here == adj[u].end()) {
@@ -95,6 +132,17 @@ void Graph::toggleEdgeDisplay(int u, int v, bool display) {
 	tmp.display = display;
 	adj[u].erase(here);
 	adj[u].insert(tmp);
+}
+
+void Graph::toggleCircularEdgeProgress(int u, int v, double progress) {
+	auto here = findCircularV(u, v);
+	if (here == circularAdj[u].end()) {
+		return;
+	}
+	CircularEdgeInfo tmp = *here;
+	tmp.progress = progress;
+	circularAdj[u].erase(here);
+	circularAdj[u].insert(tmp);
 }
 
 void Graph::toggleEdgePriority(int u, int v, int priority) {
@@ -184,6 +232,48 @@ void Graph::draw(sf::RenderWindow& window) {
 			double hypo = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
 			if (hypo - shorten * 2 - (edgeType != Undirected ? 0.5 * lineThickness : 0) >= epsilonDouble) {
 				Edge edge(x1, y1, x2, y2, lineThickness, lineColor, edgeType, shorten, shorten);
+				edge.draw(window);
+			}
+		}
+	}
+	//draw the first priority circular edge
+	for (auto& uComp : listNode) {
+		int u = uComp.first;
+		for (auto& vComp : circularAdj[u]) {
+			if (!vComp.priority) {
+				continue;
+			}
+			int v = vComp.v;
+			sf::Color lineColor = vComp.color;
+			double x1 = listNode[u].getX();
+			double y1 = listNode[u].getY();
+			double x2 = listNode[v].getX();
+			double y2 = listNode[v].getY();
+			double shorten = defaultNode.getRadius() + defaultNode.getOutlineSize();
+			double hypo = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+			if (hypo - shorten * 2 >= epsilonDouble) {
+				CircularEdge edge(x1, y1, x2, y2, lineColor, lineThickness, shorten * 3, shorten * 3, shorten, vComp.progress);
+				edge.draw(window);
+			}
+		}
+	}
+	//then the zero priority circular edge
+	for (auto& uComp : listNode) {
+		int u = uComp.first;
+		for (auto& vComp : circularAdj[u]) {
+			if (vComp.priority) {
+				continue;
+			}
+			int v = vComp.v;
+			sf::Color lineColor = vComp.color;
+			double x1 = listNode[u].getX();
+			double y1 = listNode[u].getY();
+			double x2 = listNode[v].getX();
+			double y2 = listNode[v].getY();
+			double shorten = defaultNode.getRadius() + defaultNode.getOutlineSize();
+			double hypo = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+			if (hypo - shorten * 2 >= epsilonDouble) {
+				CircularEdge edge(x1, y1, x2, y2, lineColor, lineThickness, shorten * 3, shorten * 3, shorten, vComp.progress);
 				edge.draw(window);
 			}
 		}
@@ -621,7 +711,6 @@ void Graph::addEdge(int u, int v, sf::Color color) {
 }
 
 void Graph::addEdges(std::vector <std::tuple <int, int, sf::Color>> edges) {
-	std::vector <FakeEdge> edgeList;
 	for (auto& eComp : edges) {
 		int u = std::get<0>(eComp), v = std::get<1>(eComp);
 		sf::Color color = std::get<2>(eComp);
@@ -703,6 +792,58 @@ void Graph::updateEdgeAdd(sf::Time deltaT) {
 				deleteNode(fakeIDtmp);
 				toggleEdgeDisplay(u, v, true);
 			}
+		}
+		if (deltaT < epsilonTime) break;
+	}
+}
+
+void Graph::addCircularEdge(int u, int v, sf::Color color) {
+	circularAdj[u].insert(CircularEdgeInfo(v, color));
+}
+
+void Graph::addCircularEdge(int u, int v, sf::Color color, sf::Time time) {
+	addCircularEdge(u, v, color);
+	toggleCircularEdgeProgress(u, v, 0);
+	circularEdgeAddQueue.push_back(CircularEdgeAnimation({ {u, v} }, time, time));
+}
+
+void Graph::addCircularEdges(std::vector <std::tuple <int, int, sf::Color>> edges) {
+	for (auto& eComp : edges) {
+		int u = std::get<0>(eComp), v = std::get<1>(eComp);
+		sf::Color color = std::get<2>(eComp);
+		addCircularEdge(u, v, color);
+	}
+}
+
+void Graph::addCircularEdges(std::vector <std::tuple <int, int, sf::Color>> edges, sf::Time time) {
+	std::vector <std::pair <int, int>> edgeList;
+	for (auto& eComp : edges) {
+		int u = std::get<0>(eComp), v = std::get<1>(eComp);
+		sf::Color color = std::get<2>(eComp);
+		addCircularEdge(u, v, color);
+		toggleCircularEdgeProgress(u, v, 0);
+		edgeList.push_back({ u, v });
+	}
+	circularEdgeAddQueue.push_back(CircularEdgeAnimation(edgeList, time, time));
+}
+
+void Graph::updateCircularEdgeAdd(sf::Time deltaT) {
+	while (!circularEdgeAddQueue.empty()) {
+		CircularEdgeAnimation cur = circularEdgeAddQueue.front();
+		circularEdgeAddQueue.pop_front();
+		sf::Time elapsedTime = (cur.remainTime < deltaT ? cur.remainTime : deltaT);
+		for (auto& eComp : cur.edges) {
+			int u = eComp.first, v = eComp.second;
+			double dProgress = elapsedTime / cur.totalTime;
+			toggleCircularEdgeProgress(u, v, findCircularV(u, v)->progress + dProgress);
+		}
+		cur.remainTime -= elapsedTime;
+		deltaT -= elapsedTime;
+		if (cur.remainTime >= epsilonTime) {
+			circularEdgeAddQueue.push_front(cur);
+		}
+		else {
+			
 		}
 		if (deltaT < epsilonTime) break;
 	}
@@ -1015,6 +1156,28 @@ void Graph::updateEdgeColor(sf::Time deltaT) {
 	}
 }
 
+void Graph::setCircularEdgeColor(int u, int v, sf::Color color) {
+	if (listNode.find(u) == listNode.end() || listNode.find(v) == listNode.end()) {
+		return;
+	}
+	auto here = findCircularV(u, v);
+	if (here == circularAdj[u].end()) {
+		return;
+	}
+	CircularEdgeInfo tmp = *here;
+	tmp.color = color;
+	circularAdj[u].erase(here);
+	circularAdj[u].insert(tmp);
+}
+
+void Graph::setCircularEdgesColor(std::vector <std::tuple <int, int, sf::Color>> edges) {
+	for (auto& eComp : edges) {
+		int u = std::get<0>(eComp), v = std::get<1>(eComp);
+		sf::Color color = std::get<2>(eComp);
+		setCircularEdgeColor(u, v, color);
+	}
+}
+
 void Graph::setTheme(ColorTheme preTheme, ColorTheme curTheme) {
 	stopAnimation();
 	for (auto& uComp : listNode) {
@@ -1049,11 +1212,29 @@ void Graph::setTheme(ColorTheme preTheme, ColorTheme curTheme) {
 					break;
 				}
 			}
-			assert(resType != -1);
+			assert(resType != -1); 
 			listEdge.push_back({ u, vComp.v, colorNode[curTheme][resType].outlineColor });
 		}
 	}
 	setEdgesColor(listEdge);
+	listEdge.clear();
+	for (auto& uComp : listNode) {
+		Node& node = uComp.second;
+		int u = uComp.first;
+		for (auto& vComp : circularAdj[u]) {
+			int resType = -1;
+			for (int type = 0; type < numColorNodeType; type++) {
+				ColorNode here = colorNode[preTheme][type];
+				if (vComp.color == here.outlineColor) {
+					resType = type;
+					break;
+				}
+			}
+			assert(resType != -1);
+			listEdge.push_back({ u, vComp.v, colorNode[curTheme][resType].outlineColor });
+		}
+	}
+	setCircularEdgesColor(listEdge);
 	defaultNode.setFillColor(colorNode[curTheme][normal].fillColor);
 	defaultNode.setOutlineColor(colorNode[curTheme][normal].outlineColor);
 	defaultNode.setValueColor(colorNode[curTheme][normal].valueColor);
@@ -1068,6 +1249,7 @@ void Graph::update(sf::Time deltaT) {
 	updateNodeOutlineColor(deltaT);
 	updateNodeValueColor(deltaT);
 	updateEdgeAdd(deltaT);
+	updateCircularEdgeAdd(deltaT);
 	updateEdgeDelete(deltaT);
 	updateEdgeSwitch(deltaT);
 	updateEdgeColor(deltaT);
@@ -1079,13 +1261,22 @@ void Graph::stopAnimation() {
 		deleteNode(x);
 	}	
 	for (auto& uComp : listNode) {
-		toggleNodeDisplay(uComp.first, true);
+		int u = uComp.first;
+		toggleNodeDisplay(u, true);
 		uComp.second.stopAnimation();
+		std::vector <int> listV;
+		for (auto& vComp : circularAdj[u]) {
+			listV.push_back(vComp.v);
+		}
+		for (int v : listV) {
+			toggleCircularEdgeProgress(u, v, 1);
+		}
 	}
 	nodeAddQueue.clear();
 	nodeDeleteQueue.clear(); 
 	nodeMoveQueue.clear();
 	edgeAddQueue.clear(); 
+	circularEdgeAddQueue.clear();
 	edgeDeleteQueue.clear();
 	edgeSwitchQueue.clear();
 }
