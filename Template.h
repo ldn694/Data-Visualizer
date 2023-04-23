@@ -242,4 +242,4 @@ sf::Font* font(fontType id);
 
 sf::Text CompressWords(std::string cur, double x, double y, double width, double height, sf::Font* font, double characterSize, sf::Color color); //return cur with \n so that the width of sf::Text is not greater than width
 
-//hello
+//hello now goodbye
