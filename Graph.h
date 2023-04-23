@@ -71,7 +71,7 @@ private:
 	std::deque <NodeAnimation> nodeAddQueue, nodeDeleteQueue, nodeMoveQueue, nodeFillColorQueue, nodeOutlineColorQueue, nodeValueColorQueue;
 	std::deque <EdgeAnimation> edgeAddQueue, edgeDeleteQueue, edgeColorQueue;
 	std::deque <CircularEdgeAnimation> circularEdgeAddQueue, circularEdgeDeleteQueue, circularEdgeColorQueue;
-	std::deque <EdgeSwitchAnimation> edgeSwitchQueue;
+	std::deque <EdgeSwitchAnimation> edgeSwitchQueue, circularEdgeSwitchQueue;
 	Node defaultNode;
 	double lineThickness;
 	EdgeType edgeType;

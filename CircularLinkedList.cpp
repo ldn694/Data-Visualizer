@@ -47,9 +47,11 @@ CircularLinkedList::CircularLinkedList(double radius, double outlineSize, double
 					"Vertex* vtx = new Vertex(v);",
 					"if (head == NULL) {",
 					"	head = tail = vtx;",
+					"	vtx->next = head",
 					"	return;",
 					"}",
 					"vtx->next = head;",
+					"tail->next = vtx;",
 					"head = vtx;"
 				},
 				{	//Insert back
@@ -57,6 +59,7 @@ CircularLinkedList::CircularLinkedList(double radius, double outlineSize, double
 					"Vertex* vtx = new Vertex(v);",
 					"if (head == NULL) {",
 					"	head = tail = vtx;",
+					"	vtx->next = head",
 					"	return;",
 					"}",
 					"tail->next = vtx;",
