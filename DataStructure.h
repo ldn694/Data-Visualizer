@@ -10,7 +10,7 @@ enum AnimationType {
 	MoveNode, TranslateNode, MergeMoveNode, ValueNode,
 	FillColorNode, OutlineColorNode, ValueColorNode, VariableColorNode,
 	AddVariable, DeleteVariable,
-	EdgeColor, SwitchEdge,
+	EdgeColor, CircularEdgeColor, SwitchEdge, SwitchCircularEdge,
 	DeleteNode, DeleteEdge, DoNothing
 };
 
@@ -82,7 +82,10 @@ struct DataStructure {
 	void deleteEdge(std::vector <Animation>& animationList, std::vector < std::pair <int, int> > edges);
 	void setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
 	void setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, std::vector <ColorNodeType> type);
+	void setCircularEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
+	void setCircularEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, std::vector <ColorNodeType> type);
 	void switchEdge(std::vector <Animation>& animationList, std::vector <std::tuple <int, int, int> > edgeList);
+	void switchCircularEdge(std::vector <Animation>& animationList, std::vector <std::tuple <int, int, int> > edgeList);
 	void doNothing(std::vector <Animation>& animationList);
 	void setCurOperation(int val);
 	void setCurMode(int val);

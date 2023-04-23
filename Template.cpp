@@ -42,6 +42,10 @@ sf::Time max(const sf::Time& a, const sf::Time& b) {
 
 void MovePoint(double& x1, double& y1, double x2, double y2, double dist) {
 	double hypo = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));
+	if (hypo < epsilonDouble) {
+		x1 -= abs(dist);
+		return;
+	}
 	double dx = (x2 - x1) * dist / hypo;
 	double dy = (y2 - y1) * dist / hypo;
 	x1 += dx;
@@ -56,6 +60,10 @@ void MovePointParallel(double& x, double& y, double x1, double y1, double x2, do
 
 void MovePointUpward(double& x1, double& y1, double x2, double y2, double h) {
 	double hypo = dist2p(x1, y1, x2, y2);
+	if (hypo == 0) {
+		y1 -= abs(h);
+		return;
+	}
 	double dx = (y2 - y1) * h / hypo;
 	double dy = (x2 - x1) * h / hypo;
 	x1 -= dx;

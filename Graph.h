@@ -50,11 +50,6 @@ private:
 		sf::Time totalTime, remainTime;
 		EdgeAnimation(std::vector <FakeEdge> edges, sf::Time totalTime, sf::Time remainTime);
 	};
-	struct CircularEdgeAnimation {
-		std::vector <std::pair<int, int> > edges;
-		sf::Time totalTime, remainTime;
-		CircularEdgeAnimation(std::vector <std::pair <int, int> > edges, sf::Time totalTime, sf::Time remainTime);
-	};
 	struct FakeEdgeSwitch {
 		int u, v, newv, fakeID;
 		FakeEdgeSwitch(int u, int v, int newv, int fakeID);
@@ -69,8 +64,7 @@ private:
 	std::map <int, std::set <EdgeInfo, cmpEdgeInfo > > adj;
 	std::map <int, std::set <CircularEdgeInfo, cmpCircularEdgeInfo> > circularAdj;
 	std::deque <NodeAnimation> nodeAddQueue, nodeDeleteQueue, nodeMoveQueue, nodeFillColorQueue, nodeOutlineColorQueue, nodeValueColorQueue;
-	std::deque <EdgeAnimation> edgeAddQueue, edgeDeleteQueue, edgeColorQueue;
-	std::deque <CircularEdgeAnimation> circularEdgeAddQueue, circularEdgeDeleteQueue, circularEdgeColorQueue;
+	std::deque <EdgeAnimation> edgeAddQueue, edgeDeleteQueue, edgeColorQueue, circularEdgeAddQueue, circularEdgeDeleteQueue, circularEdgeColorQueue;
 	std::deque <EdgeSwitchAnimation> edgeSwitchQueue, circularEdgeSwitchQueue;
 	Node defaultNode;
 	double lineThickness;
@@ -82,6 +76,7 @@ private:
 	int getFakeID();
 	void toggleNodeDisplay(int u, bool display);
 	void toggleEdgePriority(int u, int v, int priority);
+	void toggleCircularEdgePriority(int u, int v, int priority);
 public:
 	Graph(double radius = 0, double outlineSize = 0, double _lineThickness = 0,
 		sf::Color fillColor = WhiteColor, sf::Color outlineColor = BlackColor, sf::Color valueColor = BlackColor, sf::Color variableColor = RedColor,
@@ -147,6 +142,11 @@ public:
 	void switchEdge(int u, int v, int newv, sf::Time time);
 	void switchEdges(std::vector <std::tuple<int, int, int>> edgesSwitch, sf::Time time);
 	void updateEdgeSwitch(sf::Time deltaT);
+	void switchCircularEdge(int u, int v, int newv);
+	void switchCircularEdge(int u, int v, int newv, sf::Time time);
+	void switchCircularEdges(std::vector <std::tuple<int, int, int>> edgesSwitch);
+	void switchCircularEdges(std::vector <std::tuple<int, int, int>> edgesSwitch, sf::Time time);
+	void updateCircularEdgeSwitch(sf::Time deltaT);
 	void setEdgeColor(int u, int v, sf::Color color);
 	void setEdgeColor(int u, int v, sf::Color color, sf::Time time);
 	void setEdgesColor(std::vector <std::tuple <int, int, sf::Color>> edges);
@@ -156,6 +156,7 @@ public:
 	void setCircularEdgeColor(int u, int v, sf::Color color, sf::Time time);
 	void setCircularEdgesColor(std::vector <std::tuple <int, int, sf::Color>> edges);
 	void setCircularEdgesColor(std::vector <std::tuple <int, int, sf::Color>> edges, sf::Time time);
+	void updateCircularEdgeColor(sf::Time deltaT);
 	void setTheme(ColorTheme preTheme, ColorTheme curTheme);
 	void update(sf::Time deltaT);
 	void stopAnimation();

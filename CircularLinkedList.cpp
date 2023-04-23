@@ -47,7 +47,7 @@ CircularLinkedList::CircularLinkedList(double radius, double outlineSize, double
 					"Vertex* vtx = new Vertex(v);",
 					"if (head == NULL) {",
 					"	head = tail = vtx;",
-					"	vtx->next = head",
+					"	vtx->next = vtx",
 					"	return;",
 					"}",
 					"vtx->next = head;",
@@ -59,7 +59,7 @@ CircularLinkedList::CircularLinkedList(double radius, double outlineSize, double
 					"Vertex* vtx = new Vertex(v);",
 					"if (head == NULL) {",
 					"	head = tail = vtx;",
-					"	vtx->next = head",
+					"	vtx->next = vtx",
 					"	return;",
 					"}",
 					"tail->next = vtx;",
@@ -251,9 +251,11 @@ void CircularLinkedList::createRandom(int n, std::vector <int> values, bool sort
 		tmp.work.colors = color;
 		animationList.push_back(tmp);
 	}
-	addVariables(animationList, { 0 }, { "head" });
-	addVariables(animationList, { n - 1 }, { "tail" });
-	addCircularEdge(animationList, { {n - 1, 0} }, theme, normal);
+	if (n > 0) {
+		addVariables(animationList, { 0 }, { "head" });
+		addVariables(animationList, { n - 1 }, { "tail" });
+		addCircularEdge(animationList, { {n - 1, 0} }, theme, normal);
+	}
 	addAnimations(animationList, stepTime, 0, "Created a singly linked list of length " + intToString(n));
 	animateAllFrame();
 }
@@ -364,12 +366,17 @@ void CircularLinkedList::insertFront(int v) {
 		addAnimations(animationList, stepTime, 3, "Both head and tail will now points to vtx.");
 
 		animationList.clear();
+		addCircularEdge(animationList, { { id, id } }, theme, highlight);
+		addAnimations(animationList, stepTime, 4, "vtx->next now points to itself.");
+
+		animationList.clear();
 		doNothing(animationList);
 		deleteVariables(animationList, { id }, { "vtx" });
-		addAnimations(animationList, stepTime, 4, "The function stops here.");
+		addAnimations(animationList, stepTime, 5, "The function stops here.");
 
 		animationList.clear();
 		setNodeColor(animationList, { id }, theme, normal);
+		setCircularEdgeColor(animationList, { { id, id } }, theme, normal);
 		addAnimations(animationList, stepTime, 0, "Re-format for visualization");
 		cll.insert(cll.begin(), { id, v, -1 });
 

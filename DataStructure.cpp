@@ -436,9 +436,38 @@ void DataStructure::setEdgeColor(std::vector <Animation>& animationList, std::ve
 	animationList.push_back(tmp);
 }
 
+void DataStructure::setCircularEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type) {
+	Animation tmp;
+	tmp.type = CircularEdgeColor;
+	tmp.element.edges = edges;
+	tmp.work.colors = std::vector <sf::Color>(edges.size(), colorNode[theme][type].outlineColor);
+	animationList.push_back(tmp);
+}
+
+void DataStructure::setCircularEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, std::vector <ColorNodeType> type) {
+	assert(edges.size() == type.size());
+	Animation tmp;
+	tmp.type = CircularEdgeColor;
+	tmp.element.edges = edges;
+	for (int i = 0; i < type.size(); i++) {
+		tmp.work.colors.push_back(colorNode[theme][type[i]].outlineColor);
+	}
+	animationList.push_back(tmp);
+}
+
 void DataStructure::switchEdge(std::vector <Animation>& animationList, std::vector <std::tuple <int, int, int> > edgeList) {
 	Animation tmp;
 	tmp.type = SwitchEdge;
+	for (int i = 0; i < edgeList.size(); i++) {
+		tmp.element.edges.push_back({ std::get<0>(edgeList[i]), std::get<1>(edgeList[i]) });
+		tmp.work.goalNode.push_back(std::get<2>(edgeList[i]));
+	}
+	animationList.push_back(tmp);
+}
+
+void DataStructure::switchCircularEdge(std::vector <Animation>& animationList, std::vector <std::tuple <int, int, int> > edgeList) {
+	Animation tmp;
+	tmp.type = SwitchCircularEdge;
 	for (int i = 0; i < edgeList.size(); i++) {
 		tmp.element.edges.push_back({ std::get<0>(edgeList[i]), std::get<1>(edgeList[i]) });
 		tmp.work.goalNode.push_back(std::get<2>(edgeList[i]));
@@ -694,6 +723,23 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 			graph.switchEdges(edgeSwitchList, time);
 		}
 	}
+	if (animation.type == SwitchCircularEdge) {
+		std::vector <std::tuple <int, int, int> > edgeSwitchList;
+		if (animation.element.edges.size() != animation.work.goalNode.size()) {
+			assert(false);
+		}
+		for (int i = 0; i < (int)animation.element.edges.size(); i++) {
+			auto e = animation.element.edges[i];
+			int u = e.first, v = e.second, newv = animation.work.goalNode[i];
+			edgeSwitchList.push_back({ u, v, newv });
+		}
+		if (time < epsilonTime) {
+			graph.switchCircularEdges(edgeSwitchList);
+		}
+		else {
+			graph.switchCircularEdges(edgeSwitchList, time);
+		}
+	}
 	if (animation.type == EdgeColor) {
 		std::vector <std::tuple <int, int, sf::Color> > edgeList;
 		if (animation.element.edges.size() != animation.work.colors.size()) {
@@ -710,6 +756,24 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 		}
 		else {
 			graph.setEdgesColor(edgeList, time);
+		}
+	}
+	if (animation.type == CircularEdgeColor) {
+		std::vector <std::tuple <int, int, sf::Color> > edgeList;
+		if (animation.element.edges.size() != animation.work.colors.size()) {
+			assert(false);
+		}
+		for (int i = 0; i < (int)animation.element.edges.size(); i++) {
+			auto e = animation.element.edges[i];
+			int u = e.first, v = e.second;
+			sf::Color color = animation.work.colors[i];
+			edgeList.push_back({ u, v, color });
+		}
+		if (time < epsilonTime) {
+			graph.setCircularEdgesColor(edgeList);
+		}
+		else {
+			graph.setCircularEdgesColor(edgeList, time);
 		}
 	}
 	if (animation.type == DoNothing) {

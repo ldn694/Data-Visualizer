@@ -22,6 +22,7 @@ void CircularEdge::draw(sf::RenderWindow &window) {
 	MovePointUpward(x4, y4, x2, y2, leftward);
 	double x5 = x2, y5 = y2;
 	MovePoint(x5, y5, x1, y1, -leftward);
+	std::cout << "1(" << x1 << "," << y1 << ") 2(" << x2 << "," << y2 << ") 3(" << x3 << "," << y3 << ") 4(" << x4 << "," << y4 << ") 5(" << x5 << "," << y5 << ") " << progress << "\n";
 	// 4------3
 	// |      |
 	// |      |
