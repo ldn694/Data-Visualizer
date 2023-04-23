@@ -15,14 +15,13 @@ void CircularEdge::draw(sf::RenderWindow &window) {
 	double leftPart = (dist2p(x1, y1, x2, y2) + leftward) / totalLength;
 	double downPart = upward / totalLength;
 	double rightPart = (leftward - shorten) / totalLength;
-	double x3 = x1, y3 = y1;
-	MovePointUpward(x3, y3, x2, y2, upward);
-	double x4 = x2, y4 = y2;
-	MovePointUpward(x4, y4, x1, y1, -upward);
-	MovePointUpward(x4, y4, x2, y2, leftward);
-	double x5 = x2, y5 = y2;
-	MovePoint(x5, y5, x1, y1, -leftward);
-	std::cout << "1(" << x1 << "," << y1 << ") 2(" << x2 << "," << y2 << ") 3(" << x3 << "," << y3 << ") 4(" << x4 << "," << y4 << ") 5(" << x5 << "," << y5 << ") " << progress << "\n";
+	double x3 = x1, y3 = y1 - upward;
+	//MovePointUpward(x3, y3, x2, y2, upward);
+	double x4 = x1 - leftward - (x1 - x2), y4 = y1 - upward;
+	//MovePointUpward(x4, y4, x1, y1, -upward);
+	//MovePointUpward(x4, y4, x2, y2, leftward);
+	double x5 = x2 - leftward, y5 = y2;
+	//MovePoint(x5, y5, x1, y1, -leftward);
 	// 4------3
 	// |      |
 	// |      |

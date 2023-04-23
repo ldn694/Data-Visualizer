@@ -385,7 +385,7 @@ void CircularLinkedList::insertFront(int v) {
 	}
 
 	animationList.clear();
-	addNode(animationList, id, v, (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2 - 5 * defaultNode.getRadius(), HEIGHT_RES / 3);
+	addNode(animationList, id, v, (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2, HEIGHT_RES / 2);
 	setNodeColor(animationList, { id }, theme, highlight);
 	addVariables(animationList, { id }, { "vtx" });
 	addAnimations(animationList, stepTime, 1, "Created new vertex vtx storing value " + intToString(v) + ".");
@@ -396,14 +396,18 @@ void CircularLinkedList::insertFront(int v) {
 
 	animationList.clear();
 	addEdge(animationList, { {id, getHeadID()} }, theme, highlight);
-	addAnimations(animationList, stepTime, 6, "vtx->next now points to head");
+	addAnimations(animationList, stepTime, 7, "vtx->next now points to head");
+
+	animationList.clear();
+	switchCircularEdge(animationList, { {getTailID(), getHeadID(), id} });
+	addAnimations(animationList, stepTime, 8, "tail->next now points to vtx");
 
 	animationList.clear();
 	setNodeColor(animationList, { id }, theme, highlight2);
 	deleteVariables(animationList, { getHeadID() }, { "head" });
 	addVariables(animationList, { id }, { "head" });
 	setEdgeColor(animationList, { {id, getHeadID()} }, theme, normal);
-	addAnimations(animationList, stepTime, 7, "head now points to vtx");
+	addAnimations(animationList, stepTime, 9, "head now points to vtx");
 
 	animationList.clear();
 	translateNode(animationList, getListID(0, getSize() - 1), 2.5f * defaultNode.getRadius(), 0);

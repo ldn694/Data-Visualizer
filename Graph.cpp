@@ -205,7 +205,6 @@ void Graph::setFont(sf::Font* newFont) {
 }
 
 void Graph::draw(sf::RenderWindow& window) {
-	std::cout << "num node = " << listNode.size() << "\n";
 	//draw the first priority edge
 	for (auto& uComp : listNode) {
 		int u = uComp.first;
@@ -262,7 +261,6 @@ void Graph::draw(sf::RenderWindow& window) {
 			double x2 = listNode[v].getX();
 			double y2 = listNode[v].getY();
 			double shorten = defaultNode.getRadius() + defaultNode.getOutlineSize();
-			std::cout << u << "->" << v << ":";
 			CircularEdge edge(x1, y1, x2, y2, lineColor, lineThickness, shorten * 3, shorten * 3, shorten, vComp.progress);
 			edge.draw(window);
 		}
@@ -281,7 +279,6 @@ void Graph::draw(sf::RenderWindow& window) {
 			double x2 = listNode[v].getX();
 			double y2 = listNode[v].getY();
 			double shorten = defaultNode.getRadius() + defaultNode.getOutlineSize();
-			std::cout << u << "->" << v << ":";
 			CircularEdge edge(x1, y1, x2, y2, lineColor, lineThickness, shorten * 3, shorten * 3, shorten, vComp.progress);
 			edge.draw(window);
 		}
@@ -291,7 +288,6 @@ void Graph::draw(sf::RenderWindow& window) {
 			uComp.second.draw(window);
 		}
 	}
-	std::cout << "----------------------------\n";
 }
 
 void Graph::addNode(int u, int value, double x, double y) {
@@ -476,7 +472,6 @@ void Graph::updateNodeDelete(sf::Time deltaT) {
 
 void Graph::moveNode(int pos, double x, double y) {
 	listNode[pos].setXY(x, y);
-	std::cout << "Moved " << pos << " " << x << " " << y << "\n";
 }
 
 void Graph::moveNode(int pos, double x, double y, sf::Time time) {
@@ -1095,19 +1090,59 @@ void Graph::switchCircularEdge(int u, int v, int newv, sf::Time time) {
 	listNode[fakeID].setDisplay(false);
 	addCircularEdge(u, fakeID, findCircularV(u, v)->color);
 	circularEdgeSwitchQueue.push_back(EdgeSwitchAnimation({ FakeEdgeSwitch(u, v, newv, fakeID) }, time, time));
-	switchEdge(u, v, newv);
+	switchCircularEdge(u, v, newv);
 }
 
 void Graph::switchCircularEdges(std::vector <std::tuple<int, int, int>> edgesSwitch) {
-	
+	for (auto& eComp : edgesSwitch) {
+		int u = std::get<0>(eComp), v = std::get<1>(eComp), newv = std::get<2>(eComp);
+		switchCircularEdge(u, v, newv);
+	}
 }
 
 void Graph::switchCircularEdges(std::vector <std::tuple<int, int, int>> edgesSwitch, sf::Time time) {
-	
+	std::vector <FakeEdgeSwitch> edgeSwitchList;
+	for (auto& eComp : edgesSwitch) {
+		int u = std::get<0>(eComp), v = std::get<1>(eComp), newv = std::get<2>(eComp);
+		if (v == newv || findCircularV(u, v) == circularAdj[u].end()) {
+			return;
+		}
+		toggleCircularEdgeProgress(u, v, 0);
+		int fakeID = getFakeID();
+		addNode(fakeID, 0, listNode[v].getX(), listNode[v].getY());
+		listNode[fakeID].setDisplay(false);
+		addCircularEdge(u, fakeID, findCircularV(u, v)->color);
+		edgeSwitchList.push_back(FakeEdgeSwitch(u, v, newv, fakeID));
+		switchCircularEdge(u, v, newv);
+	}
+	circularEdgeSwitchQueue.push_back(EdgeSwitchAnimation(edgeSwitchList, time, time));
 }
 
 void Graph::updateCircularEdgeSwitch(sf::Time deltaT) {
-	
+	while (!circularEdgeSwitchQueue.empty()) {
+		EdgeSwitchAnimation cur = circularEdgeSwitchQueue.front();
+		circularEdgeSwitchQueue.pop_front();
+		sf::Time elapsedTime = (cur.remainTime < deltaT ? cur.remainTime : deltaT);
+		for (auto& vComp : cur.edges) {
+			int u = vComp.u, v = vComp.v, newv = vComp.newv, fakeID = vComp.fakeID;
+			double dx = elapsedTime / cur.remainTime * (listNode[newv].getX() - listNode[fakeID].getX());
+			double dy = elapsedTime / cur.remainTime * (listNode[newv].getY() - listNode[fakeID].getY());
+			moveNode(fakeID, listNode[fakeID].getX() + dx, listNode[fakeID].getY() + dy);
+		}
+		deltaT -= elapsedTime;
+		cur.remainTime -= elapsedTime;
+		if (cur.remainTime >= epsilonTime) {
+			circularEdgeSwitchQueue.push_front(cur);
+		}
+		else {
+			for (auto& vComp : cur.edges) {
+				int u = vComp.u, v = vComp.v, newv = vComp.newv, fakeID = vComp.fakeID;
+				deleteNode(fakeID);
+				toggleCircularEdgeProgress(u, newv, 1);
+			}
+		}
+		if (deltaT < epsilonTime) break;
+	}
 }
 
 void Graph::setEdgeColor(int u, int v, sf::Color color) {
@@ -1391,7 +1426,7 @@ void Graph::update(sf::Time deltaT) {
 	updateCircularEdgeAdd(deltaT);
 	updateEdgeDelete(deltaT);
 	updateEdgeSwitch(deltaT);
-	//updateCircularEdgeSwitch(deltaT);
+	updateCircularEdgeSwitch(deltaT);
 	updateEdgeColor(deltaT);
 	updateCircularEdgeColor(deltaT);
 }
