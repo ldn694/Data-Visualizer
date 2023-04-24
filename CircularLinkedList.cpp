@@ -262,7 +262,7 @@ void CircularLinkedList::createRandom(int n, std::vector <int> values, bool sort
 		addVariables(animationList, { n - 1 }, { "tail" });
 		addCircularEdge(animationList, { {n - 1, 0} }, theme, normal);
 	}
-	addAnimations(animationList, stepTime, 0, "Created a singly linked list of length " + intToString(n));
+	addAnimations(animationList, stepTime, 0, "Created a circular linked list of length " + intToString(n));
 	animateAllFrame();
 }
 
