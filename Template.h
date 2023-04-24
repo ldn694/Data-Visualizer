@@ -73,12 +73,12 @@ const sf::Time delayTime = sf::seconds(0.2f);
 const sf::Time flickeringTime = sf::seconds(0.5f);
 const sf::Time errorDisplayTime = sf::seconds(1.0f);
 
-const double heightBox = 100;
-const double widthBox = 250;
+const double heightBox = 80;
+const double widthBox = 240;
 const double outlineBox = 5;
 const double speedList[] = { 0.25, 0.5, 1.0, 2.0, 4.0 };
-const double sizeLetterAnnouncement = 25;
-const double sizeLetterError = 25;
+const double sizeLetterAnnouncement = 20;
+const double sizeLetterError = 20;
 
 const int maxLetter = 4;
 const int maxSizeData = 15;

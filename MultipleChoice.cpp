@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "MultipleChoice.h"
 #include "Box.h"
 MultipleChoice::MultipleChoice(double _x, double _y, double _width, double _height, std::vector <std::string> _choices, sf::Font* _font, int _curChoice) :
@@ -29,7 +30,7 @@ MultipleChoice::MultipleChoice(double _x, double _y, double _width, double _heig
 	circles.resize(choices.size());
 	for (int i = 0; i < choices.size(); i++) {
 		circles[i].setPointCount(pointCountCircle);
-		circles[i].setRadius(width * 0.05);
+		circles[i].setRadius(std::min(stepHeight * 0.35, width * 0.05));
 		circles[i].setOrigin(circles[i].getLocalBounds().width / 2, circles[i].getLocalBounds().height / 2);
 		circles[i].setPosition(x + width * 0.85, y + stepHeight * (i + 0.5));
 	}
@@ -69,7 +70,7 @@ void MultipleChoice::draw(sf::RenderWindow& window, ColorTheme theme) {
 	}
 	sf::CircleShape curCircle;
 	curCircle.setPointCount(pointCountCircle);
-	curCircle.setRadius(width * 0.03);
+	curCircle.setRadius(std::min(stepHeight * 0.35, width * 0.05) * 0.65);
 	curCircle.setOrigin(curCircle.getLocalBounds().width / 2, curCircle.getLocalBounds().height / 2);
 	curCircle.setFillColor(choicesInnerCircleColor[theme]);
 	curCircle.setPosition(circles[curChoice].getPosition());
