@@ -6,8 +6,8 @@
 #include "DoublyLinkedList.h"
 
 DoublyLinkedList::DoublyLinkedList(double radius, double outlineSize, double lineThickness,
-	ColorTheme _theme, EdgeType edgeType, sf::Font* _font) :
-	DataStructure(radius, outlineSize, lineThickness, _theme, edgeType, _font,
+	ColorTheme _theme, EdgeType edgeType, sf::Font* _font, int numPointCircle) :
+	DataStructure(radius, outlineSize, lineThickness, _theme, edgeType, _font, numPointCircle,
 		{
 			{	//Create
 				{

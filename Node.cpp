@@ -215,15 +215,15 @@ void Node::updateValueColor(sf::Time deltaT) {
 Node::Node(double _x, double _y, int _value,
 	double _radius, double _outlineSize,
 	sf::Color _fillColor, sf::Color _outlineColor, sf::Color _valueColor, sf::Color _variableColor,
-	sf::Font* _font, bool _display) :
+	sf::Font* _font, bool _display, int _numPointCircle) :
 	x(_x), y(_y), value(_value), radius(_radius), outlineSize(_outlineSize),
-	fillColor(_fillColor), outlineColor(_outlineColor), valueColor(_valueColor), variableColor(_variableColor), font(_font), display(_display)
+	fillColor(_fillColor), outlineColor(_outlineColor), valueColor(_valueColor), variableColor(_variableColor), font(_font), display(_display), numPointCircle(_numPointCircle)
 {
 	shape = sf::CircleShape(radius);
 	shape.setFillColor(fillColor);
 	shape.setOutlineColor(outlineColor);
 	shape.setOutlineThickness(outlineSize);
-	shape.setPointCount(pointCountCircle);
+	shape.setPointCount(numPointCircle);
 	shape.setOrigin(radius, radius);
 	shape.setPosition(x, y);
 	shape.setRotation(45.0f);

@@ -12,7 +12,7 @@
 struct Node {
 private:
 	double x, y;
-	int value;
+	int value, numPointCircle;
 	std::set <std::string> variableList;
 	double radius, outlineSize;
 	sf::Color fillColor, outlineColor, valueColor, variableColor;
@@ -43,7 +43,7 @@ public:
 	Node(double x = 0, double y = 0, int value = 0,
 		double radius = 0, double outlineSize = 0,
 		sf::Color fillColor = WhiteColor, sf::Color outlineColor = BlackColor, sf::Color valueColor = BlackColor, sf::Color variableColor = RedColor,
-		sf::Font* font = nullptr, bool display = true);
+		sf::Font* font = nullptr, bool display = true, int numPointCircle = 30);
 	void setValue(int newValue);
 	void setX(double newX);
 	void setY(double newY);

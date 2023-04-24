@@ -58,7 +58,7 @@ struct DataStructure {
 	int curFrame = 0;
 	sf::RectangleShape codeBoard;
 	DataStructure(double radius = 0, double outlineSize = 0, double lineThickness = 0,
-		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected, sf::Font* font = nullptr, 
+		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected, sf::Font* font = nullptr, int numPointCircle = 30,
 		std::vector < std::vector <std::vector <std::string> > > codes = {}, double x = 0, double y = 0, double width = 0, double height = 0, sf::Font* codeFont = nullptr,
 		double xAnnouncement = 0, double yAnnouncement = 0, double widthAnnouncement = 0, double heightAnnouncement = 0, sf::Font *announcementFont = nullptr,
 		double xError = 0, double yError = 0, double widthError = 0, double heightError = 0, sf::Font* errorFont = nullptr);

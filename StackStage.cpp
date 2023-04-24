@@ -3,7 +3,7 @@
 #include "Template.h"
 
 StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSize, double lineThickness,
-	ColorTheme theme, EdgeType edgeType) :
+	ColorTheme theme, EdgeType edgeType, int numPointCircle) :
 	Stage(window, { "Create", "Push", "Pop", "Peek" }, 
 		{ 
 			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom", "Upload File"},
@@ -73,7 +73,7 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 		},
 		theme)
 {
-	ds = Stack(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
+	ds = Stack(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial), numPointCircle);
 	setDS(&ds);
 }
 

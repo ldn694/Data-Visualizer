@@ -78,8 +78,8 @@ Graph::EdgeSwitchAnimation::EdgeSwitchAnimation(std::vector <FakeEdgeSwitch> _ed
 
 Graph::Graph(double radius, double outlineSize, double _lineThickness,
 		sf::Color fillColor, sf::Color outlineColor, sf::Color valueColor, sf::Color variableColor,
-		EdgeType _idEdgeType, sf::Font* font) :
-	defaultNode(0, 0, 0, radius, outlineSize, fillColor, outlineColor, valueColor, variableColor, font), edgeType(_idEdgeType)
+		EdgeType _idEdgeType, sf::Font* font, int numPointCircle) :
+	defaultNode(0, 0, 0, radius, outlineSize, fillColor, outlineColor, valueColor, variableColor, font, numPointCircle), edgeType(_idEdgeType)
 {
 	lineThickness = _lineThickness;
 	srand(time(0));

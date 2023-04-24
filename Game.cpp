@@ -21,27 +21,27 @@ Game::Game(sf::ContextSettings settings)
 }
 
 void Game::runStack() {
-	StackStage stack(window, 20, 5, 4, theme, SinglyDirected);
+	StackStage stack(window, 20, 5, 4, theme, SinglyDirected, 30);
 	stack.run();
 }
 
 void Game::runQueue() {
-	QueueStage queue(window, 20, 5, 4, theme, SinglyDirected);
+	QueueStage queue(window, 20, 5, 4, theme, SinglyDirected, 30);
 	queue.run();
 }
 
 void Game::runSLL() {
-	SinglyLinkedListStage sll(window, 20, 5, 4, theme, SinglyDirected);
+	SinglyLinkedListStage sll(window, 20, 5, 4, theme, SinglyDirected, 30);
 	sll.run();
 }
 
 void Game::runDLL() {
-	DoublyLinkedListStage dll(window, 20, 5, 4, theme, DoublyDirected);
+	DoublyLinkedListStage dll(window, 20, 5, 4, theme, DoublyDirected, 30);
 	dll.run();
 }
 
 void Game::runCLL() {
-	CircularLinkedListStage cll(window, 20, 5, 4, theme, SinglyDirected);
+	CircularLinkedListStage cll(window, 20, 5, 4, theme, SinglyDirected, 30);
 	cll.run();
 }
 

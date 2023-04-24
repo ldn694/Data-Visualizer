@@ -3,7 +3,7 @@
 #include "Template.h"
 
 CircularLinkedListStage::CircularLinkedListStage(sf::RenderWindow& window, double radius, double outlineSize, double lineThickness,
-	ColorTheme theme, EdgeType edgeType) :
+	ColorTheme theme, EdgeType edgeType, int numPointCircle) :
 	Stage(window, { "Create", "Search", "Insert", "Remove", "Update" },
 		{
 			{"Empty", "Random", "Random Sorted", "Fixed Size", "Manual", "Upload File"},
@@ -98,7 +98,7 @@ CircularLinkedListStage::CircularLinkedListStage(sf::RenderWindow& window, doubl
 		},
 		theme)
 {
-	ds = CircularLinkedList(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
+	ds = CircularLinkedList(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial), numPointCircle);
 	setDS(&ds);
 }
 

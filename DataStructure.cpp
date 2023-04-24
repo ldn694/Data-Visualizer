@@ -9,14 +9,14 @@
 #include "Box.h"
 
 DataStructure::DataStructure(double radius, double outlineSize, double lineThickness,
-	ColorTheme _theme, EdgeType idEdgeType, sf::Font* font, 
+	ColorTheme _theme, EdgeType idEdgeType, sf::Font* font, int numPointCircle,
 	std::vector <std::vector <std::vector <std::string> > > _codes, double x, double y, double width, double height, sf::Font* codeFont,
 	double _xAnnouncement, double _yAnnouncement, double _widthAnnouncement, double _heightAnnouncement, sf::Font* _announcementFont,
 	double _xError, double _yError, double _widthError, double _heightError, sf::Font* _errorFont) :
 	theme(_theme), codes(_codes),
 	xAnnouncement(_xAnnouncement), yAnnouncement(_yAnnouncement), widthAnnouncement(_widthAnnouncement), heightAnnouncement(_heightAnnouncement), announcementFont(_announcementFont),
 	xError(_xError), yError(_yError), widthError(_widthError), heightError(_heightError), errorFont(_errorFont),
-	defaultGraph(Graph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font))
+	defaultGraph(Graph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font, numPointCircle))
 {
 	errorTime = sf::seconds(0.f);
 	isAnimating = false;

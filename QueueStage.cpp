@@ -3,7 +3,7 @@
 #include "Template.h"
 
 QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSize, double lineThickness,
-	ColorTheme theme, EdgeType edgeType) :
+	ColorTheme theme, EdgeType edgeType, int numPointCircle) :
 	Stage(window, { "Create", "Enqueue", "Dequeue", "Peek" },
 		{
 			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom", "Upload File"},
@@ -76,7 +76,7 @@ QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSi
 		},
 		theme)
 {
-	ds = Queue(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial));
+	ds = Queue(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial), numPointCircle);
 	setDS(&ds);
 }
 

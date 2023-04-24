@@ -80,7 +80,7 @@ private:
 public:
 	Graph(double radius = 0, double outlineSize = 0, double _lineThickness = 0,
 		sf::Color fillColor = WhiteColor, sf::Color outlineColor = BlackColor, sf::Color valueColor = BlackColor, sf::Color variableColor = RedColor,
-		EdgeType _edgeType = Undirected, sf::Font* font = nullptr);
+		EdgeType _edgeType = Undirected, sf::Font* font = nullptr, int numPointCircle = 30);
 	Node getDefaultNode();
 	void setFont(sf::Font* newFont);
 	void draw(sf::RenderWindow& window);
