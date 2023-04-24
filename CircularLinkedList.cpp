@@ -50,8 +50,8 @@ CircularLinkedList::CircularLinkedList(double radius, double outlineSize, double
 					"	vtx->next = vtx",
 					"	return;",
 					"}",
-					"vtx->next = head;",
 					"tail->next = vtx;",
+					"vtx->next = head;",
 					"head = vtx;"
 				},
 				{	//Insert back
@@ -63,6 +63,7 @@ CircularLinkedList::CircularLinkedList(double radius, double outlineSize, double
 					"	return;",
 					"}",
 					"tail->next = vtx;",
+					"vtx->next = head;",
 					"tail = vtx;"
 				},
 				{	//Insert middle
@@ -85,7 +86,12 @@ CircularLinkedList::CircularLinkedList(double radius, double outlineSize, double
 					"if (head == NULL) return;",
 					"Vertex* temp = head;",
 					"head = head->next;",
-					"if (head == NULL) tail = NULL;",
+					"if (head == NULL) {",
+					"	tail = NULL;",
+					"}",
+					"else {",
+					"	tail->next = head",
+					"}",
 					"delete temp;"
 				},
 				{	//Remove back
@@ -101,7 +107,7 @@ CircularLinkedList::CircularLinkedList(double radius, double outlineSize, double
 					"	cur = cur->next; aft = aft->next;",
 					"}",
 					"delete aft; tail = cur;",
-					"cur->next = NULL;"
+					"tail->next = head;"
 				},
 				{	//Remove middle
 					"",
@@ -394,13 +400,14 @@ void CircularLinkedList::insertFront(int v) {
 	doNothing(animationList);
 	addAnimations(animationList, stepTime, 2, "List is currently not empty (head != NULL), so the condition is false and we proceed to next step.");
 
-	animationList.clear();
-	addEdge(animationList, { {id, getHeadID()} }, theme, highlight);
-	addAnimations(animationList, stepTime, 7, "vtx->next now points to head");
 
 	animationList.clear();
 	switchCircularEdge(animationList, { {getTailID(), getHeadID(), id} });
-	addAnimations(animationList, stepTime, 8, "tail->next now points to vtx");
+	addAnimations(animationList, stepTime, 7, "tail->next now points to vtx");
+
+	animationList.clear();
+	addEdge(animationList, { {id, getHeadID()} }, theme, highlight);
+	addAnimations(animationList, stepTime, 8, "vtx->next now points to head");
 
 	animationList.clear();
 	setNodeColor(animationList, { id }, theme, highlight2);
@@ -428,10 +435,11 @@ void CircularLinkedList::insertBack(int v) {
 	if (v < 0) {
 		v = rand() % (maxValueData + 1);
 	}
-	int id = getEmptyID();
-	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
+	int id = getEmptyID();
 	resetAnimation();
+	std::vector <Animation> animationList;
+
 	if (getSize() == 0) {
 		animationList.clear();
 		addNode(animationList, id, v, WIDTH_RES / 2, HEIGHT_RES / 3);
@@ -448,12 +456,17 @@ void CircularLinkedList::insertBack(int v) {
 		addAnimations(animationList, stepTime, 3, "Both head and tail will now points to vtx.");
 
 		animationList.clear();
+		addCircularEdge(animationList, { { id, id } }, theme, highlight);
+		addAnimations(animationList, stepTime, 4, "vtx->next now points to itself.");
+
+		animationList.clear();
 		doNothing(animationList);
 		deleteVariables(animationList, { id }, { "vtx" });
-		addAnimations(animationList, stepTime, 4, "The function stops here.");
+		addAnimations(animationList, stepTime, 5, "The function stops here.");
 
 		animationList.clear();
 		setNodeColor(animationList, { id }, theme, normal);
+		setCircularEdgeColor(animationList, { { id, id } }, theme, normal);
 		addAnimations(animationList, stepTime, 0, "Re-format for visualization");
 		cll.insert(cll.begin(), { id, v, -1 });
 
@@ -470,22 +483,28 @@ void CircularLinkedList::insertBack(int v) {
 	animationList.clear();
 	doNothing(animationList);
 	addAnimations(animationList, stepTime, 2, "List is currently not empty (head != NULL), so the condition is false and we proceed to next step.");
-
+	
 	animationList.clear();
+	deleteCircularEdge(animationList, { {getTailID(), getHeadID()} });
 	addEdge(animationList, { {getTailID(), id} }, theme, highlight);
-	addAnimations(animationList, stepTime, 6, "tail->next now points to vtx.");
+	addAnimations(animationList, stepTime, 7, "tail->next now points to vtx");
 
 	animationList.clear();
+	addCircularEdge(animationList, { {id, getHeadID()} }, theme, highlight);
+	addAnimations(animationList, stepTime, 8, "vtx->next now points to head");
+
+
+	animationList.clear();
+	setNodeColor(animationList, { id }, theme, highlight2);
+	setCircularEdgeColor(animationList, { {id, getHeadID()} }, theme, normal);
 	deleteVariables(animationList, { getTailID() }, { "tail" });
 	addVariables(animationList, { id }, { "tail" });
-	setEdgeColor(animationList, { {getTailID(), id} }, theme, normal);
-	setNodeColor(animationList, { id }, theme, highlight2);
-	cll.back().dNext = id;
-	addAnimations(animationList, stepTime, 7, "tail now points to vtx");
+	setEdgeColor(animationList, { {getTailID(), id}}, theme, normal);
+	addAnimations(animationList, stepTime, 9, "tail now points to vtx");
 
 	animationList.clear();
 	translateNode(animationList, getListID(0, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
-	cll.push_back({ id, v, -1 });
+	cll.push_back({ id, v, getHeadID() });
 	moveNode(animationList, id, WIDTH_RES - (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2, HEIGHT_RES / 3);
 	mergeMoveNode(animationList);
 	setNodeColor(animationList, { id }, theme, normal);
@@ -609,6 +628,9 @@ void CircularLinkedList::removeFront() {
 	animationList.clear();
 	addVariables(animationList, { getHeadID() }, { "temp" });
 	setNodeColor(animationList, { getHeadID() }, theme, highlight);
+	if (getSize() > 1) {
+		moveNode(animationList, getHeadID(), (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2 + 5 * defaultNode.getRadius(), HEIGHT_RES / 2);
+	}
 	addAnimations(animationList, stepTime, 2, "Created pointer temp pointing to head");
 
 	if (getSize() == 1) {
@@ -617,8 +639,12 @@ void CircularLinkedList::removeFront() {
 		addAnimations(animationList, stepTime, 3, "head now points to head->next, which is NULL.");
 
 		animationList.clear();
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 4, "head is now NULL, so the condtion is true.");
+
+		animationList.clear();
 		deleteVariables(animationList, { getTailID() }, { "tail" });
-		addAnimations(animationList, stepTime, 4, "head is now NULL (empty list), so tail is now also NULL");
+		addAnimations(animationList, stepTime, 5, "head is now NULL (empty list), so tail is now also NULL");
 	}
 	else {
 		animationList.clear();
@@ -630,11 +656,15 @@ void CircularLinkedList::removeFront() {
 
 		animationList.clear();
 		doNothing(animationList);
-		addAnimations(animationList, stepTime, 4, "head is not NULL, so the condition is false. Proceed to next step");
+		addAnimations(animationList, stepTime, 4, "head is not NULL, so the condition is false.");
+
+		animationList.clear();
+		switchCircularEdge(animationList, { {getTailID(), getHeadID(), getID(1)}});
+		addAnimations(animationList, stepTime, 8, "tail->next now points to head.");
 	}
 	animationList.clear();
 	deleteNode(animationList, { getHeadID() });
-	addAnimations(animationList, stepTime, 5, "delete temp");
+	addAnimations(animationList, stepTime, 10, "delete temp");
 
 	cll.erase(cll.begin());
 	if (getSize() > 0) {
@@ -723,19 +753,20 @@ void CircularLinkedList::removeBack() {
 	}
 	animationList.clear();
 	deleteNode(animationList, { getTailID() });
-	translateNode(animationList, getListID(0, getSize() - 1), 2.5 * defaultNode.getRadius(), 0);
+	translateNode(animationList, getListID(0, getSize() - 2), 2.5 * defaultNode.getRadius(), 0);
 	addVariables(animationList, { getID(getSize() - 2) }, { "tail" });
 	addAnimations(animationList, stepTime, 11, "delete aft, tail now points to cur.");
 
 	animationList.clear();
-	doNothing(animationList);
-	addAnimations(animationList, stepTime, 12, "cur->next (which is now also tail->next) now points to NULL.");
+	addCircularEdge(animationList, { {getID(getSize() - 2), getHeadID()} }, theme, highlight);
+	addAnimations(animationList, stepTime, 12, "tail->next now points to head.");
 	cll.pop_back();
 	cll.back().dNext = -1;
 
 	animationList.clear();
 	setNodeColor(animationList, getListID(0, getSize() - 1), theme, normal);
 	setEdgeColor(animationList, getEdgeID(0, getSize() - 1), theme, normal);
+	setCircularEdgeColor(animationList, { {getID(getSize() - 1), getHeadID()} }, theme, normal);
 	deleteVariables(animationList, { getTailID() }, { "cur" });
 	addAnimations(animationList, stepTime, 0, "Re-format for visualizing.");
 

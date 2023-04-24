@@ -11,7 +11,7 @@ enum AnimationType {
 	FillColorNode, OutlineColorNode, ValueColorNode, VariableColorNode,
 	AddVariable, DeleteVariable,
 	EdgeColor, CircularEdgeColor, SwitchEdge, SwitchCircularEdge,
-	DeleteNode, DeleteEdge, DoNothing
+	DeleteNode, DeleteEdge, DeleteCircularEdge, DoNothing
 };
 
 struct Animation {
@@ -80,6 +80,7 @@ struct DataStructure {
 	void addEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, std::vector <ColorNodeType> type);
 	void addCircularEdge(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
 	void deleteEdge(std::vector <Animation>& animationList, std::vector < std::pair <int, int> > edges);
+	void deleteCircularEdge(std::vector <Animation>& animationList, std::vector < std::pair <int, int> > edges);
 	void setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);
 	void setEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, std::vector <ColorNodeType> type);
 	void setCircularEdgeColor(std::vector <Animation>& animationList, std::vector <std::pair <int, int>> edges, ColorTheme theme, ColorNodeType type);

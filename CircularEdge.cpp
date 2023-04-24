@@ -1,3 +1,4 @@
+#include <algorithm>
 #include "CircularEdge.h"
 #include "Template.h"
 #include "Edge.h"
@@ -10,22 +11,18 @@ CircularEdge::CircularEdge(double _x1, double _y1, double _x2, double _y2, sf::C
 }
 
 void CircularEdge::draw(sf::RenderWindow &window) {
-	double totalLength = dist2p(x1, y1, x2, y2) + (upward + leftward - shorten) * 2;
-	double upPart = (upward - shorten) / totalLength;
-	double leftPart = (dist2p(x1, y1, x2, y2) + leftward) / totalLength;
-	double downPart = upward / totalLength;
-	double rightPart = (leftward - shorten) / totalLength;
-	double x3 = x1, y3 = y1 - upward;
-	//MovePointUpward(x3, y3, x2, y2, upward);
-	double x4 = x1 - leftward - (x1 - x2), y4 = y1 - upward;
-	//MovePointUpward(x4, y4, x1, y1, -upward);
-	//MovePointUpward(x4, y4, x2, y2, leftward);
+	double x3 = x1, y3 = std::min(y1, y2) - upward;
+	double x4 = x1 - leftward - (x1 - x2), y4 = std::min(y1, y2) - upward;
 	double x5 = x2 - leftward, y5 = y2;
-	//MovePoint(x5, y5, x1, y1, -leftward);
 	// 4------3
 	// |      |
 	// |      |
 	// 5->2   1
+	double totalLength = dist2p(x1, y1, x3, y3) - shorten + dist2p(x3, y3, x4, y4) + dist2p(x4, y4, x5, y5) + dist2p(x5, y5, x2, y2) - shorten;
+	double upPart = (dist2p(x1, y1, x3, y3) - shorten) / totalLength;
+	double leftPart = dist2p(x3, y3, x4, y4) / totalLength;
+	double downPart = dist2p(x4, y4, x5, y5) / totalLength;
+	double rightPart = (dist2p(x5, y5, x2, y2) - shorten) / totalLength;
 	if (progress < upPart) { //up
 		Edge upEdge(x1, y1, x3, y3, thickness, color, SinglyDirected, shorten, (upPart - progress) * totalLength - thickness * 0.5);
 		upEdge.draw(window);

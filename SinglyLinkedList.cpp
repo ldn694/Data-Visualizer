@@ -708,7 +708,7 @@ void SinglyLinkedList::removeBack() {
 	}
 	animationList.clear();
 	deleteNode(animationList, { getTailID() });
-	translateNode(animationList, getListID(0, getSize() - 1), 2.5 * defaultNode.getRadius(), 0);
+	translateNode(animationList, getListID(0, getSize() - 2), 2.5 * defaultNode.getRadius(), 0);
 	addVariables(animationList, { getID(getSize() - 2) }, { "tail" });
 	addAnimations(animationList, stepTime, 11, "delete aft, tail now points to cur.");
 

@@ -387,9 +387,12 @@ void Graph::deleteNode(int pos, sf::Time time) {
 	listNode[fakeID].setOutline(listNode[pos].getOutlineSize());
 	listNode[fakeID].addZooming(0.f, 0.f, time);
 	nodeDeleteQueue.push_back(NodeAnimation({ FakeNode(pos, fakeID) }, time, time));
-	std::vector <std::pair <int, int> > edges;
+	std::vector <std::pair <int, int> > edges, circularEdges;
 	for (auto& vComp : adj[pos]) {
 		edges.push_back({ pos, vComp.v });
+	}
+	for (auto& vComp : circularAdj[pos]) {
+		circularEdges.push_back({ pos, vComp.v });
 	}
 	for (auto& uComp : listNode) {
 		int u = uComp.first;
@@ -402,6 +405,7 @@ void Graph::deleteNode(int pos, sf::Time time) {
 		}
 	}
 	deleteEdges(edges, time);
+	deleteCircularEdges(edges, time);
 	deleteNode(pos);
 }
 
@@ -423,10 +427,13 @@ void Graph::deleteNodes(std::vector <int> nodes, sf::Time time) {
 		nodeList.push_back(FakeNode(pos, fakeID));
 	}
 	nodeDeleteQueue.push_back(NodeAnimation(nodeList, time, time));
-	std::vector <std::pair <int, int> > edges;
+	std::vector <std::pair <int, int> > edges, circularEdges;
 	for (int pos : nodes) {
 		for (auto& vComp : adj[pos]) {
 			edges.push_back({ pos, vComp.v });
+		}
+		for (auto& vComp : circularAdj[pos]) {
+			circularEdges.push_back({ pos, vComp.v });
 		}
 		for (auto& uComp : listNode) {
 			int u = uComp.first;
@@ -440,6 +447,7 @@ void Graph::deleteNodes(std::vector <int> nodes, sf::Time time) {
 		}
 	}
 	deleteEdges(edges, time);
+	deleteCircularEdges(circularEdges, time);
 	for (auto pos : nodes) {
 		deleteNode(pos);
 	}
@@ -993,6 +1001,80 @@ void Graph::updateEdgeDelete(sf::Time deltaT) {
 	}
 }
 
+void Graph::deleteCircularEdge(int u, int v) {
+	if (listNode.find(u) == listNode.end() || listNode.find(v) == listNode.end()) {
+		return;
+	}
+	while (true) {
+		auto here = findCircularV(u, v);
+		if (here == circularAdj[u].end()) {
+			break;
+		}
+		circularAdj[u].erase(here);
+	}
+}
+
+void Graph::deleteCircularEdges(std::vector <std::pair<int, int>> edges) {
+	for (std::pair <int, int> edge : edges)
+	{
+		int u = edge.first, v = edge.second;
+		deleteCircularEdge(u, v);
+	}
+}
+
+void Graph::deleteCircularEdges(std::vector <std::pair<int, int>> edges, sf::Time time) {
+	std::vector <FakeEdge> edgeList;
+	for (std::pair <int, int> edge : edges)
+	{
+		int u = edge.first, v = edge.second;
+		if (listNode.find(u) == listNode.end() || listNode.find(v) == listNode.end()) {
+			continue;
+		}
+		auto here = findCircularV(u, v);
+		if (here == circularAdj[u].end()) {
+			continue;
+		}
+		int fakeIDu = getFakeID();
+		int fakeIDv = getFakeID();
+		double x1 = listNode[u].getX(), y1 = listNode[u].getY();
+		double x2 = listNode[v].getX(), y2 = listNode[v].getY();
+		addNode(fakeIDu, 0, x1, y1);
+		addNode(fakeIDv, 0, x2, y2);
+		listNode[fakeIDu].setDisplay(false);
+		listNode[fakeIDv].setDisplay(false);
+		addCircularEdge(fakeIDu, fakeIDv, here->color);
+		edgeList.push_back(FakeEdge(u, v, fakeIDu, fakeIDv));
+		deleteCircularEdge(u, v);
+	}
+	circularEdgeDeleteQueue.push_back(EdgeAnimation(edgeList, time, time));
+}
+
+void Graph::updateCircularEdgeDelete(sf::Time deltaT) {
+	while (!circularEdgeDeleteQueue.empty()) {
+		EdgeAnimation cur = circularEdgeDeleteQueue.front();
+		circularEdgeDeleteQueue.pop_front();
+		sf::Time elapsedTime = (cur.remainTime < deltaT ? cur.remainTime : deltaT);
+		for (auto& eComp : cur.edges) {
+			int fakeIDu = eComp.fakeIDu, fakeIDv = eComp.fakeIDv;
+			double dProgress = elapsedTime / cur.totalTime;
+			toggleCircularEdgeProgress(fakeIDu, fakeIDv, findCircularV(fakeIDu, fakeIDv)->progress - dProgress);
+		}
+		cur.remainTime -= elapsedTime;
+		deltaT -= elapsedTime;
+		if (cur.remainTime >= epsilonTime) {
+			circularEdgeDeleteQueue.push_front(cur);
+		}
+		else {
+			for (auto& eComp : cur.edges) {
+				int fakeIDu = eComp.fakeIDu, fakeIDv = eComp.fakeIDv;
+				deleteNode(fakeIDu);
+				deleteNode(fakeIDv);
+			}
+		}
+		if (deltaT < epsilonTime) break;
+	}
+}
+
 void Graph::switchEdge(int u, int v, int newv) {
 	if (v == newv || findV(u, v) == adj[u].end()) {
 		return;
@@ -1425,6 +1507,7 @@ void Graph::update(sf::Time deltaT) {
 	updateEdgeAdd(deltaT);
 	updateCircularEdgeAdd(deltaT);
 	updateEdgeDelete(deltaT);
+	updateCircularEdgeDelete(deltaT);
 	updateEdgeSwitch(deltaT);
 	updateCircularEdgeSwitch(deltaT);
 	updateEdgeColor(deltaT);
@@ -1440,6 +1523,20 @@ void Graph::stopAnimation() {
 		int u = uComp.first;
 		toggleNodeDisplay(u, true);
 		uComp.second.stopAnimation();
+		std::vector <int> listV;
+		for (auto& vComp : adj[u]) {
+			listV.push_back(vComp.v);
+		}
+		for (int v : listV) {
+			toggleEdgeDisplay(u, v, 1);
+		}
+		listV.clear();
+		for (auto& vComp : circularAdj[u]) {
+			listV.push_back(vComp.v);
+		}
+		for (int v : listV) {
+			toggleCircularEdgeProgress(u, v, 1);
+		}
 	}
 	nodeAddQueue.clear();
 	nodeDeleteQueue.clear(); 
@@ -1447,8 +1544,11 @@ void Graph::stopAnimation() {
 	edgeAddQueue.clear(); 
 	circularEdgeAddQueue.clear();
 	edgeDeleteQueue.clear();
+	circularEdgeDeleteQueue.clear();
 	edgeSwitchQueue.clear();
 	circularEdgeSwitchQueue.clear();
+	edgeColorQueue.clear();
+	circularEdgeColorQueue.clear();
 }
 
 //-------------------------------------------------------

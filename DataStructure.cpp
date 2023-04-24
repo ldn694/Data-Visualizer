@@ -196,6 +196,25 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 				}
 				tmp.work.colors = listColor;
 			}
+			if (tmp.type == CircularEdgeColor) {
+				if (tmp.work.colors.empty()) {
+					continue;
+				}
+				std::vector <sf::Color> listColor;
+				for (int k = 0; k < tmp.work.colors.size(); k++) {
+					sf::Color hereColor = tmp.work.colors[k];
+					int resType = -1;
+					for (int type = 0; type < numColorNodeType; type++) {
+						if (colorNode[theme][type].outlineColor == hereColor) {
+							resType = type;
+							break;
+						}
+					}
+					assert(resType != -1);
+					listColor.push_back(colorNode[newTheme][resType].outlineColor);
+				}
+				tmp.work.colors = listColor;
+			}
 			if (tmp.type == AddEdge) {
 				if (tmp.work.colors.empty()) {
 					continue;
@@ -413,6 +432,13 @@ void DataStructure::addEdge(std::vector <Animation>& animationList, std::vector 
 void DataStructure::deleteEdge(std::vector <Animation>& animationList, std::vector < std::pair <int, int> > edges) {
 	Animation tmp;
 	tmp.type = DeleteEdge;
+	tmp.element.edges = edges;
+	animationList.push_back(tmp);
+}
+
+void DataStructure::deleteCircularEdge(std::vector <Animation>& animationList, std::vector < std::pair <int, int> > edges) {
+	Animation tmp;
+	tmp.type = DeleteCircularEdge;
 	tmp.element.edges = edges;
 	animationList.push_back(tmp);
 }
@@ -704,6 +730,20 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 		}
 		else {
 			graph.deleteEdges(edgeList, time);
+		}
+	}
+	if (animation.type == DeleteCircularEdge) {
+		std::vector <std::pair <int, int> > edgeList;
+		for (int i = 0; i < (int)animation.element.edges.size(); i++) {
+			auto e = animation.element.edges[i];
+			int u = e.first, v = e.second;
+			edgeList.push_back({ u, v });
+		}
+		if (time < epsilonTime) {
+			graph.deleteCircularEdges(edgeList);
+		}
+		else {
+			graph.deleteCircularEdges(edgeList, time);
 		}
 	}
 	if (animation.type == SwitchEdge) {

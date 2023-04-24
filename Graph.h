@@ -137,6 +137,10 @@ public:
 	void deleteEdges(std::vector <std::pair<int, int>> edges);
 	void deleteEdges(std::vector <std::pair<int, int>> edges, sf::Time time);
 	void updateEdgeDelete(sf::Time deltaT);
+	void deleteCircularEdge(int u, int v);
+	void deleteCircularEdges(std::vector <std::pair<int, int>> edges);
+	void deleteCircularEdges(std::vector <std::pair<int, int>> edges, sf::Time time);
+	void updateCircularEdgeDelete(sf::Time deltaT);
 	void switchEdge(int u, int v, int newv);
 	void switchEdges(std::vector <std::tuple<int, int, int>> edgesSwitch);
 	void switchEdge(int u, int v, int newv, sf::Time time);
