@@ -33,6 +33,7 @@ MyVector<T>::MyVector() {
 
 template <typename T>
 MyVector<T>::~MyVector() {
+	std::cout << "destructing myvector n = " << n << " capacity = " << capacity << "\n";
 	delete[] a;
 }
 
@@ -47,7 +48,7 @@ MyVector<T>::MyVector(int newSize, T value) {
 	capacity = n = newSize;
 	a = new T[n];
 	for (int i = 0; i < n; i++) {
-		a[i] = T;
+		a[i] = value;
 	}
 }
 
@@ -58,7 +59,7 @@ void MyVector<T>::resize(int newSize) {
 		return;
 	}
 	T* newA = new T[newSize];
-	for (int i = 0; i < newSize; i++) {
+	for (int i = 0; i < n; i++) {
 		newA[i] = a[i];
 	}
 	delete[] a;
@@ -74,7 +75,7 @@ int MyVector<T>::size() {
 
 template <typename T>
 void MyVector<T>::push_back(T value) {
-	//std::cout << "start pushing\n";
+	std::cout << "start pushing n = " << n << " capacity = " << capacity << "\n";
 	if (n == capacity) {
 		capacity *= 2;
 		T* newA = new T[capacity];
@@ -84,11 +85,9 @@ void MyVector<T>::push_back(T value) {
 		delete[] a;
 		a = newA;
 	}
-	//std::cout << "start assigning\n";
 	a[n] = value;
-	//std::cout << "start increasing n\n";
 	n++;
-	//std::cout << "stop pushing\n";
+	std::cout << "stop pushing n = " << n << " capacity = " << capacity << "\n";
 }
 
 template <typename T>

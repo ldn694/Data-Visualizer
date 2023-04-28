@@ -143,6 +143,10 @@ SinglyLinkedList::SinglyLinkedList(double radius, double outlineSize, double lin
 		WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 4 - outlineBox * 2, widthBox * 2, heightBox, font(fontType::Consolas),
 		0, HEIGHT_RES - heightBox * 4, widthBox * 2, heightBox, font(fontType::Arial)) {}
 
+SinglyLinkedList::~SinglyLinkedList() {
+	sll.~MyVector<Data>();
+}
+
 int SinglyLinkedList::getSize() {
 	return (int)sll.size();
 }
@@ -201,6 +205,7 @@ int SinglyLinkedList::getEmptyID() {
 }
 
 void SinglyLinkedList::createRandom(int n, std::vector <int> values, bool sorted) {
+	std::cout << "quan ngu\n";
 	if (n == -1) {
 		n = rand() % maxSizeData + 1;
 	}
@@ -208,8 +213,11 @@ void SinglyLinkedList::createRandom(int n, std::vector <int> values, bool sorted
 		return;
 	}
 	mainGraph = defaultGraph;
+	std::cout << "start resetAnimation\n";
 	resetAnimation();
+	std::cout << "start clear\n";
 	sll.clear();
+	std::cout << "done clear\n";
 	std::vector <int> nodeList;
 	std::vector <std::pair <int, int> > edgeList;
 	std::vector <sf::Color> color;
@@ -228,7 +236,7 @@ void SinglyLinkedList::createRandom(int n, std::vector <int> values, bool sorted
 	std::cout << "n = " << n << "\n";
 	for (int i = 0; i < n; i++) {
 		int value = valueList[i];
-		std::cout << i << ":" << i << "\n";
+		std::cout << i << "\n";
 		sll.push_back({ i, value,  (i < n - 1 ? i + 1 : -1) });
 		nodeList.push_back(i);
 		nodeInfo.push_back({ value, x, y });
@@ -238,6 +246,7 @@ void SinglyLinkedList::createRandom(int n, std::vector <int> values, bool sorted
 			color.push_back({ defaultNode.getOutlineColor() });
 		}
 	}
+	std::cout << "Em yeu ly 2\n";
 	std::vector <Animation> animationList;
 	Animation tmp;
 	tmp.type = AddNode;
@@ -252,8 +261,11 @@ void SinglyLinkedList::createRandom(int n, std::vector <int> values, bool sorted
 	}
 	addVariables(animationList, { 0 }, { "head" });
 	addVariables(animationList, { n - 1 }, { "tail" });
+	std::cout << "done animationList\n";
 	addAnimations(animationList, stepTime, 0, "Created a singly linked list of length " + intToString(n));
+	std::cout << "addAnimations\n";
 	animateAllFrame();
+	std::cout << "Finished create random\n";
 }
 
 void SinglyLinkedList::search(int v) {

@@ -11,6 +11,7 @@ private:
 public:
 	SinglyLinkedList(double radius = 0, double outlineSize = 0, double lineThickness = 0,
 		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected, sf::Font* font = nullptr, int numPointCircle = 30);
+	~SinglyLinkedList();
 	int getEmptyID();
 	int getSize();
 	int getHeadValue();
