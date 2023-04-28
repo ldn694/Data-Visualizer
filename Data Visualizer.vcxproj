@@ -166,6 +166,8 @@
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="StackStage.cpp" />
     <ClCompile Include="Stage.cpp" />
+    <ClCompile Include="StaticArray.cpp" />
+    <ClCompile Include="StaticArrayStage.cpp" />
     <ClCompile Include="Template.cpp" />
     <ClCompile Include="TriangleButton.cpp" />
     <ClCompile Include="TypingBox.cpp" />
@@ -197,6 +199,8 @@
     <ClInclude Include="Stack.h" />
     <ClInclude Include="StackStage.h" />
     <ClInclude Include="Stage.h" />
+    <ClInclude Include="StaticArray.h" />
+    <ClInclude Include="StaticArrayStage.h" />
     <ClInclude Include="Template.h" />
     <ClInclude Include="TriangleButton.h" />
     <ClInclude Include="TypingBox.h" />

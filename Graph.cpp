@@ -81,6 +81,7 @@ Graph::Graph(double radius, double outlineSize, double _lineThickness,
 		EdgeType _idEdgeType, sf::Font* font, int numPointCircle) :
 	defaultNode(0, 0, 0, radius, outlineSize, fillColor, outlineColor, valueColor, variableColor, font, numPointCircle), edgeType(_idEdgeType)
 {
+	std::cout << "graph " << numPointCircle << "\n";
 	lineThickness = _lineThickness;
 	srand(time(0));
 }

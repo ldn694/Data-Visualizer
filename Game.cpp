@@ -7,6 +7,7 @@
 #include "CircularLinkedListStage.h"
 #include "StackStage.h"
 #include "QueueStage.h"
+#include "StaticArrayStage.h"
 #include "Template.h"
 
 Game::Game(sf::ContextSettings settings)
@@ -17,6 +18,7 @@ Game::Game(sf::ContextSettings settings)
 	sllBox = Box(700, 500, 200, 300, { CommandBoxNormal }, "SLL", font(fontType::Prototype), 50, NO_BORDER, 5);
 	dllBox = Box(1000, 500, 200, 300, { CommandBoxNormal }, "DLL", font(fontType::Prototype), 50, NO_BORDER, 5);
 	cllBox = Box(1300, 500, 200, 300, { CommandBoxNormal }, "CLL", font(fontType::Prototype), 50, NO_BORDER, 5);
+	staticArrayBox = Box(400, 100, 200, 300, { CommandBoxNormal }, "Static\nArray", font(fontType::Prototype), 50, NO_BORDER, 5);
 	theme = LightTheme;
 }
 
@@ -43,6 +45,11 @@ void Game::runDLL() {
 void Game::runCLL() {
 	CircularLinkedListStage cll(window, 20, 5, 4, theme, SinglyDirected, 30);
 	cll.run();
+}
+
+void Game::runStaticArray() {
+	StaticArrayStage staticArray(window, 20 * sqrt(2), 5, 4, theme, SinglyDirected, 4);
+	staticArray.run();
 }
 
 void Game::processEvents(sf::Clock& mClock)
@@ -76,6 +83,10 @@ void Game::processEvents(sf::Clock& mClock)
 				runCLL();
 				mClock.restart();
 			}
+			if (staticArrayBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
+				runStaticArray();
+				mClock.restart();
+			}
 			break;
 		}
 	}
@@ -94,6 +105,7 @@ void Game::render()
 	sllBox.draw(window, theme);
 	dllBox.draw(window, theme);
 	cllBox.draw(window, theme);
+	staticArrayBox.draw(window, theme);
 	window.display();
 }
 
