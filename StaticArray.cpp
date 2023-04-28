@@ -54,7 +54,6 @@ StaticArray::StaticArray(double radius, double outlineSize, double lineThickness
 		WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 3, widthBox * 2, heightBox * 3, font(fontType::Consolas),
 		WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 4 - outlineBox * 2, widthBox * 2, heightBox, font(fontType::Consolas),
 		0, HEIGHT_RES - heightBox * 4, widthBox * 2, heightBox, font(fontType::Arial)) {
-	std::cout << numPointCircle << "\n";
 }
 
 int StaticArray::getSize() {
@@ -120,11 +119,11 @@ void StaticArray::createRandom(int n, std::vector <int> values, bool sorted) {
 	std::vector <int> nodeList;
 	std::vector <std::tuple <int, double, double> > nodeInfo;
 	Node defaultNode = defaultGraph.getDefaultNode();
-	double x = (WIDTH_RES - (defaultNode.getRadius() * (5 * n - 5))) / 2;
+	double x = (WIDTH_RES - (defaultNode.getRadius() * (3 * n - 3))) / 2;
 	double y = HEIGHT_RES / 3;
 	std::vector <int> valueList;
 	for (int i = 0; i < n; i++) {
-		int value = (values.empty() ? rand() % 100 + 1 : values[i]);
+		int value = (values.empty() ? rand() % maxValueData + 1 : values[i]);
 		valueList.push_back(value);
 	}
 	if (sorted) {
@@ -135,7 +134,7 @@ void StaticArray::createRandom(int n, std::vector <int> values, bool sorted) {
 		arr.push_back({ i, value });
 		nodeList.push_back(i);
 		nodeInfo.push_back({ value, x, y });
-		x += defaultNode.getRadius() * 5;
+		x += defaultNode.getRadius() * 3;
 	}
 	std::vector <Animation> animationList;
 	Animation tmp;
@@ -143,8 +142,6 @@ void StaticArray::createRandom(int n, std::vector <int> values, bool sorted) {
 	tmp.element.nodes = nodeList;
 	tmp.work.nodeInfos = nodeInfo;
 	animationList.push_back(tmp);
-	addVariables(animationList, { 0 }, { "head" });
-	addVariables(animationList, { n - 1 }, { "tail" });
 	for (int i = 0; i < n; i++) {
 		addVariables(animationList, { i }, { intToString(i) });
 	}

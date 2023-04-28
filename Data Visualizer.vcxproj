@@ -188,6 +188,7 @@
     <ClInclude Include="MediaControl.h" />
     <ClInclude Include="MultipleChoice.h" />
     <ClInclude Include="MyShape.h" />
+    <ClInclude Include="MyVector.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="PlayButton.h" />
     <ClInclude Include="Queue.h" />

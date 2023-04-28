@@ -48,7 +48,7 @@ void Game::runCLL() {
 }
 
 void Game::runStaticArray() {
-	StaticArrayStage staticArray(window, 20 * sqrt(2), 5, 4, theme, SinglyDirected, 4);
+	StaticArrayStage staticArray(window, 20 * sqrt(2), 3, 4, theme, SinglyDirected, 4);
 	staticArray.run();
 }
 
