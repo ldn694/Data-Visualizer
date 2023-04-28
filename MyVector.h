@@ -19,6 +19,7 @@ public:
 	void clear();
 	void insert(int pos, T value);
 	void erase(int pos);
+	bool empty();
 	T& operator[](int index) const;
 	T& back();
 };
@@ -73,6 +74,7 @@ int MyVector<T>::size() {
 
 template <typename T>
 void MyVector<T>::push_back(T value) {
+	//std::cout << "start pushing\n";
 	if (n == capacity) {
 		capacity *= 2;
 		T* newA = new T[capacity];
@@ -82,8 +84,11 @@ void MyVector<T>::push_back(T value) {
 		delete[] a;
 		a = newA;
 	}
+	//std::cout << "start assigning\n";
 	a[n] = value;
+	//std::cout << "start increasing n\n";
 	n++;
+	//std::cout << "stop pushing\n";
 }
 
 template <typename T>
@@ -94,11 +99,13 @@ void MyVector<T>::pop_back() {
 
 template <typename T>
 void MyVector<T>::clear() {
-	assert(n > 0);
+	if (n == 0) {
+		return;
+	}
 	capacity = 1;
 	n = 0;
 	delete[] a;
-	a = new int[1];
+	a = new T[1];
 }
 
 template <typename T>
@@ -123,6 +130,11 @@ void MyVector <T>::erase(int pos) {
 		a[i] = a[i + 1];
 	}
 	pop_back();
+}
+
+template <typename T>
+bool MyVector <T>::empty(){
+	return n == 0;
 }
 
 template <typename T>

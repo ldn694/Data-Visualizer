@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include "MyVector.h"
 #include "Template.h"
 #include "SinglyLinkedList.h"
 
@@ -186,8 +187,8 @@ int SinglyLinkedList::getEmptyID() {
 	int id = 0;
 	while (true) {
 		bool flag = false;
-		for (auto& dComp : sll) {
-			if (dComp.id == id) {
+		for (int i = 0; i < sll.size(); i++) {
+			if (sll[i].id == id) {
 				flag = true;
 			}
 		}
@@ -206,7 +207,6 @@ void SinglyLinkedList::createRandom(int n, std::vector <int> values, bool sorted
 	if (!values.empty() && values[0] < 0) {
 		return;
 	}
-	sll.clear();
 	mainGraph = defaultGraph;
 	resetAnimation();
 	sll.clear();
@@ -225,8 +225,10 @@ void SinglyLinkedList::createRandom(int n, std::vector <int> values, bool sorted
 	if (sorted) {
 		std::sort(valueList.begin(), valueList.end());
 	}
+	std::cout << "n = " << n << "\n";
 	for (int i = 0; i < n; i++) {
 		int value = valueList[i];
+		std::cout << i << ":" << i << "\n";
 		sll.push_back({ i, value,  (i < n - 1 ? i + 1 : -1) });
 		nodeList.push_back(i);
 		nodeInfo.push_back({ value, x, y });
@@ -367,7 +369,7 @@ void SinglyLinkedList::insertFront(int v) {
 		animationList.clear();
 		setNodeColor(animationList, { id }, theme, normal);
 		addAnimations(animationList, stepTime, 0, "Re-format for visualization");
-		sll.insert(sll.begin(), { id, v, -1 });
+		sll.insert(0, { id, v, -1 });
 
 		animateAllFrame();
 		return;
@@ -396,7 +398,7 @@ void SinglyLinkedList::insertFront(int v) {
 
 	animationList.clear();
 	translateNode(animationList, getListID(0, getSize() - 1), 2.5f * defaultNode.getRadius(), 0);
-	sll.insert(sll.begin(), { id, v, getHeadID()});
+	sll.insert(0, { id, v, getHeadID()});
 	moveNode(animationList, id, (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2, HEIGHT_RES / 3);
 	mergeMoveNode(animationList);
 	setNodeColor(animationList, { id }, theme, normal);
@@ -440,7 +442,7 @@ void SinglyLinkedList::insertBack(int v) {
 		animationList.clear();
 		setNodeColor(animationList, { id }, theme, normal);
 		addAnimations(animationList, stepTime, 0, "Re-format for visualization");
-		sll.insert(sll.begin(), { id, v, -1 });
+		sll.insert(0, { id, v, -1 });
 
 		animateAllFrame();
 		return;
@@ -545,7 +547,7 @@ void SinglyLinkedList::insertMiddle(int i, int v) {
 			deleteVariables(animationList, { getID(i) }, { "aft" });
 			deleteVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
 			sll[i - 1].dNext = id;
-			sll.insert(sll.begin() + i, { id, v, sll[i].id });
+			sll.insert(i, { id, v, sll[i].id });
 			setNodeColor(animationList, getListID(0, getSize() - 1), theme, normal);
 			setEdgeColor(animationList, getEdgeID(0, i + 1), theme, normal);
 			addAnimations(animationList, stepTime, 7, "The function stops here.");
@@ -621,7 +623,7 @@ void SinglyLinkedList::removeFront() {
 	deleteNode(animationList, { getHeadID() });
 	addAnimations(animationList, stepTime, 5, "delete temp");
 
-	sll.erase(sll.begin());
+	sll.erase(0);
 	if (getSize() > 0) {
 		animationList.clear();
 		setNodeColor(animationList, { getHeadID() }, theme, normal);
@@ -785,7 +787,7 @@ void SinglyLinkedList::removeMiddle(int i) {
 			deleteVariables(animationList, { getID(k) }, { "k = " + intToString(k), "cur" });
 			addAnimations(animationList, stepTime, 7, "The function stops here.");
 
-			sll.erase(sll.begin() + i);
+			sll.erase(i);
 
 			animateAllFrame();
 			return;
