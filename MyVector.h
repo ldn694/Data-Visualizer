@@ -1,151 +1,199 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include <initializer_list>
 #include <cassert>
 
-template <typename T> class MyVector {
-private:
-	T* a;
-	int capacity, n;
+template <class T>
+class MyVector {
 public:
 	MyVector();
+	MyVector(unsigned int size, const T& inital = T());
+	MyVector(std::initializer_list <T> list);
 	~MyVector();
-	MyVector(int newSize);
-	MyVector(int newSize, T value);
-	int size();
-	void resize(int newSize);
+
+	unsigned int capacity() const;
+	unsigned int size() const;
+	bool empty() const;
+
+	T* begin();
+	T* end();
+
+	T& front();
+	T& back();
+
 	void push_back(T value);
 	void pop_back();
+	void resize(unsigned int size);
 	void clear();
-	void insert(int pos, T value);
-	void erase(int pos);
-	bool empty();
-	T& operator[](int index) const;
-	T& back();
+	void insert(unsigned int pos, T value);
+	void erase(unsigned int pos);
+
+	T& operator [] (unsigned int index);
+	//MyVector& operator = (const MyVector <T>& other);
+
+private:
+	unsigned int currentSize;
+	unsigned int currentCapacity;
+	T* buffer;
 };
 
-template <typename T>
-MyVector<T>::MyVector() {
-	capacity = 1;
-	n = 0;
-	a = new T[1];
+template <class T>
+MyVector <T>::MyVector() {
+	currentCapacity = 0;
+	currentSize = 0;
+	buffer = nullptr;
 }
 
-template <typename T>
-MyVector<T>::~MyVector() {
-	std::cout << "destructing myvector n = " << n << " capacity = " << capacity << "\n";
-	delete[] a;
-}
-
-template <typename T>
-MyVector<T>::MyVector(int newSize) {
-	capacity = n = newSize;
-	a = new T[n];
-}
-
-template <typename T>
-MyVector<T>::MyVector(int newSize, T value) {
-	capacity = n = newSize;
-	a = new T[n];
-	for (int i = 0; i < n; i++) {
-		a[i] = value;
+template <class T>
+MyVector <T>::MyVector(unsigned int size, const T& inital) {
+	currentCapacity = size;
+	currentSize = size;
+	buffer = new T[currentCapacity];
+	for (unsigned int i = 0; i < size; i++) {
+		buffer[i] = inital;
 	}
 }
 
-template <typename T>
-void MyVector<T>::resize(int newSize) {
-	if (n >= newSize) {
-		n = newSize;
-		return;
+template <class T>
+MyVector <T>::MyVector(std::initializer_list <T> list) {
+	unsigned int size = list.size;
+	currentCapacity = size;
+	currentSize = size;
+	buffer = new T[currentCapacity];
+	for (unsigned int i = 0; i < size; i++) {
+		buffer[i] = *(list.begin() + i);
 	}
-	T* newA = new T[newSize];
-	for (int i = 0; i < n; i++) {
-		newA[i] = a[i];
-	}
-	delete[] a;
-	a = newA;
-	n = newSize;
-	capacity = newSize;
 }
 
-template <typename T>
-int MyVector<T>::size() {
-	return n;
+template <class T>
+MyVector <T>::~MyVector() {
+	delete[]buffer;
 }
 
-template <typename T>
-void MyVector<T>::push_back(T value) {
-	std::cout << "start pushing n = " << n << " capacity = " << capacity << "\n";
-	if (n == capacity) {
-		capacity *= 2;
-		T* newA = new T[capacity];
-		for (int i = 0; i < n; i++) {
-			newA[i] = a[i];
+template <class T>
+unsigned int MyVector <T>::capacity() const {
+	return currentCapacity;
+}
+
+template <class T>
+unsigned int MyVector <T>::size() const {
+	return currentSize;
+}
+
+template <class T>
+bool MyVector <T>::empty() const {
+	return currentSize == 0;
+}
+
+template <class T>
+T* MyVector <T>::begin() {
+	return buffer;
+}
+
+template <class T>
+T* MyVector <T>::end() {
+	return buffer + currentSize;
+}
+
+template <class T>
+T& MyVector <T>::front() {
+	return buffer[0];
+}
+
+template <class T>
+T& MyVector <T>::back() {
+	return buffer[currentSize - 1];
+}
+
+template <class T>
+void MyVector <T>::push_back(T value) {
+	if (currentSize == currentCapacity) {
+		currentCapacity *= 2;
+		if (currentCapacity == 0) {
+			currentCapacity = 1;
 		}
-		delete[] a;
-		a = newA;
+
+		T* temp = new T[currentCapacity];
+		for (unsigned int i = 0; i < currentSize; i++) {
+			temp[i] = buffer[i];
+		}
+
+		delete buffer;
+		buffer = temp;
 	}
-	a[n] = value;
-	n++;
-	std::cout << "stop pushing n = " << n << " capacity = " << capacity << "\n";
+
+	buffer[currentSize] = value;
+	currentSize++;
 }
 
-template <typename T>
-void MyVector<T>::pop_back() {
-	assert(n > 0);
-	n--;
+template <class T>
+void MyVector <T>::pop_back() {
+	currentSize--;
 }
 
-template <typename T>
-void MyVector<T>::clear() {
-	if (n == 0) {
-		return;
+template <class T>
+void MyVector <T>::resize(unsigned int size) {
+	if (currentSize > currentCapacity) {
+		currentCapacity = size;
+		T* temp = new T[currentCapacity];
+		for (unsigned int i = 0; i < currentSize; i++) {
+			temp[i] = buffer[i];
+		}
+
+		delete buffer;
+		buffer = temp;
 	}
-	capacity = 1;
-	n = 0;
-	delete[] a;
-	a = new T[1];
+
+	currentSize = size;
 }
 
-template <typename T>
-void MyVector <T>::insert(int pos, T value) {
-	assert(pos >= 0 && pos <= n);
-	if (pos == n) {
+template <class T>
+void MyVector <T>::clear() {
+	currentSize = 0;
+}
+
+template <class T>
+void MyVector <T>::insert(unsigned int pos, T value) {
+	assert(pos >= 0 && pos <= currentSize);
+	if (pos == currentSize) {
 		push_back(value);
 		return;
 	}
 	T temp = back();
-	for (int i = n - 1; i > pos; i--) {
-		a[i] = a[i - 1];
+	for (int i = currentSize - 1; i > pos; i--) {
+		buffer[i] = buffer[i - 1];
 	}
-	a[pos] = value;
+	buffer[pos] = value;
 	push_back(temp);
 }
 
-template <typename T>
-void MyVector <T>::erase(int pos) {
-	assert(pos >= 0 && pos < n);
-	for (int i = pos; i < n - 1; i++) {
-		a[i] = a[i + 1];
+template <class T>
+void MyVector <T>::erase(unsigned int pos) {
+	assert(pos >= 0 && pos < currentSize);
+	for (int i = pos; i < currentSize - 1; i++) {
+		buffer[i] = buffer[i + 1];
 	}
 	pop_back();
 }
 
-template <typename T>
-bool MyVector <T>::empty(){
-	return n == 0;
+template <class T>
+T& MyVector <T>::operator [] (unsigned int index) {
+	return buffer[index];
 }
 
-template <typename T>
-T& MyVector <T>::operator[](int index) const {
-	assert(index >= 0 && index < n);
-	return a[index];
-}
+//template <class T>
+//MyVector <T>& MyVector <T>::operator = (const MyVector <T>& other) {
+//	if (other.capacity() > currentCapacity) {
+//		delete buffer;
+//		currentCapacity = other.capacity();
+//		buffer = new T[currentCapacity];
+//	}
+//
+//	currentSize = other.size();
+//	for (unsigned int i = 0; i < currentSize; i++) {
+//		buffer[i] = other[i];
+//	}
+//}
 
-template <typename T>
-T& MyVector <T>::back() {
-	assert(n > 0);
-	return a[n - 1];
-}
-
-#endif 
+#endif

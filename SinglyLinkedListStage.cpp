@@ -104,7 +104,6 @@ SinglyLinkedListStage::SinglyLinkedListStage(sf::RenderWindow& window, double ra
 
 bool SinglyLinkedListStage::processEvents() {
 	sf::Event event;
-	std::cout << "start processEvent\n";
 	while (window.pollEvent(event))
 	{
 		switch (event.type) {
@@ -128,7 +127,6 @@ bool SinglyLinkedListStage::processEvents() {
 			break;
 		}
 	}
-	std::cout << "done pollEvent\n";
 	if (operating) {
 		ds.setIsAnimating(true);
 		std::string modeString = modeName[curOperation][curMode];
@@ -137,9 +135,7 @@ bool SinglyLinkedListStage::processEvents() {
 				ds.createRandom(0, {});
 			}
 			if (modeString == "Random") {
-				std::cout << "i start createRandom\n";
 				ds.createRandom();
-				std::cout << "i killed createRandom\n";
 			}
 			if (modeString == "Random Sorted") {
 				ds.createRandom(-1, {}, true);
@@ -227,7 +223,6 @@ bool SinglyLinkedListStage::processEvents() {
 		}
 		operating = false;
 	}
-	std::cout << "done processingEvent\n";
 	return false;
 }
 
@@ -250,17 +245,12 @@ void SinglyLinkedListStage::run() {
 	{
 		timePool += mClock.restart();
 		while (timePool >= timePerFrame) {
-			std::cout << "start processing\n";
 			if (processEvents()) {
-				std::cout << "stopped run\n";
 				return;
 			}
-			std::cout << "done processing\n";
 			timePool -= timePerFrame;
 			update(timePerFrame);
-			std::cout << "done updating\n";
 			render();
-			std::cout << "done rendering\n";
 		}
 	}
 }
