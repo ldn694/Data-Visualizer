@@ -1,11 +1,12 @@
 #pragma once
 #include "DataStructure.h"
+#include "MyVector.h"
 struct Queue : public DataStructure {
 private:
 	struct Data {
 		int id, value, dNext;
 	};
-	std::vector <Data> queue;
+	MyVector <Data> queue;
 
 public:
 	Queue(double radius = 0, double outlineSize = 0, double lineThickness = 0,

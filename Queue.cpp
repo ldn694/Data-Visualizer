@@ -304,7 +304,7 @@ void Queue::dequeue() {
 		translateNode(animationList, getListID(1, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
 		addAnimations(animationList, stepTime, 5, "delete temp");
 	}
-	queue.erase(queue.begin());
+	queue.erase(0);
 	if (getSize() > 0) {
 		animationList.clear();
 		setNodeColor(animationList, { getHeadID() }, theme, normal);
