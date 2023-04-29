@@ -223,7 +223,7 @@ void Stack::push(int value) {
 	animationList.clear();
 	Node defaultNode = defaultGraph.getDefaultNode();
 	translateNode(animationList, getListID(0, getSize() - 1), 2.5f * defaultNode.getRadius(), 0);
-	stack.insert(stack.begin(), {id, value, head});
+	stack.insert(0, {id, value, head});
 	moveNode(animationList, id, (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2, HEIGHT_RES / 3);
 	mergeMoveNode(animationList);
 	setNodeColor(animationList, { id }, theme, normal);
@@ -279,7 +279,7 @@ void Stack::pop() {
 		translateNode(animationList, getListID(1, getSize() - 1), -2.5f * defaultNode.getRadius(), 0);
 		addAnimations(animationList, stepTime, 4, "delete temp");
 	}
-	stack.erase(stack.begin());
+	stack.erase(0);
 	if (getSize() > 0) {
 		animationList.clear();
 		setNodeColor(animationList, { getHeadID() }, theme, normal);

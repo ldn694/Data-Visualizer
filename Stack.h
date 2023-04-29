@@ -1,11 +1,12 @@
 #pragma once
 #include "DataStructure.h"
+#include "MyVector.h"
 struct Stack: public DataStructure {
 private:
 	struct Data {
 		int id, value, dNext;
 	};
-	std::vector <Data> stack;
+	MyVector <Data> stack;
 	
 public:
 	Stack(double radius = 0, double outlineSize = 0, double lineThickness = 0,
