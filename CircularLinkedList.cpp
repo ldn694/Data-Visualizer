@@ -384,7 +384,7 @@ void CircularLinkedList::insertFront(int v) {
 		setNodeColor(animationList, { id }, theme, normal);
 		setCircularEdgeColor(animationList, { { id, id } }, theme, normal);
 		addAnimations(animationList, stepTime, 0, "Re-format for visualization");
-		cll.insert(cll.begin(), { id, v, -1 });
+		cll.insert(0, { id, v, -1 });
 
 		animateAllFrame();
 		return;
@@ -418,7 +418,7 @@ void CircularLinkedList::insertFront(int v) {
 
 	animationList.clear();
 	translateNode(animationList, getListID(0, getSize() - 1), 2.5f * defaultNode.getRadius(), 0);
-	cll.insert(cll.begin(), { id, v, getHeadID() });
+	cll.insert(0, { id, v, getHeadID() });
 	moveNode(animationList, id, (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2, HEIGHT_RES / 3);
 	mergeMoveNode(animationList);
 	setNodeColor(animationList, { id }, theme, normal);
@@ -468,7 +468,7 @@ void CircularLinkedList::insertBack(int v) {
 		setNodeColor(animationList, { id }, theme, normal);
 		setCircularEdgeColor(animationList, { { id, id } }, theme, normal);
 		addAnimations(animationList, stepTime, 0, "Re-format for visualization");
-		cll.insert(cll.begin(), { id, v, -1 });
+		cll.insert(0, { id, v, -1 });
 
 		animateAllFrame();
 		return;
@@ -579,7 +579,7 @@ void CircularLinkedList::insertMiddle(int i, int v) {
 			deleteVariables(animationList, { getID(i) }, { "aft" });
 			deleteVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
 			cll[i - 1].dNext = id;
-			cll.insert(cll.begin() + i, { id, v, cll[i].id });
+			cll.insert(i, { id, v, cll[i].id });
 			setNodeColor(animationList, getListID(0, getSize() - 1), theme, normal);
 			setEdgeColor(animationList, getEdgeID(0, i + 1), theme, normal);
 			addAnimations(animationList, stepTime, 7, "The function stops here.");
@@ -666,7 +666,7 @@ void CircularLinkedList::removeFront() {
 	deleteNode(animationList, { getHeadID() });
 	addAnimations(animationList, stepTime, 10, "delete temp");
 
-	cll.erase(cll.begin());
+	cll.erase(0);
 	if (getSize() > 0) {
 		animationList.clear();
 		setNodeColor(animationList, { getHeadID() }, theme, normal);
@@ -831,7 +831,7 @@ void CircularLinkedList::removeMiddle(int i) {
 			deleteVariables(animationList, { getID(k) }, { "k = " + intToString(k), "cur" });
 			addAnimations(animationList, stepTime, 7, "The function stops here.");
 
-			cll.erase(cll.begin() + i);
+			cll.erase(i);
 
 			animateAllFrame();
 			return;

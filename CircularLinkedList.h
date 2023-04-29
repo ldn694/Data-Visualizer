@@ -1,11 +1,12 @@
 #pragma once
 #include "DataStructure.h"
+#include "MyVector.h"
 struct CircularLinkedList : public DataStructure {
 private:
 	struct Data {
 		int id, value, dNext;
 	};
-	std::vector <Data> cll;
+	MyVector <Data> cll;
 
 public:
 	CircularLinkedList(double radius = 0, double outlineSize = 0, double lineThickness = 0,
