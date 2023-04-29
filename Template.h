@@ -57,6 +57,8 @@ const sf::Color CaribbeanCurrentColor(0, 108, 103);
 const sf::Color NyanzaColor(207, 255, 229);
 const sf::Color WhiteSmokeColor(245, 245, 245);
 const sf::Color AntiFlashWhiteColor(235, 235, 235);
+const sf::Color PlatinumColor(200, 198, 194);
+const sf::Color DimGrayColor(80, 80, 80);
 
 const bool ADD_EDGE = true;
 const bool ERASE_EDGE = false;
@@ -96,7 +98,7 @@ enum ColorTheme {
 };
 
 enum ColorNodeType {
-	normal, highlight, lowlight, highlight2, highlight3
+	normal, highlight, lowlight, highlight2, highlight3, faded
 };
 
 enum TypingBoxMode {
@@ -104,7 +106,7 @@ enum TypingBoxMode {
 };
 
 const int numColorTheme = 2;
-const int numColorNodeType = 5;
+const int numColorNodeType = 6;
 const int numTypingBoxMode = 3;
 
 const int  typingModeMaxCharacter[numTypingBoxMode] = { 3, 20, 20 };
@@ -121,14 +123,16 @@ const ColorNode colorNode[numColorTheme][numColorNodeType] =
 		ColorNode(OrangeColor, OrangeColor, MilkColor, RedColor),
 		ColorNode(MilkColor, OrangeColor, OrangeColor, RedColor),
 		ColorNode(LightGreenColor, LightGreenColor, MilkColor, RedColor),
-		ColorNode(BlueColor, BlueColor, MilkColor, RedColor)
+		ColorNode(BlueColor, BlueColor, MilkColor, RedColor),
+		ColorNode(PlatinumColor, DimGrayColor, DimGrayColor, RedColor)
 	} ,
 	{
 		ColorNode(BlackColor, WhiteColor, WhiteColor, OrangeColor),
 		ColorNode(YellowColor, YellowColor, BlackColor, OrangeColor),
 		ColorNode(BlackColor, YellowColor, YellowColor, OrangeColor),
 		ColorNode(GreenColor, GreenColor, BlackColor, OrangeColor),
-		ColorNode(BlueColor, BlueColor, MilkColor, RedColor)
+		ColorNode(BlueColor, BlueColor, MilkColor, RedColor),
+		ColorNode(PlatinumColor, DimGrayColor, DimGrayColor, RedColor)
 	}
 };
 

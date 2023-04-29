@@ -29,6 +29,54 @@ StaticArray::StaticArray(double radius, double outlineSize, double lineThickness
 					""
 				}
 			},
+			{	//Insert
+				{	//Insert front
+					"",
+					"size++;",
+					"for (int i = size - 1; i > 0; i--) {",
+					"	a[i] = a[i - 1];",
+					"}",
+					"a[0] = v;"
+				},
+				{	//Insert back
+					"",
+					"size++;",
+					"a[size - 1] = v;"
+				},
+				{	//Insert middle
+					"",
+					"size++;",
+					"for (int k = size - 1; k > 0; k--) {",
+					"	a[k] = a[k - 1];",
+					"}",
+					"a[i] = v;"
+				}
+			},
+			{	//Delete
+				{	//Delete front
+					"",
+					"if (size == 0) return;",
+					"for (int i = 0; i < size - 1; i++) {",
+					"	a[i] = a[i + 1];",
+					"}",
+					"size--;",
+					"a[size] = 0;"
+				},
+				{	//Delete back
+					"",
+					"if (size == 0) return;",
+					"size--;",
+					"a[size] = 0;"
+				},
+				{	//Delete middle
+					"",
+					"for (int k = i; k < size - 1; k++) {",
+					"	a[k] = a[k + 1];",
+					"}",
+					"size--;",
+					"a[size] = 0;"
+				}
+			},
 			{	//Search
 				{
 					"",
@@ -58,6 +106,10 @@ StaticArray::StaticArray(double radius, double outlineSize, double lineThickness
 
 int StaticArray::getSize() {
 	return (int)arr.size();
+}
+
+int StaticArray::getCapa() {
+	return (int)arr.capacity();
 }
 
 int StaticArray::getHeadValue() {
@@ -115,7 +167,6 @@ void StaticArray::createRandom(int n, std::vector <int> values, bool sorted) {
 	arr.clear();
 	mainGraph = defaultGraph;
 	resetAnimation();
-	arr.clear();
 	std::vector <int> nodeList;
 	std::vector <std::tuple <int, double, double> > nodeInfo;
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -146,6 +197,78 @@ void StaticArray::createRandom(int n, std::vector <int> values, bool sorted) {
 		addVariables(animationList, { i }, { intToString(i) });
 	}
 	addAnimations(animationList, stepTime, 0, "Created a static array of length " + intToString(n));
+	animateAllFrame();
+	size = capa = n;
+}
+
+void StaticArray::insertFront(int v) {
+	resetAnimation();
+	if (size + 1 > capa) {
+		setError(true, "Maximmum size of " + intToString(capa) + " reached!");
+		return;
+	}
+	if (v < 0) {
+		v = rand() % (maxValueData + 1);
+	}
+
+	std::vector <Animation> animationList;
+
+	animationList.clear();
+}
+
+void StaticArray::insertBack(int v) {
+	resetAnimation();
+	if (size + 1 > capa) {
+		setError(true, "Maximmum size of " + intToString(capa) + " reached!");
+		return;
+	}
+	if (v < 0) {
+		v = rand() % (maxValueData + 1);
+	}
+	
+	std::vector <Animation> animationList;
+
+	animationList.clear();
+	setNodeColor(animationList, { getID(size) }, theme, normal);
+	addAnimations(animationList, stepTime, 2, "size is increased by 1, now size is " + intToString(size + 1));
+	size++;
+
+	animationList.clear();
+	setNodeColor(animationList, { getID(size - 1) }, theme, highlight);
+	setNodeValue(animationList, { getID(size - 1) }, {v});
+	addAnimations(animationList, stepTime, 1, "a[" + intToString(size - 1) + "] is assigned to " + intToString(v) + ".");
+
+	animationList.clear();
+	setNodeColor(animationList, { getID(size - 1) }, theme, normal);
+	addAnimations(animationList, stepTime, 0, "Re-format for visualization.");
+
+	animateAllFrame();
+}
+
+void StaticArray::deleteBack() {
+	resetAnimation();
+	if (getSize() == 0) {
+		std::vector <Animation> animationList;
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 1, "The array is currently empty (size = 0), no operation is performed.");
+		animateAllFrame();
+		return;
+	}
+	std::vector <Animation> animationList;
+
+	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 1, "The array is currently not empty (size > 0), proceed to next step.");
+
+	animationList.clear();
+	setNodeColor(animationList, { getID(size - 1) }, theme, faded);
+	size--;
+	addAnimations(animationList, stepTime, 2, "size is decrease by 1, now size = " + intToString(size));
+
+	animationList.clear();
+	setNodeValue(animationList, { getID(size) }, {0});
+	addAnimations(animationList, stepTime, 3, "a[" + intToString(size) + "] is now assigned to 0 (deleted element).");
+
 	animateAllFrame();
 }
 

@@ -4,9 +4,11 @@
 
 StaticArrayStage::StaticArrayStage(sf::RenderWindow& window, double radius, double outlineSize, double lineThickness,
 	ColorTheme theme, EdgeType edgeType, int numPointCircle) :
-	Stage(window, { "Create", "Search", "Update", "Access"},
+	Stage(window, { "Create", "Insert", "Delete", "Search", "Update", "Access"},
 		{
 			{"Empty", "Random", "Random Sorted", "Fixed Size", "Manual", "Upload File"},
+			{"i = 0 (head)", "i = n (after tail)", "i = 1..n - 1 (middle)"},
+			{"i = 0 (head)", "i = n - 1 (tail)", "i = 1..n - 2 (middle)"},
 			{"v = ?"},
 			{"i = ?, v = ?"},
 			{"i = ?"}
@@ -19,6 +21,16 @@ StaticArrayStage::StaticArrayStage(sf::RenderWindow& window, double radius, doub
 				{"n ="},
 				{"v[] ="},
 				{}
+			},
+			{
+				{"v ="},
+				{"v ="},
+				{"i =", "v ="}
+			},
+			{
+				{},
+				{},
+				{"i ="}
 			},
 			{
 				{"v ="}
@@ -40,6 +52,16 @@ StaticArrayStage::StaticArrayStage(sf::RenderWindow& window, double radius, doub
 				{}
 			},
 			{
+				{singleNumber},
+				{singleNumber},
+				{singleNumber, singleNumber}
+			},
+			{
+				{},
+				{},
+				{singleNumber}
+			},
+			{
 				{singleNumber}
 			},
 			{
@@ -57,6 +79,16 @@ StaticArrayStage::StaticArrayStage(sf::RenderWindow& window, double radius, doub
 				{{0, maxSizeData}},
 				{{0, maxValueData}},
 				{}
+			},
+			{
+				{{0, maxValueData}},
+				{{0, maxValueData}},
+				{{0, maxSizeData}, {0, maxValueData}}
+			},
+			{
+				{},
+				{},
+				{{0, maxSizeData}}
 			},
 			{
 				{{0, maxValueData}}
@@ -129,6 +161,19 @@ bool StaticArrayStage::processEvents() {
 				if (!values.empty()) {
 					ds.createRandom(values.size(), values);
 				}
+			}
+		}
+		if (operationName[curOperation] == "Insert") {
+			if (modeString == "i = n (after tail)") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.insertBack(val);
+				}
+			}
+		}
+		if (operationName[curOperation] == "Delete") {
+			if (modeString == "i = n - 1 (tail)") {
+				ds.deleteBack();
 			}
 		}
 		if (operationName[curOperation] == "Search") {
