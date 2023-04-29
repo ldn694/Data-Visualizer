@@ -374,7 +374,7 @@ void DoublyLinkedList::insertFront(int v) {
 		animationList.clear();
 		setNodeColor(animationList, { id }, theme, normal);
 		addAnimations(animationList, stepTime, 0, "Re-format for visualization");
-		dll.insert(dll.begin(), { id, v, -1 });
+		dll.insert(0, { id, v, -1 });
 
 		animateAllFrame();
 		return;
@@ -403,7 +403,7 @@ void DoublyLinkedList::insertFront(int v) {
 
 	animationList.clear();
 	translateNode(animationList, getListID(0, getSize() - 1), 2.5f * defaultNode.getRadius(), 0);
-	dll.insert(dll.begin(), { id, v, getHeadID() });
+	dll.insert(0, { id, v, getHeadID() });
 	moveNode(animationList, id, (WIDTH_RES - (defaultNode.getRadius() * (5 * getSize() - 5))) / 2, HEIGHT_RES / 3);
 	mergeMoveNode(animationList);
 	setNodeColor(animationList, { id }, theme, normal);
@@ -447,7 +447,7 @@ void DoublyLinkedList::insertBack(int v) {
 		animationList.clear();
 		setNodeColor(animationList, { id }, theme, normal);
 		addAnimations(animationList, stepTime, 0, "Re-format for visualization");
-		dll.insert(dll.begin(), { id, v, -1 });
+		dll.insert(0, { id, v, -1 });
 
 		animateAllFrame();
 		return;
@@ -557,7 +557,7 @@ void DoublyLinkedList::insertMiddle(int i, int v) {
 			deleteVariables(animationList, { getID(i) }, { "aft" });
 			deleteVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
 			dll[i - 1].dNext = id;
-			dll.insert(dll.begin() + i, { id, v, dll[i].id });
+			dll.insert(i, { id, v, dll[i].id });
 			setNodeColor(animationList, getListID(0, getSize() - 1), theme, normal);
 			setEdgeColor(animationList, getEdgeID(0, i + 1), theme, normal);
 			addAnimations(animationList, stepTime, 8, "The function stops here.");
@@ -641,7 +641,7 @@ void DoublyLinkedList::removeFront() {
 	deleteNode(animationList, { getHeadID() });
 	addAnimations(animationList, stepTime, 10, "delete temp");
 
-	dll.erase(dll.begin());
+	dll.erase(0);
 	if (getSize() > 0) {
 		animationList.clear();
 		setNodeColor(animationList, { getHeadID() }, theme, normal);
@@ -705,7 +705,7 @@ void DoublyLinkedList::removeBack() {
 	deleteNode(animationList, { getTailID() });
 	addAnimations(animationList, stepTime, 10, "delete temp");
 
-	dll.erase(dll.begin() + getSize() - 1);
+	dll.pop_back();
 	if (getSize() > 0) {
 		animationList.clear();
 		setNodeColor(animationList, { getTailID() }, theme, normal);
@@ -774,7 +774,7 @@ void DoublyLinkedList::removeMiddle(int i) {
 			deleteVariables(animationList, { getID(k) }, { "k = " + intToString(k), "cur" });
 			addAnimations(animationList, stepTime, 7, "The function stops here.");
 
-			dll.erase(dll.begin() + i);
+			dll.erase(i);
 			animateAllFrame();
 
 			

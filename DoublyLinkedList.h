@@ -2,12 +2,13 @@
 
 #pragma once
 #include "DataStructure.h"
+#include "MyVector.h"
 struct DoublyLinkedList : public DataStructure {
 private:
 	struct Data {
 		int id, value, dNext, dPrev;
 	};
-	std::vector <Data> dll;
+	MyVector <Data> dll;
 
 public:
 	DoublyLinkedList(double radius = 0, double outlineSize = 0, double lineThickness = 0,
