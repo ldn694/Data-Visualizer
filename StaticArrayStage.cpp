@@ -164,6 +164,12 @@ bool StaticArrayStage::processEvents() {
 			}
 		}
 		if (operationName[curOperation] == "Insert") {
+			if (modeString == "i = 0 (head)") {
+				int val = valueTypingBox[0].getProperInt();
+				if (val != -1) {
+					ds.insertFront(val);
+				}
+			}
 			if (modeString == "i = n (after tail)") {
 				int val = valueTypingBox[0].getProperInt();
 				if (val != -1) {

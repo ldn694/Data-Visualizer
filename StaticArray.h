@@ -17,6 +17,7 @@ public:
 	int getCapa();
 	int getHeadValue();
 	int getTailValue();
+	int getValue(int i);
 	int getHeadID();
 	int getTailID();
 	int getID(int i);

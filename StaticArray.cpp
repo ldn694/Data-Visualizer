@@ -120,6 +120,10 @@ int StaticArray::getTailValue() {
 	return arr.back().value;
 }
 
+int StaticArray::getValue(int i) {
+	return arr[i].value;
+}
+
 int StaticArray::getHeadID() {
 	return arr[0].id;
 }
@@ -202,7 +206,7 @@ void StaticArray::createRandom(int n, std::vector <int> values, bool sorted) {
 }
 
 void StaticArray::insertFront(int v) {
-	resetAnimation();
+	std::cout << "start inserting front!\n";
 	if (size + 1 > capa) {
 		setError(true, "Maximmum size of " + intToString(capa) + " reached!");
 		return;
@@ -210,14 +214,96 @@ void StaticArray::insertFront(int v) {
 	if (v < 0) {
 		v = rand() % (maxValueData + 1);
 	}
+	resetAnimation();
 
 	std::vector <Animation> animationList;
 
 	animationList.clear();
+	setNodeColor(animationList, { getID(size) }, theme, normal);
+	addAnimations(animationList, stepTime, 1, "size is increased by 1, now size is " + intToString(size + 1));
+	size++;
+
+	int i = size - 1, pre = -1;
+	bool firstTime = false;
+	while (true) {
+		if (firstTime) {
+			i--;
+		}
+		if (i <= 0) {
+			if (!firstTime) {
+				animationList.clear();
+				doNothing(animationList);
+				addAnimations(animationList, stepTime, 2, "i = " + intToString(i) + " <= 0, so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+			else {
+				animationList.clear();
+				addVariables(animationList, { getID(i) }, { "i = " + intToString(i) });
+				deleteVariables(animationList, { getID(i + 1) }, { "i = " + intToString(i + 1) });
+				if (pre == -1) {
+					setNodeColor(animationList, { getID(i) }, theme, { highlight });
+				}
+				else {
+					setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+				}
+				addAnimations(animationList, stepTime, 2, "i is decreased by 1, now i = " + intToString(i) + " <= 0, so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+		}
+		if (!firstTime) {
+			animationList.clear();
+			addVariables(animationList, { getID(i) }, { "i = " + intToString(i) });
+			if (pre == -1) {
+				setNodeColor(animationList, { getID(i)}, theme, { highlight});
+			}
+			else {
+				setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+			}
+			addAnimations(animationList, stepTime, 2, "We assign i = " + intToString(i) + ", as i > 0, the condition is true and the loop continues.");
+		}
+		else {
+			animationList.clear();
+			deleteVariables(animationList, { getID(i + 1) }, { "i = " + intToString(i + 1) });
+			addVariables(animationList, { getID(i) }, { "i = " + intToString(i) });
+			if (pre == -1) {
+				setNodeColor(animationList, { getID(i) }, theme, { highlight });
+			}
+			else {
+				setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+			}
+			addAnimations(animationList, stepTime, 2, "i is decreased by 1, now i = " + intToString(i) + " > 0, so the condition is true and the loop continues.");
+		}
+
+		animationList.clear();
+		setNodeColor(animationList, { getID(i - 1) }, theme, highlight2);
+		setNodeValue(animationList, { getID(i) }, { getValue(i - 1) });
+		addAnimations(animationList, stepTime, 3, "a[" + intToString(i) + "] is assigned to " + intToString(getValue(i - 1)) + "(= a[" + intToString(i - 1) + "]).");
+		arr[i].value = arr[i - 1].value;
+		pre = i;
+		firstTime = true;
+	}
+
+	animationList.clear();
+	deleteVariables(animationList, { getID(0) }, { "i = 0" });
+	setNodeColor(animationList, { getID(0) }, theme, highlight);
+	setNodeValue(animationList, { getID(0) }, { v });
+	addAnimations(animationList, stepTime, 5, "a[0] is now assigned to " + intToString(v) + " (inserted element).");
+	arr[0].value = v;
+
+	animationList.clear();
+	setNodeColor(animationList, { getID(0) }, theme, normal);
+	addAnimations(animationList, stepTime, 0, "Re-format for visualization.");
+
+
+	animateAllFrame();
+	std::cout << "size = " << size << " capa = " << capa << "\n";
+	for (int i = 0; i < capa; i++) {
+		std::cout << arr[i].value << " ";
+	}
+	std::cout << "\n";
 }
 
 void StaticArray::insertBack(int v) {
-	resetAnimation();
 	if (size + 1 > capa) {
 		setError(true, "Maximmum size of " + intToString(capa) + " reached!");
 		return;
@@ -226,6 +312,7 @@ void StaticArray::insertBack(int v) {
 		v = rand() % (maxValueData + 1);
 	}
 	
+	resetAnimation();
 	std::vector <Animation> animationList;
 
 	animationList.clear();
@@ -263,7 +350,7 @@ void StaticArray::deleteBack() {
 	animationList.clear();
 	setNodeColor(animationList, { getID(size - 1) }, theme, faded);
 	size--;
-	addAnimations(animationList, stepTime, 2, "size is decrease by 1, now size = " + intToString(size));
+	addAnimations(animationList, stepTime, 2, "size is decreased by 1, now size = " + intToString(size));
 
 	animationList.clear();
 	setNodeValue(animationList, { getID(size) }, {0});

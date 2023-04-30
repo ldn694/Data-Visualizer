@@ -20,7 +20,7 @@ namespace WinAPI {
 const int WIDTH_RES = 1600;
 const int HEIGHT_RES = 900;
 
-const sf::Color GreyColor(211, 211, 211);
+const sf::Color SilverColor(185, 180, 174);
 const sf::Color RedColor(255, 0, 0);
 const sf::Color GreenColor(0, 255, 0);
 const sf::Color BlueColor(0, 0, 255);
@@ -124,15 +124,15 @@ const ColorNode colorNode[numColorTheme][numColorNodeType] =
 		ColorNode(MilkColor, OrangeColor, OrangeColor, RedColor),
 		ColorNode(LightGreenColor, LightGreenColor, MilkColor, RedColor),
 		ColorNode(BlueColor, BlueColor, MilkColor, RedColor),
-		ColorNode(PlatinumColor, DimGrayColor, DimGrayColor, RedColor)
+		ColorNode(MilkColor, SilverColor, SilverColor, RedColor)
 	} ,
 	{
 		ColorNode(BlackColor, WhiteColor, WhiteColor, OrangeColor),
 		ColorNode(YellowColor, YellowColor, BlackColor, OrangeColor),
 		ColorNode(BlackColor, YellowColor, YellowColor, OrangeColor),
 		ColorNode(GreenColor, GreenColor, BlackColor, OrangeColor),
-		ColorNode(BlueColor, BlueColor, MilkColor, RedColor),
-		ColorNode(PlatinumColor, DimGrayColor, DimGrayColor, RedColor)
+		ColorNode(BlueColor, BlueColor, MilkColor, OrangeColor),
+		ColorNode(MilkColor, SilverColor, SilverColor, OrangeColor)
 	}
 };
 
