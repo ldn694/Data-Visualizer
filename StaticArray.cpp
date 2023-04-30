@@ -739,5 +739,26 @@ void StaticArray::updateVal(int i, int v) {
 }
 
 void StaticArray::access(int i) {
+	resetAnimation();
+	std::vector <Animation> animationList;
+	if (i < 0 || i >= size) {
+		animationList.clear();
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 1, "There is no position " + intToString(i) + " in the array (out of range). The function stops here.");
+		animateAllFrame();
+		return;
+	}
+	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 1, "The requested position i = " + intToString(i) + " is valid.The function continues.");
 
+	animationList.clear();
+	setNodeColor(animationList, { getID(i) }, theme, highlight);
+	addAnimations(animationList, stepTime, 2, "The value at position " + intToString(i) + " is " + intToString(arr[i].value) + ".");
+
+	animationList.clear();
+	setNodeColor(animationList, { getID(i) }, theme, normal);
+	addAnimations(animationList, stepTime, 0, "Re-format for visualization.");
+
+	animateAllFrame();
 }
