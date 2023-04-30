@@ -206,7 +206,6 @@ void StaticArray::createRandom(int n, std::vector <int> values, bool sorted) {
 }
 
 void StaticArray::insertFront(int v) {
-	std::cout << "start inserting front!\n";
 	if (size + 1 > capa) {
 		setError(true, "Maximmum size of " + intToString(capa) + " reached!");
 		return;
@@ -296,11 +295,6 @@ void StaticArray::insertFront(int v) {
 
 
 	animateAllFrame();
-	std::cout << "size = " << size << " capa = " << capa << "\n";
-	for (int i = 0; i < capa; i++) {
-		std::cout << arr[i].value << " ";
-	}
-	std::cout << "\n";
 }
 
 void StaticArray::insertBack(int v) {
@@ -332,9 +326,109 @@ void StaticArray::insertBack(int v) {
 	animateAllFrame();
 }
 
+void StaticArray::insertMiddle(int index, int v) {
+	if (size + 1 > capa) {
+		setError(true, "Maximmum size of " + intToString(capa) + " reached!");
+		return;
+	}
+	if (size < 2) {
+		setError(true, "There is no position in the middle!");
+		return;
+	}
+	if (index < 1 || index > size - 1) {
+		setError(true, "i must be in [1, " + intToString(size - 1) + "]!");
+		return;
+	}
+	if (v < 0) {
+		v = rand() % (maxValueData + 1);
+	}
+	resetAnimation();
+
+	std::vector <Animation> animationList;
+
+	animationList.clear();
+	setNodeColor(animationList, { getID(size) }, theme, normal);
+	addAnimations(animationList, stepTime, 1, "size is increased by 1, now size is " + intToString(size + 1));
+	size++;
+
+	int k = size - 1, pre = -1;
+	bool firstTime = false;
+	while (true) {
+		if (firstTime) {
+			k--;
+		}
+		if (k <= index) {
+			if (!firstTime) {
+				animationList.clear();
+				doNothing(animationList);
+				addAnimations(animationList, stepTime, 2, "k = " + intToString(k) + " <= i (i = " + intToString(index) + "), therefore the loop breaks here.");
+				break;
+			}
+			else {
+				animationList.clear();
+				addVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
+				deleteVariables(animationList, { getID(k + 1) }, { "k = " + intToString(k + 1) });
+				if (pre == -1) {
+					setNodeColor(animationList, { getID(k) }, theme, { highlight });
+				}
+				else {
+					setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
+				}
+				addAnimations(animationList, stepTime, 2, "k is decreased by 1, now k = " + intToString(k) + " <= i (i = " + intToString(index) + "), so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+		}
+		if (!firstTime) {
+			animationList.clear();
+			addVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
+			if (pre == -1) {
+				setNodeColor(animationList, { getID(k) }, theme, { highlight });
+			}
+			else {
+				setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
+			}
+			addAnimations(animationList, stepTime, 2, "We assign k = " + intToString(k) + ", as k > i (i = " + intToString(index) + "), the condition is true and the loop continues.");
+		}
+		else {
+			animationList.clear();
+			deleteVariables(animationList, { getID(k + 1) }, { "k = " + intToString(k + 1) });
+			addVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
+			if (pre == -1) {
+				setNodeColor(animationList, { getID(k) }, theme, { highlight });
+			}
+			else {
+				setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
+			}
+			addAnimations(animationList, stepTime, 2, "k is decreased by 1, now k = " + intToString(k) + " > i (i = " + intToString(index) + "), so the condition is true and the loop continues.");
+		}
+
+		animationList.clear();
+		setNodeColor(animationList, { getID(k - 1) }, theme, highlight2);
+		setNodeValue(animationList, { getID(k) }, { getValue(k - 1) });
+		addAnimations(animationList, stepTime, 3, "a[" + intToString(k) + "] is assigned to " + intToString(getValue(k - 1)) + "(= a[" + intToString(k - 1) + "]).");
+		arr[k].value = arr[k - 1].value;
+		pre = k;
+		firstTime = true;
+	}
+
+	animationList.clear();
+	deleteVariables(animationList, { getID(index) }, { "k = " + intToString(index)});
+	setNodeColor(animationList, { getID(index) }, theme, highlight);
+	setNodeValue(animationList, { getID(index) }, { v });
+	addAnimations(animationList, stepTime, 5, "a[" + intToString(k) + "] is now assigned to " + intToString(v) + " (inserted element).");
+	arr[0].value = v;
+
+	animationList.clear();
+	setNodeColor(animationList, { getID(index) }, theme, normal);
+	addAnimations(animationList, stepTime, 0, "Re-format for visualization.");
+
+
+	animateAllFrame();
+}
+
 void StaticArray::deleteBack() {
 	resetAnimation();
-	if (getSize() == 0) {
+	if (size == 0) {
 		std::vector <Animation> animationList;
 		doNothing(animationList);
 		addAnimations(animationList, stepTime, 1, "The array is currently empty (size = 0), no operation is performed.");

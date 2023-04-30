@@ -176,6 +176,13 @@ bool StaticArrayStage::processEvents() {
 					ds.insertBack(val);
 				}
 			}
+			if (modeString == "i = 1..n - 1 (middle)") {
+				int pos = valueTypingBox[0].getProperInt();
+				int val = valueTypingBox[1].getProperInt();
+				if (pos != -1 && val != -1) {
+					ds.insertMiddle(pos, val);
+				}
+			}
 		}
 		if (operationName[curOperation] == "Delete") {
 			if (modeString == "i = n - 1 (tail)") {
