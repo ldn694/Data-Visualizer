@@ -491,7 +491,7 @@ void StaticArray::deleteFront() {
 			else {
 				setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
 			}
-			addAnimations(animationList, stepTime, 2, "i is increased by 1, now i = " + intToString(i) + " > size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is true and the loop continues.");
+			addAnimations(animationList, stepTime, 2, "i is increased by 1, now i = " + intToString(i) + " < size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is true and the loop continues.");
 		}
 
 		animationList.clear();
@@ -631,7 +631,82 @@ void StaticArray::deleteMiddle(int index) {
 }
 
 void StaticArray::search(int v) {
+	resetAnimation();
+	std::vector <Animation> animationList;
 
+	int i = 0, pre = -1;
+	bool firstTime = false;
+	while (true) {
+		if (firstTime) {
+			i++;
+		}
+		if (i >= size) {
+			if (!firstTime) {
+				animationList.clear();
+				doNothing(animationList);
+				addAnimations(animationList, stepTime, 1, "i = " + intToString(i) + " >= size (size = " + intToString(size) + "), so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+			else {
+				animationList.clear();
+				deleteVariables(animationList, { getID(i - 1) }, { "i = " + intToString(i - 1) });
+				if (pre != -1) {
+					setNodeColor(animationList, { pre }, theme, { normal });
+				}
+				addAnimations(animationList, stepTime, 1, "i is increased by 1, now i = " + intToString(i) + " >= size (size = " + intToString(size) + "), so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+		}
+		if (!firstTime) {
+			animationList.clear();
+			addVariables(animationList, { getID(i) }, { "i = " + intToString(i) });
+			if (pre == -1) {
+				setNodeColor(animationList, { getID(i) }, theme, { highlight });
+			}
+			else {
+				setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+			}
+			addAnimations(animationList, stepTime, 1, "We assign i = " + intToString(i) + ", as i < size (size = " + intToString(size) + "), the condition is true and the loop continues.");
+		}
+		else {
+			animationList.clear();
+			deleteVariables(animationList, { getID(i - 1) }, { "i = " + intToString(i - 1) });
+			addVariables(animationList, { getID(i) }, { "i = " + intToString(i) });
+			if (pre == -1) {
+				setNodeColor(animationList, { getID(i) }, theme, { highlight });
+			}
+			else {
+				setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+			}
+			addAnimations(animationList, stepTime, 1, "i is increased by 1, now i = " + intToString(i) + " < size (size = " + intToString(size) + "), so the condition is true and the loop continues.");
+		}
+
+		if (arr[i].value == v) {
+			animationList.clear();
+			setNodeColor(animationList, { getID(i) }, theme, highlight2);
+			addAnimations(animationList, stepTime * (float)2, 2, "Found value " + intToString(v) + " at position " + intToString(i) + ". The functions stop here");
+
+			animationList.clear();
+			setNodeColor(animationList, { getID(i) }, theme, normal);
+			deleteVariables(animationList, { getID(i) }, { "i = " + intToString(i) });
+			addAnimations(animationList, stepTime, 0, "Re-format for visualization.");
+
+			animateAllFrame();
+			return;
+		}
+		else {
+			animationList.clear();
+			setNodeColor(animationList, { getID(i) }, theme, highlight2);
+			addAnimations(animationList, stepTime, 2, "a[" + intToString(i) + "] does not equal to " + intToString(v) + ". So the condition is false and the functions continues.");
+		}
+		
+		pre = i;
+		firstTime = true;
+	}
+	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 4, "We finished traversing the array and could not find " + intToString(v) + ", the funtion stops here.");
+	animateAllFrame();
 }
 
 void StaticArray::updateVal(int i, int v) {
