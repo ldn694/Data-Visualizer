@@ -102,6 +102,7 @@ StaticArray::StaticArray(double radius, double outlineSize, double lineThickness
 		WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 3, widthBox * 2, heightBox * 3, font(fontType::Consolas),
 		WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 4 - outlineBox * 2, widthBox * 2, heightBox, font(fontType::Consolas),
 		0, HEIGHT_RES - heightBox * 4, widthBox * 2, heightBox, font(fontType::Arial)) {
+	size = capa = 0;
 }
 
 int StaticArray::getSize() {
@@ -318,6 +319,7 @@ void StaticArray::insertBack(int v) {
 	setNodeColor(animationList, { getID(size - 1) }, theme, highlight);
 	setNodeValue(animationList, { getID(size - 1) }, {v});
 	addAnimations(animationList, stepTime, 1, "a[" + intToString(size - 1) + "] is assigned to " + intToString(v) + ".");
+	arr[size - 1].value = v;
 
 	animationList.clear();
 	setNodeColor(animationList, { getID(size - 1) }, theme, normal);
@@ -426,6 +428,94 @@ void StaticArray::insertMiddle(int index, int v) {
 	animateAllFrame();
 }
 
+void StaticArray::deleteFront() {
+	resetAnimation();
+	if (size == 0) {
+		std::vector <Animation> animationList;
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 1, "The array is currently empty (size = 0), no operation is performed.");
+		animateAllFrame();
+		return;
+	}
+	std::vector <Animation> animationList;
+
+	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 1, "The array is currently not empty (size > 0), proceed to next step.");
+
+	int i = 0, pre = -1;
+	bool firstTime = false;
+	while (true) {
+		if (firstTime) {
+			i++;
+		}
+		if (i >= size - 1) {
+			if (!firstTime) {
+				animationList.clear();
+				doNothing(animationList);
+				addAnimations(animationList, stepTime, 2, "i = " + intToString(i) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+			else {
+				animationList.clear();
+				addVariables(animationList, { getID(i) }, { "i = " + intToString(i) });
+				deleteVariables(animationList, { getID(i - 1) }, { "i = " + intToString(i - 1) });
+				if (pre == -1) {
+					setNodeColor(animationList, { getID(i) }, theme, { highlight });
+				}
+				else {
+					setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+				}
+				addAnimations(animationList, stepTime, 2, "i is increased by 1, now i = " + intToString(i) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+		}
+		if (!firstTime) {
+			animationList.clear();
+			addVariables(animationList, { getID(i) }, { "i = " + intToString(i) });
+			if (pre == -1) {
+				setNodeColor(animationList, { getID(i) }, theme, { highlight });
+			}
+			else {
+				setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+			}
+			addAnimations(animationList, stepTime, 2, "We assign i = " + intToString(i) + ", as i < size - 1 (size - 1 = " + intToString(size - 1) + "), the condition is true and the loop continues.");
+		}
+		else {
+			animationList.clear();
+			deleteVariables(animationList, { getID(i - 1) }, { "i = " + intToString(i - 1) });
+			addVariables(animationList, { getID(i) }, { "i = " + intToString(i) });
+			if (pre == -1) {
+				setNodeColor(animationList, { getID(i) }, theme, { highlight });
+			}
+			else {
+				setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+			}
+			addAnimations(animationList, stepTime, 2, "i is increased by 1, now i = " + intToString(i) + " > size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is true and the loop continues.");
+		}
+
+		animationList.clear();
+		setNodeColor(animationList, { getID(i + 1) }, theme, highlight2);
+		setNodeValue(animationList, { getID(i) }, { getValue(i + 1) });
+		addAnimations(animationList, stepTime, 3, "a[" + intToString(i) + "] is assigned to " + intToString(getValue(i + 1)) + "(= a[" + intToString(i + 1) + "]).");
+		arr[i].value = arr[i + 1].value;
+		pre = i;
+		firstTime = true;
+	}
+
+	animationList.clear();
+	deleteVariables(animationList, { getID(size - 1) }, { "i = " + intToString(i) });
+	setNodeColor(animationList, { getID(size - 1) }, theme, faded);
+	size--;
+	addAnimations(animationList, stepTime, 5, "size is decreased by 1, now size is " + intToString(size) + ".");
+
+	animationList.clear();
+	setNodeValue(animationList, { getID(size) }, { 0 });
+	addAnimations(animationList, stepTime, 6, "a[" + intToString(size) + "] is assigned to 0 (deleted element).");
+
+	animateAllFrame();
+}
+
 void StaticArray::deleteBack() {
 	resetAnimation();
 	if (size == 0) {
@@ -449,6 +539,93 @@ void StaticArray::deleteBack() {
 	animationList.clear();
 	setNodeValue(animationList, { getID(size) }, {0});
 	addAnimations(animationList, stepTime, 3, "a[" + intToString(size) + "] is now assigned to 0 (deleted element).");
+	arr[size].value = 0;
+
+	animateAllFrame();
+}
+
+void StaticArray::deleteMiddle(int index) {
+	std::cout << "HI!\n";
+	if (size < 2) {
+		setError(true, "There is no position in the middle!");
+		return;
+	}
+	if (index < 1 || index > size - 1) {
+		setError(true, "i must be in [1, " + intToString(size - 1) + "]!");
+		return;
+	}
+	resetAnimation();
+	std::vector <Animation> animationList;
+
+	int k = index, pre = -1;
+	bool firstTime = false;
+	while (true) {
+		if (firstTime) {
+			k++;
+		}
+		if (k >= size - 1) {
+			if (!firstTime) {
+				animationList.clear();
+				doNothing(animationList);
+				addAnimations(animationList, stepTime, 1, "k = " + intToString(k) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+			else {
+				animationList.clear();
+				addVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
+				deleteVariables(animationList, { getID(k - 1) }, { "k = " + intToString(k - 1) });
+				if (pre == -1) {
+					setNodeColor(animationList, { getID(k) }, theme, { highlight });
+				}
+				else {
+					setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
+				}
+				addAnimations(animationList, stepTime, 1, "k is increased by 1, now k = " + intToString(k) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+		}
+		if (!firstTime) {
+			animationList.clear();
+			addVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
+			if (pre == -1) {
+				setNodeColor(animationList, { getID(k) }, theme, { highlight });
+			}
+			else {
+				setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
+			}
+			addAnimations(animationList, stepTime, 1, "We assign k = " + intToString(k) + ", as k < size - 1 (size - 1 = " + intToString(size - 1) + "), the condition is true and the loop continues.");
+		}
+		else {
+			animationList.clear();
+			deleteVariables(animationList, { getID(k - 1) }, { "k = " + intToString(k - 1) });
+			addVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
+			if (pre == -1) {
+				setNodeColor(animationList, { getID(k) }, theme, { highlight });
+			}
+			else {
+				setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
+			}
+			addAnimations(animationList, stepTime, 1, "k is increased by 1, now k = " + intToString(k) + " > size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is true and the loop continues.");
+		}
+
+		animationList.clear();
+		setNodeColor(animationList, { getID(k + 1) }, theme, highlight2);
+		setNodeValue(animationList, { getID(k) }, { getValue(k + 1) });
+		addAnimations(animationList, stepTime, 2, "a[" + intToString(k) + "] is assigned to " + intToString(getValue(k + 1)) + "(= a[" + intToString(k + 1) + "]).");
+		arr[k].value = arr[k + 1].value;
+		pre = k;
+		firstTime = true;
+	}
+
+	animationList.clear();
+	deleteVariables(animationList, { getID(size - 1) }, { "k = " + intToString(k) });
+	setNodeColor(animationList, { getID(size - 1) }, theme, faded);
+	size--;
+	addAnimations(animationList, stepTime, 4, "size is decreased by 1, now size is " + intToString(size) + ".");
+
+	animationList.clear();
+	setNodeValue(animationList, { getID(size) }, { 0 });
+	addAnimations(animationList, stepTime, 5, "a[" + intToString(size) + "] is assigned to 0 (deleted element).");
 
 	animateAllFrame();
 }

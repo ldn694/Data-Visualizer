@@ -185,8 +185,17 @@ bool StaticArrayStage::processEvents() {
 			}
 		}
 		if (operationName[curOperation] == "Delete") {
+			if (modeString == "i = 0 (head)") {
+				ds.deleteFront();
+			}
 			if (modeString == "i = n - 1 (tail)") {
 				ds.deleteBack();
+			}
+			if (modeString == "i = 1..n - 2 (middle)") {
+				int pos = valueTypingBox[0].getProperInt();
+				if (pos != -1) {
+					ds.deleteMiddle(pos);
+				}
 			}
 		}
 		if (operationName[curOperation] == "Search") {

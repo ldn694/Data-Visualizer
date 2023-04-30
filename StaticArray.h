@@ -28,7 +28,7 @@ public:
 	void insertMiddle(int i, int v);
 	void deleteFront();
 	void deleteBack();
-	void deleteMiddle();
+	void deleteMiddle(int i);
 	void search(int v);
 	void updateVal(int i, int v);
 	void access(int i);
