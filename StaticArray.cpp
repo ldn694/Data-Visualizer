@@ -89,12 +89,14 @@ StaticArray::StaticArray(double radius, double outlineSize, double lineThickness
 			{	//Update
 				{
 					"",
+					"if (i < 0 || i >= size) return;",
 					"arr[i] = v;"
 				}
 			}, 
 			{	//Access
 				{
 					"",
+					"if (i < 0 || i >= size) return;",
 					"return arr[i];"
 				}
 			}
@@ -710,7 +712,30 @@ void StaticArray::search(int v) {
 }
 
 void StaticArray::updateVal(int i, int v) {
+	resetAnimation();
+	std::vector <Animation> animationList;
+	if (i < 0 || i >= size) {
+		animationList.clear();
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 1, "There is no position " + intToString(i) + " in the array (out of range). The function stops here.");
+		animateAllFrame();
+		return;
+	}
+	animationList.clear();
+	doNothing(animationList);
+	addAnimations(animationList, stepTime, 1, "The requested position i = " + intToString(i) + " is valid.The function continues.");
 
+	animationList.clear();
+	setNodeColor(animationList, { getID(i) }, theme, highlight);
+	setNodeValue(animationList, { getID(i) }, { v });
+	addAnimations(animationList, stepTime, 2, "a[" + intToString(i) + "] is now assigned to " + intToString(v) + ".");
+	arr[i].value = v;
+
+	animationList.clear();
+	setNodeColor(animationList, { getID(i) }, theme, normal);
+	addAnimations(animationList, stepTime, 0, "Re-format for visualization.");
+
+	animateAllFrame();
 }
 
 void StaticArray::access(int i) {
