@@ -356,6 +356,13 @@ void DataStructure::deleteNode(std::vector <Animation>& animationList, int pos) 
 	animationList.push_back(tmp);
 }
 
+void DataStructure::deleteNode(std::vector <Animation>& animationList, std::vector <int> pos) {
+	Animation tmp;
+	tmp.type = DeleteNode;
+	tmp.element.nodes = pos;
+	animationList.push_back(tmp);
+}
+
 void DataStructure::translateNode(std::vector <Animation>& animationList, std::vector <int> nodes, double dx, double dy) {
 	Animation tmp;
 	tmp.type = TranslateNode;

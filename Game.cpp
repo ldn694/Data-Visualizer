@@ -8,6 +8,7 @@
 #include "StackStage.h"
 #include "QueueStage.h"
 #include "StaticArrayStage.h"
+#include "DynamicArrayStage.h"
 #include "Template.h"
 
 Game::Game(sf::ContextSettings settings)
@@ -19,6 +20,7 @@ Game::Game(sf::ContextSettings settings)
 	dllBox = Box(1000, 500, 200, 300, { CommandBoxNormal }, "DLL", font(fontType::Prototype), 50, NO_BORDER, 5);
 	cllBox = Box(1300, 500, 200, 300, { CommandBoxNormal }, "CLL", font(fontType::Prototype), 50, NO_BORDER, 5);
 	staticArrayBox = Box(400, 100, 200, 300, { CommandBoxNormal }, "Static\nArray", font(fontType::Prototype), 50, NO_BORDER, 5);
+	dynamicArrayBox = Box(1000, 100, 200, 300, { CommandBoxNormal }, "Dynamic\n  Array", font(fontType::Prototype), 50, NO_BORDER, 5);
 	theme = LightTheme;
 }
 
@@ -50,6 +52,11 @@ void Game::runCLL() {
 void Game::runStaticArray() {
 	StaticArrayStage staticArray(window, 20 * sqrt(2), 3, 4, theme, SinglyDirected, 4);
 	staticArray.run();
+}
+
+void Game::runDynamicArray() {
+	DynamicArrayStage dynamicArray(window, 20 * sqrt(2), 3, 4, theme, SinglyDirected, 4);
+	dynamicArray.run();
 }
 
 void Game::processEvents(sf::Clock& mClock)
@@ -87,6 +94,10 @@ void Game::processEvents(sf::Clock& mClock)
 				runStaticArray();
 				mClock.restart();
 			}
+			if (dynamicArrayBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
+				runDynamicArray();
+				mClock.restart();
+			}
 			break;
 		}
 	}
@@ -106,6 +117,7 @@ void Game::render()
 	dllBox.draw(window, theme);
 	cllBox.draw(window, theme);
 	staticArrayBox.draw(window, theme);
+	dynamicArrayBox.draw(window, theme);
 	window.display();
 }
 

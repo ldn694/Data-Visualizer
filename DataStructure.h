@@ -70,6 +70,7 @@ struct DataStructure {
 	void setNodeColor(std::vector <Animation>& animationList, std::vector <int> nodes, ColorTheme theme, std::vector <ColorNodeType> type);
 	void addNode(std::vector <Animation>& animationList, int pos, int value, double x, double y);
 	void deleteNode(std::vector <Animation>& animationList, int pos);
+	void deleteNode(std::vector <Animation>& animationList, std::vector <int> pos);
 	void translateNode(std::vector <Animation>& animationList, std::vector <int> nodes, double dx, double dy);
 	void moveNode(std::vector <Animation>& animationList, int pos, double x, double y);
 	void mergeMoveNode(std::vector <Animation>& animationList);

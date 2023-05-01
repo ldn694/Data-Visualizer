@@ -379,7 +379,12 @@ void Node::draw(sf::RenderWindow& window) {
 		sf::Text textValue;
 		textValue.setFont(*font);
 		textValue.setString(intToString(value));
-		textValue.setCharacterSize(radius);
+		if (numPointCircle == 4) {
+			textValue.setCharacterSize(radius * 0.8);
+		}
+		else {
+			textValue.setCharacterSize(radius);
+		}
 		textValue.setFillColor(valueColor);
 		sf::FloatRect textRect = textValue.getLocalBounds();
 		textValue.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
@@ -397,7 +402,12 @@ void Node::draw(sf::RenderWindow& window) {
 		}
 		textVariable.setFont(*font);
 		textVariable.setString(variableString);
-		textVariable.setCharacterSize(radius);
+		if (numPointCircle == 4) {
+			textVariable.setCharacterSize(radius * 0.8);
+		}
+		else {
+			textVariable.setCharacterSize(radius);
+		}
 		textVariable.setFillColor(variableColor);
 		textVariable.setStyle(sf::Text::Bold);
 		textRect = textVariable.getLocalBounds();

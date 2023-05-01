@@ -20,8 +20,9 @@ private:
 	void runDLL();
 	void runCLL();
 	void runStaticArray();
+	void runDynamicArray();
 private:
 	ColorTheme theme;
 	sf::RenderWindow window;
-	Box stackBox, queueBox, sllBox, dllBox, cllBox, staticArrayBox;
+	Box stackBox, queueBox, sllBox, dllBox, cllBox, staticArrayBox, dynamicArrayBox;
 };
