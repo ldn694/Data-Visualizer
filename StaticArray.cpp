@@ -698,7 +698,7 @@ void StaticArray::search(int v) {
 		}
 		else {
 			animationList.clear();
-			setNodeColor(animationList, { getID(i) }, theme, highlight2);
+			doNothing(animationList);
 			addAnimations(animationList, stepTime, 2, "a[" + intToString(i) + "] does not equal to " + intToString(v) + ". So the condition is false and the functions continues.");
 		}
 		

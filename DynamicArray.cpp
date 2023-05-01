@@ -318,13 +318,13 @@ void DynamicArray::insertFront(int v) {
 			if (!firstTime) {
 				animationList.clear();
 				doNothing(animationList);
-				addAnimations(animationList, stepTime, 2, "i = " + intToString(i) + " >= size (size = " + intToString(size) + "), so the condition is false, therefore the loop breaks here.");
+				addAnimations(animationList, stepTime, 2, "We assign i = " + intToString(i) + " >= size (size = " + intToString(size) + "), so the condition is false, therefore the loop breaks here.");
 				break;
 			}
 			else {
 				animationList.clear();
 				deleteVariables(animationList, { getID(size - 1 + i - 1) }, { "i = " + intToString(i - 1) });
-				setNodeColor(animationList, { pre, another_pre }, theme, {normal, normal});
+				setNodeColor(animationList, { getID(pre), getID(another_pre) }, theme, {normal, normal});
 				addAnimations(animationList, stepTime, 2, "i is increased by 1, now i = " + intToString(i) + " >= size (size = " + intToString(size) + "), so the condition is false, therefore the loop breaks here.");
 				break;
 			}
@@ -339,7 +339,7 @@ void DynamicArray::insertFront(int v) {
 			animationList.clear();
 			deleteVariables(animationList, { getID(size - 1 + i - 1) }, { "i = " + intToString(i - 1) });
 			addVariables(animationList, { getID(size - 1 + i) }, { "i = " + intToString(i) });
-			setNodeColor(animationList, { getID(size - 1 + i), pre, another_pre }, theme, { highlight, normal, normal});
+			setNodeColor(animationList, { getID(size - 1 + i), getID(pre), getID(another_pre) }, theme, { highlight, normal, normal});
 			addAnimations(animationList, stepTime, 2, "i is increased by 1, now i = " + intToString(i) + " < size (size = " + intToString(size) + "), so the condition is true and the loop continues.");
 		}
 
@@ -382,24 +382,76 @@ void DynamicArray::insertBack(int v) {
 	if (v < 0) {
 		v = rand() % (maxValueData + 1);
 	}
-
 	resetAnimation();
+
 	std::vector <Animation> animationList;
-
 	animationList.clear();
-	setNodeColor(animationList, { getID(size) }, theme, normal);
-	addAnimations(animationList, stepTime, 2, "size is increased by 1, now size is " + intToString(size + 1));
 	size++;
+	createTempArray(animationList, size);
+	addAnimations(animationList, stepTime, 1, "size is increased by 1, now size is " + intToString(size) + ", created new Dynamic Array b of length " + intToString(size) + ".");
+
+	int i = 0, pre = -1, another_pre = -1;
+	bool firstTime = false;
+	while (true) {
+		if (firstTime) {
+			i++;
+		}
+		if (i >= size - 1) {
+			if (!firstTime) {
+				animationList.clear();
+				doNothing(animationList);
+				addAnimations(animationList, stepTime, 2, "We assign i = " + intToString(i) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+			else {
+				animationList.clear();
+				deleteVariables(animationList, { getID(size - 1 + i - 1) }, { "i = " + intToString(i - 1) });
+				setNodeColor(animationList, { getID(pre), getID(another_pre) }, theme, { normal, normal });
+				addAnimations(animationList, stepTime, 2, "i is increased by 1, now i = " + intToString(i) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+		}
+		if (!firstTime) {
+			animationList.clear();
+			addVariables(animationList, { getID(size - 1 + i) }, { "i = " + intToString(i) });
+			setNodeColor(animationList, { getID(size - 1 + i) }, theme, { highlight });
+			addAnimations(animationList, stepTime, 2, "We assign i = " + intToString(i) + ", as i < size - 1 (size - 1 = " + intToString(size - 1) + "), the condition is true and the loop continues.");
+		}
+		else {
+			animationList.clear();
+			deleteVariables(animationList, { getID(size - 1 + i - 1) }, { "i = " + intToString(i - 1) });
+			addVariables(animationList, { getID(size - 1 + i) }, { "i = " + intToString(i) });
+			setNodeColor(animationList, { getID(size - 1 + i), getID(pre), getID(another_pre) }, theme, { highlight, normal, normal });
+			addAnimations(animationList, stepTime, 2, "i is increased by 1, now i = " + intToString(i) + " < size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is true and the loop continues.");
+		}
+
+		animationList.clear();
+		setNodeColor(animationList, { getID(i) }, theme, highlight2);
+		setNodeValue(animationList, { getID(size - 1 + i) }, { getValue(i) });
+		addAnimations(animationList, stepTime, 3, "b[" + intToString(i) + "] is assigned to " + intToString(getValue(i)) + "(= a[" + intToString(i) + "]).");
+		arr[size - 1 + i].value = arr[i].value;
+		pre = size - 1 + i;
+		another_pre = i;
+		firstTime = true;
+	}
 
 	animationList.clear();
-	setNodeColor(animationList, { getID(size - 1) }, theme, highlight);
-	setNodeValue(animationList, { getID(size - 1) }, { v });
-	addAnimations(animationList, stepTime, 1, "a[" + intToString(size - 1) + "] is assigned to " + intToString(v) + ".");
-	arr[size - 1].value = v;
+	setNodeColor(animationList, { getID(size - 1 + size - 1) }, theme, highlight);
+	setNodeValue(animationList, { getID(size - 1 + size - 1) }, { v });
+	addAnimations(animationList, stepTime, 5, "b[" + intToString(size - 1) + "] is now assigned to " + intToString(v) + " (inserted element).");
+	arr[size - 1 + size - 1].value = v;
 
 	animationList.clear();
-	setNodeColor(animationList, { getID(size - 1) }, theme, normal);
-	addAnimations(animationList, stepTime, 0, "Re-format for visualization.");
+	setNodeColor(animationList, { getID(size - 1 + size - 1) }, theme, normal);
+	deleteNode(animationList, getListID(0, size - 2));
+	addAnimations(animationList, stepTime, 6, "Delete a.");
+	for (int i = 0; i < size - 1; i++) {
+		arr.erase(0);
+	}
+
+	animationList.clear();
+	translateNode(animationList, getListID(0, size - 1), 0, HEIGHT_RES / 3 - HEIGHT_RES / 2);
+	addAnimations(animationList, stepTime, 7, "a now points to b.");
 
 	animateAllFrame();
 }
@@ -423,83 +475,117 @@ void DynamicArray::insertMiddle(int index, int v) {
 	resetAnimation();
 
 	std::vector <Animation> animationList;
-
 	animationList.clear();
-	setNodeColor(animationList, { getID(size) }, theme, normal);
-	addAnimations(animationList, stepTime, 1, "size is increased by 1, now size is " + intToString(size + 1));
 	size++;
+	createTempArray(animationList, size);
+	addAnimations(animationList, stepTime, 1, "size is increased by 1, now size is " + intToString(size) + ", created new Dynamic Array b of length " + intToString(size) + ".");
 
-	int k = size - 1, pre = -1;
+	int k = 0, pre = -1, another_pre = -1;
 	bool firstTime = false;
 	while (true) {
 		if (firstTime) {
-			k--;
+			k++;
 		}
-		if (k <= index) {
+		if (k >= index) {
 			if (!firstTime) {
 				animationList.clear();
 				doNothing(animationList);
-				addAnimations(animationList, stepTime, 2, "k = " + intToString(k) + " <= i (i = " + intToString(index) + "), therefore the loop breaks here.");
+				addAnimations(animationList, stepTime, 2, "We assign k = " + intToString(k) + " >= i (i = " + intToString(index) + "), so the condition is false, therefore the loop breaks here.");
 				break;
 			}
 			else {
 				animationList.clear();
-				addVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
-				deleteVariables(animationList, { getID(k + 1) }, { "k = " + intToString(k + 1) });
-				if (pre == -1) {
-					setNodeColor(animationList, { getID(k) }, theme, { highlight });
-				}
-				else {
-					setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
-				}
-				addAnimations(animationList, stepTime, 2, "k is decreased by 1, now k = " + intToString(k) + " <= i (i = " + intToString(index) + "), so the condition is false, therefore the loop breaks here.");
+				deleteVariables(animationList, { getID(size - 1 + k - 1) }, { "k = " + intToString(k - 1) });
+				setNodeColor(animationList, { getID(pre), getID(another_pre) }, theme, { normal, normal });
+				addAnimations(animationList, stepTime, 2, "k is increased by 1, now k = " + intToString(k) + " >= i (i = " + intToString(index) + "), so the condition is false, therefore the loop breaks here.");
 				break;
 			}
 		}
 		if (!firstTime) {
 			animationList.clear();
-			addVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
-			if (pre == -1) {
-				setNodeColor(animationList, { getID(k) }, theme, { highlight });
-			}
-			else {
-				setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
-			}
-			addAnimations(animationList, stepTime, 2, "We assign k = " + intToString(k) + ", as k > i (i = " + intToString(index) + "), the condition is true and the loop continues.");
+			addVariables(animationList, { getID(size - 1 + k) }, { "k = " + intToString(k) });
+			setNodeColor(animationList, { getID(size - 1 + k) }, theme, { highlight });
+			addAnimations(animationList, stepTime, 2, "We assign k = " + intToString(k) + ", as k < i (i = " + intToString(index) + "), the condition is true and the loop continues.");
 		}
 		else {
 			animationList.clear();
-			deleteVariables(animationList, { getID(k + 1) }, { "k = " + intToString(k + 1) });
-			addVariables(animationList, { getID(k) }, { "k = " + intToString(k) });
-			if (pre == -1) {
-				setNodeColor(animationList, { getID(k) }, theme, { highlight });
-			}
-			else {
-				setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
-			}
-			addAnimations(animationList, stepTime, 2, "k is decreased by 1, now k = " + intToString(k) + " > i (i = " + intToString(index) + "), so the condition is true and the loop continues.");
+			deleteVariables(animationList, { getID(size - 1 + k - 1) }, { "k = " + intToString(k - 1) });
+			addVariables(animationList, { getID(size - 1 + k) }, { "k = " + intToString(k) });
+			setNodeColor(animationList, { getID(size - 1 + k), getID(pre), getID(another_pre) }, theme, { highlight, normal, normal });
+			addAnimations(animationList, stepTime, 2, "k is increased by 1, now k = " + intToString(k) + " < i (i = " + intToString(index) + "), so the condition is true and the loop continues.");
 		}
 
 		animationList.clear();
-		setNodeColor(animationList, { getID(k - 1) }, theme, highlight2);
-		setNodeValue(animationList, { getID(k) }, { getValue(k - 1) });
-		addAnimations(animationList, stepTime, 3, "a[" + intToString(k) + "] is assigned to " + intToString(getValue(k - 1)) + "(= a[" + intToString(k - 1) + "]).");
-		arr[k].value = arr[k - 1].value;
-		pre = k;
+		setNodeColor(animationList, { getID(k) }, theme, highlight2);
+		setNodeValue(animationList, { getID(size - 1 + k) }, { getValue(k) });
+		addAnimations(animationList, stepTime, 3, "b[" + intToString(k) + "] is assigned to " + intToString(getValue(k)) + "(= a[" + intToString(k) + "]).");
+		arr[size - 1 + k].value = arr[k].value;
+		pre = size - 1 + k;
+		another_pre = k;
 		firstTime = true;
 	}
 
 	animationList.clear();
-	deleteVariables(animationList, { getID(index) }, { "k = " + intToString(index) });
-	setNodeColor(animationList, { getID(index) }, theme, highlight);
-	setNodeValue(animationList, { getID(index) }, { v });
-	addAnimations(animationList, stepTime, 5, "a[" + intToString(k) + "] is now assigned to " + intToString(v) + " (inserted element).");
-	arr[0].value = v;
+	setNodeColor(animationList, { getID(size - 1 + index) }, theme, highlight);
+	setNodeValue(animationList, { getID(size - 1 + index) }, { v });
+	addAnimations(animationList, stepTime, 5, "b[" + intToString(index) + "] is now assigned to " + intToString(v) + " (inserted element).");
+	arr[size - 1 + index].value = v;
+
+	k = index + 1; pre = -1; another_pre = -1; firstTime = false;
+	while (true) {
+		if (firstTime) {
+			k++;
+		}
+		if (k >= size) {
+			if (!firstTime) {
+				animationList.clear();
+				setNodeColor(animationList, { getID(size - 1 + index) }, theme, normal);
+				addAnimations(animationList, stepTime, 6, "We assign k = " + intToString(k) + " >= size (size = " + intToString(size) + "), so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+			else {
+				animationList.clear();
+				deleteVariables(animationList, { getID(size - 1 + k - 1) }, { "k = " + intToString(k - 1) });
+				setNodeColor(animationList, { getID(pre), getID(another_pre) }, theme, { normal, normal });
+				addAnimations(animationList, stepTime, 6, "k is increased by 1, now k = " + intToString(k) + " >= size (size = " + intToString(size) + "), so the condition is false, therefore the loop breaks here.");
+				break;
+			}
+		}
+		if (!firstTime) {
+			animationList.clear();
+			setNodeColor(animationList, { getID(size - 1 + index) }, theme, normal);
+			addVariables(animationList, { getID(size - 1 + k) }, { "k = " + intToString(k) });
+			setNodeColor(animationList, { getID(size - 1 + k) }, theme, { highlight });
+			addAnimations(animationList, stepTime, 6, "We assign k = " + intToString(k) + ", as k < size (size = " + intToString(size) + "), the condition is true and the loop continues.");
+		}
+		else {
+			animationList.clear();
+			deleteVariables(animationList, { getID(size - 1 + k - 1) }, { "k = " + intToString(k - 1) });
+			addVariables(animationList, { getID(size - 1 + k) }, { "k = " + intToString(k) });
+			setNodeColor(animationList, { getID(size - 1 + k), getID(pre), getID(another_pre) }, theme, { highlight, normal, normal });
+			addAnimations(animationList, stepTime, 6, "k is increased by 1, now k = " + intToString(k) + " < size (size = " + intToString(size) + "), so the condition is true and the loop continues.");
+		}
+
+		animationList.clear();
+		setNodeColor(animationList, { getID(k - 1) }, theme, highlight2);
+		setNodeValue(animationList, { getID(size - 1 + k) }, { getValue(k - 1) });
+		addAnimations(animationList, stepTime, 7, "b[" + intToString(k) + "] is assigned to " + intToString(getValue(k - 1)) + "(= a[" + intToString(k - 1) + "]).");
+		arr[size - 1 + k].value = arr[k - 1].value;
+		pre = size - 1 + k;
+		another_pre = k - 1;
+		firstTime = true;
+	}
 
 	animationList.clear();
-	setNodeColor(animationList, { getID(index) }, theme, normal);
-	addAnimations(animationList, stepTime, 0, "Re-format for visualization.");
+	deleteNode(animationList, getListID(0, size - 2));
+	addAnimations(animationList, stepTime, 9, "Delete a.");
+	for (int i = 0; i < size - 1; i++) {
+		arr.erase(0);
+	}
 
+	animationList.clear();
+	translateNode(animationList, getListID(0, size - 1), 0, HEIGHT_RES / 3 - HEIGHT_RES / 2);
+	addAnimations(animationList, stepTime, 10, "a now points to b.");
 
 	animateAllFrame();
 }
@@ -529,7 +615,7 @@ void DynamicArray::deleteFront() {
 			if (!firstTime) {
 				animationList.clear();
 				doNothing(animationList);
-				addAnimations(animationList, stepTime, 2, "i = " + intToString(i) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
+				addAnimations(animationList, stepTime, 2, "We assign i = " + intToString(i) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
 				break;
 			}
 			else {
@@ -540,7 +626,7 @@ void DynamicArray::deleteFront() {
 					setNodeColor(animationList, { getID(i) }, theme, { highlight });
 				}
 				else {
-					setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+					setNodeColor(animationList, { getID(i), getID(pre) }, theme, { highlight, normal });
 				}
 				addAnimations(animationList, stepTime, 2, "i is increased by 1, now i = " + intToString(i) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
 				break;
@@ -553,7 +639,7 @@ void DynamicArray::deleteFront() {
 				setNodeColor(animationList, { getID(i) }, theme, { highlight });
 			}
 			else {
-				setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+				setNodeColor(animationList, { getID(i), getID(pre) }, theme, { highlight, normal });
 			}
 			addAnimations(animationList, stepTime, 2, "We assign i = " + intToString(i) + ", as i < size - 1 (size - 1 = " + intToString(size - 1) + "), the condition is true and the loop continues.");
 		}
@@ -565,7 +651,7 @@ void DynamicArray::deleteFront() {
 				setNodeColor(animationList, { getID(i) }, theme, { highlight });
 			}
 			else {
-				setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+				setNodeColor(animationList, { getID(i), getID(pre) }, theme, { highlight, normal });
 			}
 			addAnimations(animationList, stepTime, 2, "i is increased by 1, now i = " + intToString(i) + " < size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is true and the loop continues.");
 		}
@@ -643,7 +729,7 @@ void DynamicArray::deleteMiddle(int index) {
 			if (!firstTime) {
 				animationList.clear();
 				doNothing(animationList);
-				addAnimations(animationList, stepTime, 1, "k = " + intToString(k) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
+				addAnimations(animationList, stepTime, 1, "We assign k = " + intToString(k) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
 				break;
 			}
 			else {
@@ -654,7 +740,7 @@ void DynamicArray::deleteMiddle(int index) {
 					setNodeColor(animationList, { getID(k) }, theme, { highlight });
 				}
 				else {
-					setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
+					setNodeColor(animationList, { getID(k), getID(pre) }, theme, { highlight, normal });
 				}
 				addAnimations(animationList, stepTime, 1, "k is increased by 1, now k = " + intToString(k) + " >= size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is false, therefore the loop breaks here.");
 				break;
@@ -667,7 +753,7 @@ void DynamicArray::deleteMiddle(int index) {
 				setNodeColor(animationList, { getID(k) }, theme, { highlight });
 			}
 			else {
-				setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
+				setNodeColor(animationList, { getID(k), getID(pre) }, theme, { highlight, normal });
 			}
 			addAnimations(animationList, stepTime, 1, "We assign k = " + intToString(k) + ", as k < size - 1 (size - 1 = " + intToString(size - 1) + "), the condition is true and the loop continues.");
 		}
@@ -679,7 +765,7 @@ void DynamicArray::deleteMiddle(int index) {
 				setNodeColor(animationList, { getID(k) }, theme, { highlight });
 			}
 			else {
-				setNodeColor(animationList, { getID(k), pre }, theme, { highlight, normal });
+				setNodeColor(animationList, { getID(k), getID(pre) }, theme, { highlight, normal });
 			}
 			addAnimations(animationList, stepTime, 1, "k is increased by 1, now k = " + intToString(k) + " > size - 1 (size - 1 = " + intToString(size - 1) + "), so the condition is true and the loop continues.");
 		}
@@ -720,14 +806,14 @@ void DynamicArray::search(int v) {
 			if (!firstTime) {
 				animationList.clear();
 				doNothing(animationList);
-				addAnimations(animationList, stepTime, 1, "i = " + intToString(i) + " >= size (size = " + intToString(size) + "), so the condition is false, therefore the loop breaks here.");
+				addAnimations(animationList, stepTime, 1, "We assign i = " + intToString(i) + " >= size (size = " + intToString(size) + "), so the condition is false, therefore the loop breaks here.");
 				break;
 			}
 			else {
 				animationList.clear();
 				deleteVariables(animationList, { getID(i - 1) }, { "i = " + intToString(i - 1) });
 				if (pre != -1) {
-					setNodeColor(animationList, { pre }, theme, { normal });
+					setNodeColor(animationList, { getID(pre) }, theme, { normal });
 				}
 				addAnimations(animationList, stepTime, 1, "i is increased by 1, now i = " + intToString(i) + " >= size (size = " + intToString(size) + "), so the condition is false, therefore the loop breaks here.");
 				break;
@@ -740,7 +826,7 @@ void DynamicArray::search(int v) {
 				setNodeColor(animationList, { getID(i) }, theme, { highlight });
 			}
 			else {
-				setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+				setNodeColor(animationList, { getID(i), getID(pre) }, theme, { highlight, normal });
 			}
 			addAnimations(animationList, stepTime, 1, "We assign i = " + intToString(i) + ", as i < size (size = " + intToString(size) + "), the condition is true and the loop continues.");
 		}
@@ -752,7 +838,7 @@ void DynamicArray::search(int v) {
 				setNodeColor(animationList, { getID(i) }, theme, { highlight });
 			}
 			else {
-				setNodeColor(animationList, { getID(i), pre }, theme, { highlight, normal });
+				setNodeColor(animationList, { getID(i), getID(pre) }, theme, { highlight, normal });
 			}
 			addAnimations(animationList, stepTime, 1, "i is increased by 1, now i = " + intToString(i) + " < size (size = " + intToString(size) + "), so the condition is true and the loop continues.");
 		}
@@ -772,7 +858,7 @@ void DynamicArray::search(int v) {
 		}
 		else {
 			animationList.clear();
-			setNodeColor(animationList, { getID(i) }, theme, highlight2);
+			doNothing(animationList);
 			addAnimations(animationList, stepTime, 2, "a[" + intToString(i) + "] does not equal to " + intToString(v) + ". So the condition is false and the functions continues.");
 		}
 
