@@ -72,6 +72,17 @@ Queue::Queue(double radius, double outlineSize, double lineThickness,
 					"if (head == NULL) return;",
 					"return tail->value;"
 				}
+			},
+			{
+				{
+					"",
+					"Vertex* cur = head;",
+					"while (cur != NULL) {",
+					"	Vertex* nxt = cur->next",
+					"	delete cur;",
+					"	cur = cur->next;",
+					"}"
+				}
 			}
 		},
 		WIDTH_RES - widthBox * 2, HEIGHT_RES - heightBox * 3, widthBox * 2, heightBox * 3, font(fontType::Consolas),
@@ -178,7 +189,7 @@ void Queue::createRandom(int n, std::vector <int> values, bool sorted) {
 	animateAllFrame();
 }
 
-void Queue::enqueue(int value) {
+void Queue::add(int value) {
 	if (getSize() + 1 > maxSizeData) {
 		setError(true, "Maximmum size of " + intToString(maxSizeData) + " reached!");
 		return;
@@ -246,7 +257,7 @@ void Queue::enqueue(int value) {
 	animateAllFrame();
 }
 
-void Queue::dequeue() {
+void Queue::remove() {
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (getSize() == 0) {
@@ -363,6 +374,72 @@ void Queue::peekBack() {
 	animationList.clear();
 	setNodeColor(animationList, { getHeadID() }, theme, normal);
 	addAnimations(animationList, stepTime, 0, "Re-layout for visualization");
+
+	animateAllFrame();
+}
+
+void Queue::clear() {
+	resetAnimation();
+	std::vector <Animation> animationList;
+
+	if (getSize() == 0) {
+		animationList.clear();
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 1, "Create new pointer cur pointing to head, which is currently NULL (empty stack).");
+
+		animationList.clear();
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 2, "cur is now NULL, so the condition is false and no operation is performed.");
+		animateAllFrame();
+		return;
+	}
+
+	animationList.clear();
+	addVariables(animationList, { getHeadID() }, { "cur" });
+	setNodeColor(animationList, { getHeadID() }, theme, highlight);
+	addAnimations(animationList, stepTime, 1, "Create new pointer cur pointing to head.");
+
+	while (true) {
+		if (getSize() == 0) {
+			animationList.clear();
+			doNothing(animationList);
+			addAnimations(animationList, stepTime, 2, "cur is now NULL (empty stack), so the condition is false and the loops stops here.");
+			break;
+		}
+		animationList.clear();
+		deleteVariables(animationList, { getHeadID() }, { "nxt" });
+		addAnimations(animationList, stepTime, 2, "cur is not NULL, so the condition is true and the loops continues.");
+
+		if (getSize() == 1) {
+			animationList.clear();
+			doNothing(animationList);
+			addAnimations(animationList, stepTime, 3, "Create new pointer nxt pointing to cur->next (which is NULL).");
+		}
+		else {
+			animationList.clear();
+			setEdgeColor(animationList, { {getHeadID(), queue[1].id} }, theme, highlight2);
+			setNodeColor(animationList, { {queue[1].id} }, theme, highlight2);
+			addVariables(animationList, { queue[1].id }, { "nxt" });
+			addAnimations(animationList, stepTime, 3, "Create new pointer nxt pointing to cur->next.");
+		}
+
+		animationList.clear();
+		deleteNode(animationList, { getHeadID() });
+		addAnimations(animationList, stepTime, 4, "Delete cur.");
+		queue.erase(0);
+
+		if (getSize() == 0) {
+			animationList.clear();
+			doNothing(animationList);
+			addAnimations(animationList, stepTime, 5, "cur now points to nxt (which is NULL).");
+		}
+		else {
+			animationList.clear();
+			setNodeColor(animationList, { getHeadID() }, theme, highlight);
+			addVariables(animationList, { getHeadID() }, { "cur" });
+			addAnimations(animationList, stepTime, 5, "cur now points to nxt.");
+		}
+	}
 
 	animateAllFrame();
 }

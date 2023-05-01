@@ -19,8 +19,9 @@ public:
 	int getTailID();
 	std::vector <int> getListID(int l = 0, int r = 0);
 	void createRandom(int n = -1, std::vector <int> values = {}, bool sorted = false);
-	void enqueue(int value);
-	void dequeue();
+	void add(int value);
+	void remove();
 	void peekFront();
 	void peekBack();
+	void clear();
 };

@@ -4,12 +4,13 @@
 
 QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSize, double lineThickness,
 	ColorTheme theme, EdgeType edgeType, int numPointCircle) :
-	Stage(window, { "Create", "Enqueue", "Dequeue", "Peek" },
+	Stage(window, { "Create", "Add", "Remove", "Peek", "Clear"},
 		{
 			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom", "Upload File"},
 			{"Random", "v = ? "},
 			{""},
-			{"Front", "Back"}
+			{"Front", "Back"},
+			{""}
 		},
 		{
 			{
@@ -29,6 +30,9 @@ QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSi
 			},
 			{
 				{},
+				{}
+			},
+			{
 				{}
 			}
 		},
@@ -51,6 +55,9 @@ QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSi
 			{
 				{},
 				{}
+			},
+			{
+				{}
 			}
 		},
 		{
@@ -71,6 +78,9 @@ QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSi
 			},
 			{
 				{},
+				{}
+			},
+			{
 				{}
 			}
 		},
@@ -137,8 +147,8 @@ bool QueueStage::processEvents() {
 				}
 			}
 		}
-		if (operationName[curOperation] == "Dequeue") {
-			ds.dequeue();
+		if (operationName[curOperation] == "Remove") {
+			ds.remove();
 		}
 		if (operationName[curOperation] == "Peek") {
 			if (modeString == "Front") {
@@ -148,16 +158,19 @@ bool QueueStage::processEvents() {
 				ds.peekBack();
 			}
 		}
-		if (operationName[curOperation] == "Enqueue") {
+		if (operationName[curOperation] == "Add") {
 			if (modeString == "v =") {
 				int val = valueTypingBox[0].getProperInt();
 				if (val != -1) {
-					ds.enqueue(val);
+					ds.add(val);
 				}
 			}
 			else {
-				ds.enqueue(-1);
+				ds.add(-1);
 			}
+		}
+		if (operationName[curOperation] == "Clear") {
+			ds.clear();
 		}
 		operating = false;
 	}
