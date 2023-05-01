@@ -4,10 +4,11 @@
 
 StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSize, double lineThickness,
 	ColorTheme theme, EdgeType edgeType, int numPointCircle) :
-	Stage(window, { "Create", "Push", "Pop", "Peek" }, 
+	Stage(window, { "Create", "Push", "Pop", "Peek", "Clear"},
 		{ 
 			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom", "Upload File"},
 			{"Random", "v = ? "},
+			{""},
 			{""},
 			{""}
 		},
@@ -23,6 +24,9 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 			{
 				{},
 				{"v ="}
+			},
+			{
+				{}
 			},
 			{
 				{}
@@ -49,6 +53,9 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 			},
 			{
 				{}
+			},
+			{
+				{}
 			}
 		},
 		{
@@ -63,6 +70,9 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 			{
 				{},
 				{{0, maxValueData}}
+			},
+			{
+				{}
 			},
 			{
 				{}
@@ -150,6 +160,9 @@ bool StackStage::processEvents() {
 			else {
 				ds.push(-1);
 			}
+		}
+		if (operationName[curOperation] == "Clear") {
+			ds.clear();
 		}
 		operating = false;
 	}
