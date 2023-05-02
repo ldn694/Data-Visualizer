@@ -530,6 +530,7 @@ void DataStructure::setCurOperation(int val) {
 }
 
 void DataStructure::setCurMode(int val) {
+	resetAnimation();
 	errorTime = sf::seconds(0.f);
 	curMode = val;
 	curStep = 0;
