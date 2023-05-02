@@ -902,6 +902,7 @@ void DoublyLinkedList::updateMiddle(int i, int v) {
 				setNodeColor(animationList, { getID(i) }, theme, highlight2);
 				setNodeValue(animationList, { getID(i) }, { v });
 				addAnimations(animationList, stepTime, 4, "cur->value is now updated to " + intToString(v) + ".");
+				dll[i].value = v;
 
 				animationList.clear();
 				setNodeColor(animationList, getListID(0, i), theme, normal);
