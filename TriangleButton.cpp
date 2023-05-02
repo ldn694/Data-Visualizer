@@ -19,11 +19,11 @@ bool TriangleButton::isInside(double hereX, double hereY) {
 	double x1 = shape.getPoint(0).x, y1 = shape.getPoint(0).y;
 	double x2 = shape.getPoint(1).x, y2 = shape.getPoint(1).y;
 	double x3 = shape.getPoint(2).x, y3 = shape.getPoint(2).y;
-	RotatePoint(x1, y1, radius + outlineSize, radius + outlineSize, rotation);
-	RotatePoint(x2, y2, radius + outlineSize, radius + outlineSize, rotation);
-	RotatePoint(x3, y3, radius + outlineSize, radius + outlineSize, rotation);
-	double dx = x - (radius + outlineSize);
-	double dy = y - (radius + outlineSize);
+	RotatePoint(x1, y1, radius, radius, rotation);
+	RotatePoint(x2, y2, radius, radius, rotation);
+	RotatePoint(x3, y3, radius, radius, rotation);
+	double dx = x - radius;
+	double dy = y - radius;
 	x1 += dx; y1 += dy;
 	x2 += dx; y2 += dy;
 	x3 += dx; y3 += dy;
