@@ -7,7 +7,7 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 	Stage(window, { "Create", "Push", "Pop", "Peek", "Clear"},
 		{ 
 			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom", "Upload File"},
-			{"Random", "v = ? "},
+			{"Random", "v = ?"},
 			{""},
 			{""},
 			{""}
@@ -151,9 +151,10 @@ bool StackStage::processEvents() {
 			ds.peek();
 		}
 		if (operationName[curOperation] == "Push") {
-			if (modeString == "v =") {
+			if (modeString == "v = ?") {
 				int val = valueTypingBox[0].getProperInt();
 				if (val != -1) {
+					std::cout << val << "\n";
 					ds.push(val);
 				}
 			}

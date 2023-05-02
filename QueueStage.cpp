@@ -7,7 +7,7 @@ QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSi
 	Stage(window, { "Create", "Add", "Remove", "Peek", "Clear"},
 		{
 			{"Empty", "Random", "Random Sorted", "Fixed Size", "Custom", "Upload File"},
-			{"Random", "v = ? "},
+			{"Random", "v = ?"},
 			{""},
 			{"Front", "Back"},
 			{""}
@@ -159,7 +159,7 @@ bool QueueStage::processEvents() {
 			}
 		}
 		if (operationName[curOperation] == "Add") {
-			if (modeString == "v =") {
+			if (modeString == "v = ?") {
 				int val = valueTypingBox[0].getProperInt();
 				if (val != -1) {
 					ds.add(val);
