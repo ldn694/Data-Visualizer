@@ -9,7 +9,19 @@ Box::Box(double _x1, double _y1, double _width, double _height,
 	colorModes(_colorModes),
 	isBorder(_isBorder), outlineSize(_outlineSize)
 {
+	double tmpOutlineSize = (isBorder ? outlineSize : 0.f);
+	outerRect = sf::RectangleShape(sf::Vector2f(width - tmpOutlineSize, height - tmpOutlineSize));
+	outerRect.setPosition(x1 + tmpOutlineSize / 2.0f, y1 + tmpOutlineSize / 2.0f);
 	curMode = 0;
+
+	Text.setFont(*font);
+	Text.setString(text);
+	Text.setCharacterSize(textSize);
+	Text.setStyle(sf::Text::Bold);
+	sf::FloatRect textRect = Text.getLocalBounds();
+	Text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+	Text.setPosition(x1 + width / 2.0f, y1 + height / 2.0f);
+
 	isDrawable = true;
 }
 
@@ -19,10 +31,12 @@ double Box::getOutlineSize() {
 
 void Box::setTextSize(double newSize) {
 	textSize = newSize;
+	Text.setCharacterSize(newSize);
 }
 
 void Box::setText(std::string newText) {
 	text = newText;
+	Text.setString(newText);
 }
 
 sf::Font* Box::getFont() {
@@ -39,6 +53,11 @@ int Box::getHeight() {
 void Box::setPosition(double _x1, double _y1) {
 	x1 = _x1;
 	y1 = _y1;
+	double tmpOutlineSize = (isBorder ? outlineSize : 0.f);
+	outerRect.setPosition(x1 + tmpOutlineSize / 2.0f, y1 + tmpOutlineSize / 2.0f);
+	sf::FloatRect textRect = Text.getLocalBounds();
+	Text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+	Text.setPosition(x1 + width / 2.0f, y1 + height / 2.0f);
 }
 
 void Box::setDrawable(bool drawable) {
@@ -49,23 +68,11 @@ void Box::draw(sf::RenderWindow& window, ColorTheme theme) {
 	if (!isDrawable) {
 		return;
 	}
-	double tmpOutlineSize = (isBorder ? outlineSize : 0.f);
-	sf::RectangleShape outerRect(sf::Vector2f(width - tmpOutlineSize, height - tmpOutlineSize));
-	outerRect.setPosition(x1 + tmpOutlineSize / 2.0f, y1 + tmpOutlineSize / 2.0f);
-	ColorBox cur = colorBox[colorModes[curMode]][theme];
-	outerRect.setFillColor(cur.fillColor);
-	outerRect.setOutlineColor(cur.outlineColor);
+	outerRect.setFillColor(colorBox[colorModes[curMode]][theme].fillColor);
+	outerRect.setOutlineColor(colorBox[colorModes[curMode]][theme].outlineColor);
 	outerRect.setOutlineThickness(outlineSize);
 	window.draw(outerRect);
-	sf::Text Text;
-	Text.setFont(*font);
-	Text.setString(text);
-	Text.setCharacterSize(textSize);
-	Text.setFillColor(cur.textColor);
-	Text.setStyle(sf::Text::Bold);
-	sf::FloatRect textRect = Text.getLocalBounds();
-	Text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
-	Text.setPosition(x1 + width / 2.0f, y1 + height / 2.0f);
+	Text.setFillColor(colorBox[colorModes[curMode]][theme].textColor);
 	window.draw(Text);
 }
 

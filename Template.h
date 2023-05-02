@@ -235,11 +235,11 @@ void MovePointUpward(double& x1, double& y1, double x2, double y2, double h);
 
 void MovePointParallel(double& x, double& y, double x1, double y1, double x2, double y2); //move point A(x, y) to a A'(x', y') so that AA' is parallel to BC in which B is (x1, y1) and C is (x2, y2) and |AA'|=|BC|
 
-const std::string fontName[] = { "Fonts/arial.ttf", "Fonts/Consolas.ttf", "Fonts/CartoGothic.otf", "Fonts/DejaVuSans.ttf", "Fonts/Genshin.ttf", "Fonts/CSGO.ttf", "Fonts/Prototype.ttf"};
-const std::string fontAlternativeName[] = { "..\\..\\Fonts\\Arial.ttf", "..\\..\\Fonts\\Consolas.ttf", "..\\..\\Fonts\\CartoGothic.otf", "..\\..\\Fonts\\DejaVuSans.ttf", "..\\..\\Fonts\\Genshin.ttf", "..\\..\\Fonts\\CSGO.ttf", "..\\..\\Fonts\\Prototype.ttf" };
-const int numFont = 7;
+const std::string fontName[] = { "Fonts/arial.ttf", "Fonts/Consolas.ttf", "Fonts/Prototype.ttf"};
+const std::string fontAlternativeName[] = { "..\\..\\Fonts\\Arial.ttf", "..\\..\\Fonts\\Consolas.ttf", "..\\..\\Fonts\\Prototype.ttf" };
+const int numFont = 3;
 enum fontType {
-	Arial, Consolas, CartoGothic, DejaVu, Genshin, CSGO, Prototype
+	Arial, Consolas, Prototype
 };
 extern std::vector <sf::Font> listFont;
 sf::Font* font(fontType id);

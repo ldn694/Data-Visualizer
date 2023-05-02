@@ -13,6 +13,8 @@ private:
 	std::vector <ColorBoxType> colorModes;
 	bool isBorder, isDrawable;
 	int curMode;
+	sf::RectangleShape outerRect;
+	sf::Text Text;
 public:
 	Box(double x1 = 0.f, double y1 = 0.f, double width = 0.f, double height = 0.f,
 		std::vector <ColorBoxType> colorModes = {},

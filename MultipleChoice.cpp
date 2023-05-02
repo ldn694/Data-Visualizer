@@ -3,7 +3,7 @@
 #include "MultipleChoice.h"
 #include "Box.h"
 MultipleChoice::MultipleChoice(double _x, double _y, double _width, double _height, std::vector <std::string> _choices, sf::Font* _font, int _curChoice) :
-	x(_x), y(_y), width(_width), height(_height), choices(_choices), curChoice(_curChoice), font(_font)
+	x(_x), y(_y), width(_width), height(_height), choices(_choices), curChoice(_curChoice), font(_font), outerBox(Box(_x, _y, _width, _height, { MediaBox }))
 {
 	stepHeight = height / choices.size();
 	double l = 0.f, r = 1000.f;
@@ -52,7 +52,6 @@ int MultipleChoice::getChoice() {
 }
 
 void MultipleChoice::draw(sf::RenderWindow& window, ColorTheme theme) {
-	Box outerBox(x, y, width, height, { MediaBox });
 	outerBox.draw(window, theme);
 	for (int i = 0; i < choices.size(); i++) {
 		Box lineBox(x, y + stepHeight * i, width, stepHeight, {MediaBox});

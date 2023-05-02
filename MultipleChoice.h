@@ -2,6 +2,7 @@
 
 #include "Template.h"
 #include "MyShape.h"
+#include "Box.h"
 
 struct MultipleChoice {
 private:
@@ -10,6 +11,7 @@ private:
 	std::vector <sf::CircleShape> circles;
 	sf::Font* font;
 	int curChoice;
+	Box outerBox;
 public:
 	MultipleChoice(double x = 0.f, double y = 0.f, double width = 0.f, double height = 0.f, std::vector <std::string> choices = {}, sf::Font* font = nullptr, int curChoice = 0);
 	int getChoice();

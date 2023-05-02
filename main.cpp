@@ -16,7 +16,7 @@ int main()
 		}
 	}
 	sf::ContextSettings settings;
-	settings.antialiasingLevel = 16;
+	settings.antialiasingLevel = 4;
 	Game game(settings);
 	game.run();
 	/*sf::Texture texture;
