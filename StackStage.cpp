@@ -183,18 +183,11 @@ void StackStage::render() {
 }
 
 void StackStage::run() {
-	sf::Clock mClock;
-	sf::Time timePool = sf::Time::Zero;
-	while (window.isOpen())
-	{
-		timePool += mClock.restart();
-		while (timePool >= timePerFrame) {
-			if (processEvents()) {
-				return;
-			}
-			timePool -= timePerFrame;
-			update(timePerFrame);
-			render();
+	while (true) {
+		if (processEvents()) {
+			return;
 		}
+		update(timePerFrame);
+		render();
 	}
 }

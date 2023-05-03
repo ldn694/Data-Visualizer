@@ -10,7 +10,7 @@ public:
 	Game(sf::ContextSettings settings);
 	void run();
 private:
-	void processEvents(sf::Clock& mClock);
+	void processEvents();
 	void update(sf::Time deltaT);
 	void render();
 	void handlePlayerInput();

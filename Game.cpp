@@ -60,7 +60,7 @@ void Game::runDynamicArray() {
 	dynamicArray.run();
 }
 
-void Game::processEvents(sf::Clock& mClock)
+void Game::processEvents()
 {
 	sf::Event event;
 	while (window.pollEvent(event))
@@ -73,31 +73,24 @@ void Game::processEvents(sf::Clock& mClock)
 		case sf::Event::MouseButtonPressed:
 			if (stackBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
 				runStack();
-				mClock.restart();
 			}
 			if (queueBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
 				runQueue();
-				mClock.restart();
 			}
 			if (sllBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
 				runSLL();
-				mClock.restart();
 			}
 			if (dllBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
 				runDLL();
-				mClock.restart();
 			}
 			if (cllBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
 				runCLL();
-				mClock.restart();
 			}
 			if (staticArrayBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
 				runStaticArray();
-				mClock.restart();
 			}
 			if (dynamicArrayBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
 				runDynamicArray();
-				mClock.restart();
 			}
 			break;
 		}
@@ -122,18 +115,27 @@ void Game::render()
 	window.display();
 }
 
+std::string ExePath() {
+	TCHAR buffer[MAX_PATH] = { 0 };
+	GetModuleFileName(NULL, buffer, MAX_PATH);
+	std::wstring::size_type pos = std::wstring(buffer).find_last_of(L"\\/");
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	std::string fileName = converter.to_bytes(std::wstring(buffer).substr(0, pos));
+	return fileName;
+}
+
 void Game::run()
 {
-	sf::Clock mClock;
-	sf::Time timePool = sf::Time::Zero;
+	//std::string defaultAddress = ExePath();
+	//std::cout << defaultAddress << "\n";
 	while (window.isOpen())
 	{
-		timePool += mClock.restart();
-		while (timePool >= timePerFrame) {
-			processEvents(mClock);
-			timePool -= timePerFrame;
-			update(timePerFrame);
-			render();
-		}
+		/*std::cout << ("cd " + defaultAddress).c_str() << "\n";
+		system(("cd " + defaultAddress).c_str());
+		system("cd");
+		std::cout << "\n";*/
+		processEvents();
+		update(timePerFrame);
+		render();
 	}
 }

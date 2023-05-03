@@ -23,7 +23,7 @@ void ReadFromFile::handleMousePressed(double mouseX, double mouseY) {
     ofn.lpstrFilter = L"Text Files (*.txt)\0*.txt\0";
     ofn.lpstrFile = szFileName;
     ofn.nMaxFile = MAX_PATH;
-    ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+    ofn.Flags = OFN_EXPLORER | OFN_FILEMUSTEXIST | OFN_HIDEREADONLY | OFN_NOCHANGEDIR;
     ofn.lpstrDefExt = L"txt";
     if (GetOpenFileName(&ofn) == TRUE) {
         std::wstring filePath(ofn.lpstrFile);
@@ -43,6 +43,14 @@ void ReadFromFile::handleMousePressed(double mouseX, double mouseY) {
     else {
         // User cancelled the dialog
     }
+    ofn.lpstrFile = NULL;
+    ofn.lpstrFileTitle = NULL;
+    ofn.lpstrFilter = NULL;
+    ofn.lpstrCustomFilter = NULL;
+    ofn.nMaxFile = 0;
+    ofn.nMaxCustFilter = 0;
+    ofn.lpstrTitle = NULL;
+    ofn.lpstrInitialDir = NULL;
 }
 
 void ReadFromFile::draw(sf::RenderWindow& window, ColorTheme theme) {
