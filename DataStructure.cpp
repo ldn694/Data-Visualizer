@@ -910,6 +910,7 @@ void DataStructure::draw(sf::RenderWindow& window) {
 		tmpRect.setPosition(xAnnouncement, yAnnouncement);
 		tmpRect.setFillColor(announcementFillColor[theme]);
 		window.draw(tmpRect);
+		//std::cout << "HERE! " << (int)announcementTextColor[theme].r << " " << (int)announcementTextColor[theme].g << " " << (int)announcementTextColor[theme].b << "\n";
 		sf::Text announcementText = CompressWords(listFrame[curFrame].announcement, 
 			xAnnouncement, yAnnouncement, widthAnnouncement, heightAnnouncement, 
 			announcementFont, sizeLetterAnnouncement, announcementTextColor[theme]);

@@ -3,7 +3,7 @@
 BackButton::BackButton(double x, double y, double width, double height) :
 	arrow("Images/back.png", x + width * 0.5, y + height * 0.5, width * 0.649929, height * 0.7, backButtonNormalOutlineColor),
 	square("Images/curved_square.png", x + width * 0.5, y + height * 0.5, width, height, backButtonNormalOutlineColor),
-	innerSquare("Images/curved_square.png", x + width * 0.5, y + height * 0.5, width * 0.85, height * 0.85, backButtonNormalFillColor)
+	innerSquare("Images/curved_square.png", x + width * 0.5, y + height * 0.5, width * 0.9, height * 0.9, backButtonNormalFillColor)
 {
 
 }

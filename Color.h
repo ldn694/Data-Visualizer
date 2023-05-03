@@ -10,36 +10,23 @@ const sf::Color WhiteColor(255, 255, 255);
 const sf::Color OrangeColor(255, 128, 0);
 const sf::Color YellowColor(255, 255, 0);
 const sf::Color LightGreenColor(82, 188, 105);
-const sf::Color DarkGreenColor(48, 104, 68);
-const sf::Color LightGreyBlueColor(176, 194, 219);
-const sf::Color DarkGreyBlueColor(71, 108, 158);
-const sf::Color PurpleColor(112, 41, 99);
-const sf::Color LightCyanColor(203, 228, 222);
 const sf::Color DarkCyanColor(14, 131, 136);
 const sf::Color LightYellowColor(255, 217, 61);
 const sf::Color DarkBrownColor(79, 32, 13);
 const sf::Color MilkColor(246, 241, 233);
 const sf::Color EerieBlackColor(30, 30, 30);
-const sf::Color NavyColor(0, 72, 124);
-const sf::Color LightNavyColor(62, 102, 128);
-const sf::Color DarkBlueColor(28, 130, 173);
 const sf::Color SlightlyGreenColor(76, 175, 80);
 const sf::Color DarkOrangeColor(255, 155, 66);
 const sf::Color DarkPinkColor(240, 128, 128);
 const sf::Color PastelBlueColor(191, 215, 234);
-const sf::Color DarkYellowGreenColor(142, 168, 4);
 const sf::Color BuffColor(216, 164, 127);
 const sf::Color BrightPinkColor(238, 75, 106);
-const sf::Color GrapeColor(101, 0, 164);
-const sf::Color TaupeGrayColor(147, 145, 150);
-const sf::Color TiffanyBlueColor(162, 232, 221);
-const sf::Color EmeraldColor(50, 222, 138);
-const sf::Color CaribbeanCurrentColor(0, 108, 103);
-const sf::Color NyanzaColor(207, 255, 229);
 const sf::Color WhiteSmokeColor(245, 245, 245);
 const sf::Color AntiFlashWhiteColor(235, 235, 235);
-const sf::Color PlatinumColor(200, 198, 194);
-const sf::Color DimGrayColor(80, 80, 80);
+const sf::Color VistaBlueColor(185, 224, 255);
+const sf::Color MediumSlateBlueColor(141, 114, 225);
+const sf::Color RoyalPurpleColor(108, 74, 182);
+const sf::Color UranianBlueColor(141, 158, 255);
 
 enum ColorTheme {
 	LightTheme, DarkTheme
@@ -75,10 +62,10 @@ const ColorNode colorNode[numColorTheme][numColorNodeType] =
 		ColorNode(MilkColor, SilverColor, SilverColor, RedColor)
 	} ,
 	{
-		ColorNode(BlackColor, WhiteColor, WhiteColor, OrangeColor),
-		ColorNode(YellowColor, YellowColor, BlackColor, OrangeColor),
-		ColorNode(BlackColor, YellowColor, YellowColor, OrangeColor),
-		ColorNode(GreenColor, GreenColor, BlackColor, OrangeColor),
+		ColorNode(EerieBlackColor, WhiteColor, WhiteColor, OrangeColor),
+		ColorNode(YellowColor, YellowColor, EerieBlackColor, OrangeColor),
+		ColorNode(EerieBlackColor, YellowColor, YellowColor, OrangeColor),
+		ColorNode(GreenColor, GreenColor, EerieBlackColor, OrangeColor),
 		ColorNode(BlueColor, BlueColor, MilkColor, OrangeColor),
 		ColorNode(MilkColor, SilverColor, SilverColor, OrangeColor)
 	}
@@ -99,19 +86,19 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 {
 	{ //CommandBoxNormal
 		ColorBox(DarkPinkColor, BlackColor, BlackColor),
-		ColorBox(GrapeColor, WhiteSmokeColor, WhiteSmokeColor),
+		ColorBox(RoyalPurpleColor, EerieBlackColor, WhiteSmokeColor),
 	},
 	{ //CommandBoxSelected
 		ColorBox(DarkOrangeColor, BlackColor, BlackColor),
-		ColorBox(CaribbeanCurrentColor, WhiteSmokeColor, WhiteSmokeColor),
+		ColorBox(VistaBlueColor, EerieBlackColor, EerieBlackColor),
 	},
 	{ //GoBoxNormal
 		ColorBox(SlightlyGreenColor, BlackColor, WhiteColor),
-		ColorBox(NyanzaColor, WhiteSmokeColor, BlackColor)
+		ColorBox(EerieBlackColor, EerieBlackColor, WhiteSmokeColor)
 	},
 	{ //TriangleButtonNormal
 		ColorBox(PastelBlueColor, BlackColor, BlackColor),
-		ColorBox(NyanzaColor, WhiteSmokeColor, WhiteSmokeColor)
+		ColorBox(WhiteSmokeColor, EerieBlackColor, WhiteSmokeColor)
 	},
 	{ //Typing_Box
 		ColorBox(BlackColor, WhiteColor, WhiteColor),
@@ -119,15 +106,15 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 	},
 	{ //MediaBox
 		ColorBox(DarkPinkColor, BlackColor, BlackColor),
-		ColorBox(GrapeColor, WhiteSmokeColor, WhiteColor)
+		ColorBox(RoyalPurpleColor, EerieBlackColor, WhiteColor)
 	},
 	{ //CodeOuterBox
 		ColorBox(BuffColor, BlackColor, BlackColor),
-		ColorBox(DarkBlueColor, WhiteSmokeColor, WhiteSmokeColor)
+		ColorBox(UranianBlueColor, EerieBlackColor, EerieBlackColor)
 	},
 	{ //WarningBox
 		ColorBox(LightYellowColor, RedColor, BlackColor),
-		ColorBox(EmeraldColor, RedColor, EerieBlackColor)
+		ColorBox(MediumSlateBlueColor, RedColor, EerieBlackColor)
 	},
 	{ //UploadBox
 		ColorBox(AntiFlashWhiteColor, BlackColor, BlackColor),
@@ -135,32 +122,32 @@ const ColorBox colorBox[numColorBoxType][numColorTheme] =
 	}
 };
 
-const sf::Color codeNormalViewColor[numColorTheme] = { BlackColor, WhiteSmokeColor };
+const sf::Color codeNormalViewColor[numColorTheme] = { BlackColor, EerieBlackColor };
 const sf::Color codeHightlightViewColor[numColorTheme] = { WhiteColor, EerieBlackColor };
 const sf::Color codeHighlightBackGroundColor[numColorTheme]{ BrightPinkColor, DarkCyanColor };
 
-const sf::Color scrubberZipColor[numColorTheme] = { RedColor, CaribbeanCurrentColor };
-const sf::Color scrubberPassedColor[numColorTheme] = { RedColor, EmeraldColor };
-const sf::Color scrubberRemainColor[numColorTheme] = { BlackColor, TaupeGrayColor };
+const sf::Color scrubberZipColor[numColorTheme] = { RedColor, UranianBlueColor };
+const sf::Color scrubberPassedColor[numColorTheme] = { RedColor, MediumSlateBlueColor };
+const sf::Color scrubberRemainColor[numColorTheme] = { BlackColor, EerieBlackColor };
 
-const sf::Color playButtonCircleColor[numColorTheme] = { DarkBrownColor, EmeraldColor };
+const sf::Color playButtonCircleColor[numColorTheme] = { DarkBrownColor, UranianBlueColor };
 const sf::Color playButtonTriangleColor[numColorTheme] = { DarkOrangeColor, EerieBlackColor };
 
 const sf::Color choicesColor[numColorTheme] = { BlackColor, WhiteSmokeColor };
 const sf::Color choicesOuterCircleColor[numColorTheme] = { DarkBrownColor,  EerieBlackColor };
-const sf::Color choicesInnerCircleColor[numColorTheme] = { OrangeColor, EmeraldColor };
+const sf::Color choicesInnerCircleColor[numColorTheme] = { OrangeColor, UranianBlueColor };
 
 const sf::Color warningColor[numColorTheme] = { RedColor, RedColor };
 
-const sf::Color backButtonNormalOutlineColor[numColorTheme] = { BlackColor, TaupeGrayColor };
-const sf::Color backButtonNormalFillColor[numColorTheme] = { DarkPinkColor, GrapeColor };
+const sf::Color backButtonNormalOutlineColor[numColorTheme] = { BlackColor, EerieBlackColor };
+const sf::Color backButtonNormalFillColor[numColorTheme] = { DarkPinkColor, RoyalPurpleColor };
 
-const sf::Color announcementFillColor[numColorTheme] = { DarkOrangeColor , CaribbeanCurrentColor };
-const sf::Color announcementTextColor[numColorTheme] = { BlackColor, WhiteColor };
+const sf::Color announcementFillColor[numColorTheme] = { DarkOrangeColor , VistaBlueColor };
+const sf::Color announcementTextColor[numColorTheme] = { BlackColor, EerieBlackColor };
 
-const sf::Color warningFillColor[numColorTheme] = { YellowColor , CaribbeanCurrentColor };
+const sf::Color warningFillColor[numColorTheme] = { YellowColor , MediumSlateBlueColor };
 const sf::Color warningTextColor[numColorTheme] = { BlackColor, WhiteColor };
 
 const sf::Color bulbColor[numColorTheme] = { MilkColor, MilkColor };
 
-const sf::Color errorTextColor[numColorTheme] = { RedColor, EmeraldColor };
+const sf::Color errorTextColor[numColorTheme] = { RedColor, UranianBlueColor };

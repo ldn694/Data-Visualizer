@@ -115,7 +115,7 @@ sf::Text CompressWords(std::string cur, double x, double y, double width, double
 	for (int i = 0; i < words.size(); i++) {
 		tmp = cur + " " + words[i];
 		tmpText.setString(tmp);
-		if (tmpText.getLocalBounds().width > width) {
+		if (tmpText.getLocalBounds().width > width * 0.9) {
 			resText = resText + cur + "\n";
 			cur = words[i];
 		}
@@ -131,5 +131,6 @@ sf::Text CompressWords(std::string cur, double x, double y, double width, double
 	tmpText.setOrigin(tmpText.getLocalBounds().left + tmpText.getLocalBounds().width / 2.0f, tmpText.getLocalBounds().top + tmpText.getLocalBounds().height / 2.0f);
 	tmpText.setPosition(x + width / 2.0f, y + height / 2.0f);
 	tmpText.setFillColor(color);
+	//std::cout << resText << " " << (int)tmpText.getFillColor().r << " " << (int)tmpText.getFillColor().g << " " << (int)tmpText.getFillColor().b << "\n";
 	return tmpText;
 }

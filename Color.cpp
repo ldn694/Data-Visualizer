@@ -5,3 +5,4 @@ ColorNode::ColorNode(sf::Color _fillColor, sf::Color _outlineColor, sf::Color _v
 
 ColorBox::ColorBox(sf::Color _fillColor, sf::Color _outlineColor, sf::Color _textColor) :
 	fillColor(_fillColor), outlineColor(_outlineColor), textColor(_textColor) {}
+

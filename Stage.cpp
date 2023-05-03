@@ -48,8 +48,8 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	}
 	curMode = 0;
 
-	prevModeButton = TriangleButton(widthBox / 5.0f, HEIGHT_RES - heightBox * 1.5f, 20, 5, -90.f);
-	nextModeButton = TriangleButton(2 * widthBox - widthBox / 5.0f, HEIGHT_RES - heightBox * 1.5f, 20, 5, 90.f);
+	prevModeButton = TriangleButton(widthBox / 5.0f, HEIGHT_RES - heightBox * 1.5f, 20, 3, -90.f);
+	nextModeButton = TriangleButton(2 * widthBox - widthBox / 5.0f, HEIGHT_RES - heightBox * 1.5f, 20, 3, 90.f);
 
 	numValue.resize(numOperation);
 	assert(valueName.size() == numOperation);
