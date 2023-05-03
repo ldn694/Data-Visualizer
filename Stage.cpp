@@ -8,7 +8,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	std::vector <std::vector <std::vector <std::pair <int, int> > > > _valueBound,
 	ColorTheme _theme, DataStructure* _ds) :
 	window(_window), operationName(_operationName), modeName(_modeName), valueName(_valueName), typingMode(_typingMode), valueBound(_valueBound), theme(_theme),
-	//ingameSettings(widthBox * 2, HEIGHT_RES - heightBox * 3, WIDTH_RES - widthBox * 4, heightBox * 3),
+	ingameSettings(widthBox * 2, HEIGHT_RES - heightBox * 3, WIDTH_RES - widthBox * 4, heightBox * 3),
 	backButton(0, 0, widthBox / 4, widthBox / 4),
 	readFromFile(widthBox / 2, HEIGHT_RES - heightBox * 3 / 4, widthBox, heightBox / 2,
 				0, HEIGHT_RES - heightBox * 4 - outlineBox * 2, widthBox * 2, heightBox, font(fontType::Prototype), maxSizeData, 0, maxValueData),
@@ -72,7 +72,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 }
 
 void Stage::setDS(DataStructure* newDS) {
-	//ingameSettings.setDS(newDS);
+	ingameSettings.setDS(newDS);
 	ds = newDS;
 }
 
@@ -164,10 +164,10 @@ bool Stage::handleMousePressed(double x, double y) {
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
 		valueTypingBox[i].clickOn(x, y);
 	}
-	//int themeCode = ingameSettings.handleMousePressed(x, y);
-	//if (themeCode != -1) {
-	//	setTheme(ColorTheme(themeCode));
-	//}
+	int themeCode = ingameSettings.handleMousePressed(x, y);
+	if (themeCode != -1) {
+		setTheme(ColorTheme(themeCode));
+	}
 	readFromFile.handleMousePressed(x, y);
 	return backButton.handleMousePressed(x, y);
 }
@@ -179,18 +179,18 @@ void Stage::handleKeyPressed(int key) {
 			valueTypingBox[i].readKey(key);
 		}
 	}
-	//ingameSettings.handleKeyPressed(key);
+	ingameSettings.handleKeyPressed(key);
 	if (key == int(sf::Keyboard::Enter)) {
 		operating = true;
 	}
 }
 
 void Stage::handleMouseMove(double x, double y) {
-	//ingameSettings.handleMouseMove(x, y);
+	ingameSettings.handleMouseMove(x, y);
 }
 
 void Stage::handleMouseReleased(double x, double y) {
-	//ingameSettings.handleMouseReleased(x, y);
+	ingameSettings.handleMouseReleased(x, y);
 }
 
 void Stage::draw() {
@@ -216,7 +216,7 @@ void Stage::draw() {
 	for (int i = 0; i < numOperation; i++) {
 		operationBox[i].draw(window, theme);
 	}
-	//ingameSettings.draw(window, theme);
+	ingameSettings.draw(window, theme);
 	backButton.draw(window, theme);
 }
 

@@ -40,7 +40,7 @@ protected:
 
 	std::vector <std::vector <int>> numValue;
 
-	//IngameSettings ingameSettings;
+	IngameSettings ingameSettings;
 	BackButton backButton;
 
 	ColorTheme theme;
