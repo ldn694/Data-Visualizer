@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Template.h"
+#include "Color.h"
 
 struct TriangleButton {
 	double x, y, radius, outlineSize, rotation;

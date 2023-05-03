@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Template.h"
+#include "Color.h"
 
 const bool WITH_BORDER = true;
 const bool NO_BORDER = false;

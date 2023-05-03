@@ -4,6 +4,7 @@
 #include "Template.h"
 #include "Graph.h"
 #include "Box.h"
+#include "Color.h"
 
 enum AnimationType {
 	AddNode, AddEdge, AddCircularEdge,

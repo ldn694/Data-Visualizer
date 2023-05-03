@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "Template.h"
+#include "Color.h"
 #include "StaticArray.h"
 
 StaticArray::StaticArray(double radius, double outlineSize, double lineThickness,

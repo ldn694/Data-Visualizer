@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include "Template.h"
+#include "Color.h"
 
 
 struct ReadFromFile {

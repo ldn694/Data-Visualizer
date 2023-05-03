@@ -3,7 +3,6 @@
 #include "cassert"
 #include <iostream>
 #include "Game.h"
-#include "StackStage.h"
 
 int main()
 {

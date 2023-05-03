@@ -144,6 +144,7 @@
     <ClCompile Include="CircularEdge.cpp" />
     <ClCompile Include="CircularLinkedList.cpp" />
     <ClCompile Include="CircularLinkedListStage.cpp" />
+    <ClCompile Include="Color.cpp" />
     <ClCompile Include="DoublyLinkedList.cpp" />
     <ClCompile Include="DoublyLinkedListStage.cpp" />
     <ClCompile Include="DynamicArray.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="CircularEdge.h" />
     <ClInclude Include="CircularLinkedList.h" />
     <ClInclude Include="CircularLinkedListStage.h" />
+    <ClInclude Include="Color.h" />
     <ClInclude Include="DoublyLinkedList.h" />
     <ClInclude Include="DoublyLinkedListStage.h" />
     <ClInclude Include="DynamicArray.h" />

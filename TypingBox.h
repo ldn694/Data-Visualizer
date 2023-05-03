@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Template.h"
+#include "Color.h"
 
 struct TypingBox {
 protected:

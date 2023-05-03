@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include "Template.h"
+#include "Color.h"
 
 struct MyShape {
 	sf::Texture texture;

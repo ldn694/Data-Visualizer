@@ -8,6 +8,7 @@
 #include <queue>
 #include <deque>
 #include "Template.h"
+#include "Color.h"
 
 struct Node {
 private:
