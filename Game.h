@@ -25,4 +25,5 @@ private:
 	ColorTheme theme;
 	sf::RenderWindow window;
 	Box stackBox, queueBox, sllBox, dllBox, cllBox, staticArrayBox, dynamicArrayBox;
+	sf::Text projName, description, author;
 };

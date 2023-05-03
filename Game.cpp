@@ -15,14 +15,32 @@ Game::Game(sf::ContextSettings settings)
 	: window(sf::VideoMode(WIDTH_RES, HEIGHT_RES), "Data Visualizer", sf::Style::Close, settings)
 {
 	window.setFramerateLimit(60);
-	stackBox = Box(100, 500, 200, 300, { CommandBoxNormal }, "Stack", font(fontType::Prototype), 50, NO_BORDER, 5);
-	queueBox = Box(400, 500, 200, 300, { CommandBoxNormal }, "Queue", font(fontType::Prototype), 50, NO_BORDER, 5);
-	sllBox = Box(700, 500, 200, 300, { CommandBoxNormal }, "SLL", font(fontType::Prototype), 50, NO_BORDER, 5);
-	dllBox = Box(1000, 500, 200, 300, { CommandBoxNormal }, "DLL", font(fontType::Prototype), 50, NO_BORDER, 5);
-	cllBox = Box(1300, 500, 200, 300, { CommandBoxNormal }, "CLL", font(fontType::Prototype), 50, NO_BORDER, 5);
-	staticArrayBox = Box(400, 100, 200, 300, { CommandBoxNormal }, "Static\nArray", font(fontType::Prototype), 50, NO_BORDER, 5);
-	dynamicArrayBox = Box(1000, 100, 200, 300, { CommandBoxNormal }, "Dynamic\n  Array", font(fontType::Prototype), 50, NO_BORDER, 5);
+	stackBox = Box(410, 700, 360, 120, { CommandBoxNormal }, "Stack", font(fontType::Prototype), 40, NO_BORDER, 5);
+	queueBox = Box(830, 700, 360, 120, { CommandBoxNormal }, "Queue", font(fontType::Prototype), 40, NO_BORDER, 5);
+	sllBox = Box(200, 550, 360, 120, { CommandBoxNormal }, "Singly Linked List", font(fontType::Prototype), 40, NO_BORDER, 5);
+	dllBox = Box(620, 550, 360, 120, { CommandBoxNormal }, "Doubly Linked List", font(fontType::Prototype), 40, NO_BORDER, 5);
+	cllBox = Box(1040, 550, 360, 120, { CommandBoxNormal }, "Circular Linked List", font(fontType::Prototype), 40, NO_BORDER, 5);
+	staticArrayBox = Box(410, 400, 360, 120, { CommandBoxNormal }, "Static Array", font(fontType::Prototype), 40, NO_BORDER, 5);
+	dynamicArrayBox = Box(830, 400, 360, 120, { CommandBoxNormal }, "Dynamic Array", font(fontType::Prototype), 40, NO_BORDER, 5);
 	theme = LightTheme;
+	projName.setFont(*font(fontType::Prototype));
+	projName.setCharacterSize(70);
+	projName.setString("DATA VISUALIZER");
+	projName.setStyle(sf::Text::Bold);
+	projName.setOrigin(projName.getLocalBounds().left + projName.getLocalBounds().width / 2, projName.getLocalBounds().top + projName.getLocalBounds().height / 2);
+	projName.setPosition(WIDTH_RES / 2, 105);
+	description.setFont(*font(fontType::Prototype));
+	description.setCharacterSize(30);
+	description.setString("CS162 Lab Project – Based on VisuAlgo");
+	description.setStyle(sf::Text::Italic);
+	description.setOrigin(description.getLocalBounds().left + description.getLocalBounds().width / 2, description.getLocalBounds().top + description.getLocalBounds().height / 2);
+	description.setPosition(WIDTH_RES / 2, 205);
+	author.setFont(*font(fontType::Prototype));
+	author.setCharacterSize(30);
+	author.setString("by Le Duc Nhuan - 22125070 - 22TT1");
+	author.setStyle(sf::Text::Italic);
+	author.setOrigin(author.getLocalBounds().left + author.getLocalBounds().width / 2, author.getLocalBounds().top + author.getLocalBounds().height / 2);
+	author.setPosition(WIDTH_RES / 2, 256);
 }
 
 void Game::runStack() {
@@ -105,6 +123,13 @@ void Game::update(sf::Time deltaT)
 void Game::render()
 {
 	window.clear(theme == LightTheme ? MilkColor : EerieBlackColor);
+	sf::Color textColor = theme == LightTheme ? BlackColor : MilkColor;
+	projName.setFillColor(textColor);
+	description.setFillColor(textColor);
+	author.setFillColor(textColor);
+	window.draw(projName);
+	window.draw(description);
+	window.draw(author);
 	stackBox.draw(window, theme); 
 	queueBox.draw(window, theme);
 	sllBox.draw(window, theme);
