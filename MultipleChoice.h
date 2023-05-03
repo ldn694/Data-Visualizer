@@ -9,6 +9,7 @@ private:
 	double x, y, width, height, stepHeight, letterSize;
 	std::vector <std::string> choices;
 	std::vector <sf::CircleShape> circles;
+	std::vector <Box> listBox;
 	sf::Font* font;
 	int curChoice;
 	Box outerBox;

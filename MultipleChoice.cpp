@@ -6,16 +6,16 @@ MultipleChoice::MultipleChoice(double _x, double _y, double _width, double _heig
 	x(_x), y(_y), width(_width), height(_height), choices(_choices), curChoice(_curChoice), font(_font), outerBox(Box(_x, _y, _width, _height, { MediaBox }))
 {
 	stepHeight = height / choices.size();
-	double l = 0.f, r = 1000.f;
+	double l = 0.f, r = 100.f;
 	for (int cnt = 0; cnt < 60; cnt++) {
 		double mid = (l + r) / 2;
 		double maxWidth = 0, maxHeight = 0;
+		sf::Text text;
+		text.setFont(*font);
+		text.setCharacterSize(mid);
 		for (int i = 0; i < choices.size(); i++)
 		{
-			sf::Text text;
-			text.setFont(*font);
 			text.setString(choices[i]);
-			text.setCharacterSize(mid);
 			maxWidth = (maxWidth > text.getLocalBounds().width ? maxWidth : text.getLocalBounds().width);
 			maxHeight = (maxHeight > text.getLocalBounds().height ? maxHeight : text.getLocalBounds().height);
 		}
@@ -33,6 +33,10 @@ MultipleChoice::MultipleChoice(double _x, double _y, double _width, double _heig
 		circles[i].setRadius(std::min(stepHeight * 0.35, width * 0.05));
 		circles[i].setOrigin(circles[i].getLocalBounds().width / 2, circles[i].getLocalBounds().height / 2);
 		circles[i].setPosition(x + width * 0.85, y + stepHeight * (i + 0.5));
+	}
+	listBox.resize(choices.size());
+	for (int i = 0; i < choices.size(); i++) {
+		listBox[i] = Box(x, y + stepHeight * i, width, stepHeight, { MediaBox });
 	}
 }
 
@@ -54,8 +58,7 @@ int MultipleChoice::getChoice() {
 void MultipleChoice::draw(sf::RenderWindow& window, ColorTheme theme) {
 	outerBox.draw(window, theme);
 	for (int i = 0; i < choices.size(); i++) {
-		Box lineBox(x, y + stepHeight * i, width, stepHeight, {MediaBox});
-		lineBox.draw(window, theme);
+		listBox[i].draw(window, theme);
 		sf::Text text;
 		text.setString(choices[i]);
 		text.setFont(*font);
