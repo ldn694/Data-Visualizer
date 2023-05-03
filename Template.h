@@ -213,6 +213,8 @@ const sf::Color announcementTextColor[numColorTheme] = { BlackColor, WhiteColor 
 const sf::Color warningFillColor[numColorTheme] = { YellowColor , CaribbeanCurrentColor };
 const sf::Color warningTextColor[numColorTheme] = { BlackColor, WhiteColor };
 
+const sf::Color bulbColor[numColorTheme] = { MilkColor, EerieBlackColor };
+
 const sf::Color errorTextColor[numColorTheme] = { RedColor, EmeraldColor };
 
 std::string intToString(int a);

@@ -11,8 +11,11 @@
 #include "DynamicArrayStage.h"
 #include "Template.h"
 
-Game::Game(sf::ContextSettings settings)
-	: window(sf::VideoMode(WIDTH_RES, HEIGHT_RES), "Data Visualizer", sf::Style::Close, settings)
+Game::Game(sf::ContextSettings settings): 
+	window(sf::VideoMode(WIDTH_RES, HEIGHT_RES), "Data Visualizer", sf::Style::Close, settings),
+	lightBulb("Images/full_bulb.png", WIDTH_RES - widthBox / 8, widthBox / 8, widthBox / 8 / 46 * 30, widthBox / 8, bulbColor),
+	darkBulb("Images/empty_bulb.png", WIDTH_RES - widthBox / 8, widthBox / 8, widthBox / 8 / 46 * 30, widthBox / 8, bulbColor),
+	themeBox("Images/curved_square.png", WIDTH_RES - widthBox / 8, widthBox / 8, widthBox / 4, widthBox / 4, backButtonNormalFillColor)
 {
 	window.setFramerateLimit(60);
 	stackBox = Box(410, 700, 360, 120, { CommandBoxNormal }, "Stack", font(fontType::Prototype), 40, NO_BORDER, 5);
@@ -110,6 +113,9 @@ void Game::processEvents()
 			if (dynamicArrayBox.isInside(event.mouseButton.x, event.mouseButton.y)) {
 				runDynamicArray();
 			}
+			if (themeBox.isMousePressed(event.mouseButton.x, event.mouseButton.y)) {
+				theme = ColorTheme((theme + 1) % numColorTheme);
+			}
 			break;
 		}
 	}
@@ -124,6 +130,13 @@ void Game::render()
 {
 	window.clear(theme == LightTheme ? MilkColor : EerieBlackColor);
 	sf::Color textColor = theme == LightTheme ? BlackColor : MilkColor;
+	themeBox.draw(window, theme);
+	if (theme == LightTheme) {
+		lightBulb.draw(window, theme);
+	}
+	else {
+		darkBulb.draw(window, theme);
+	}
 	projName.setFillColor(textColor);
 	description.setFillColor(textColor);
 	author.setFillColor(textColor);

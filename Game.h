@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include "Box.h"
+#include "MyShape.h"
 
 struct Game
 {
@@ -25,5 +26,6 @@ private:
 	ColorTheme theme;
 	sf::RenderWindow window;
 	Box stackBox, queueBox, sllBox, dllBox, cllBox, staticArrayBox, dynamicArrayBox;
+	MyShape lightBulb, darkBulb, themeBox;
 	sf::Text projName, description, author;
 };
