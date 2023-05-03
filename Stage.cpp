@@ -8,7 +8,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	std::vector <std::vector <std::vector <std::pair <int, int> > > > _valueBound,
 	ColorTheme _theme, DataStructure* _ds) :
 	window(_window), operationName(_operationName), modeName(_modeName), valueName(_valueName), typingMode(_typingMode), valueBound(_valueBound), theme(_theme),
-	ingameSettings(widthBox * 2, HEIGHT_RES - heightBox * 3, WIDTH_RES - widthBox * 4, heightBox * 3),
+	ingameSettings(widthBox * 2, HEIGHT_RES - heightBox * 3, WIDTH_RES - widthBox * 4, heightBox * 3, nullptr, _theme),
 	backButton(0, 0, widthBox / 4, widthBox / 4),
 	readFromFile(widthBox / 2, HEIGHT_RES - heightBox * 3 / 4, widthBox, heightBox / 2,
 				0, HEIGHT_RES - heightBox * 4 - outlineBox * 2, widthBox * 2, heightBox, font(fontType::Prototype), maxSizeData, 0, maxValueData),

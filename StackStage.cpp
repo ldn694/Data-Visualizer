@@ -87,18 +87,18 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 	setDS(&ds);
 }
 
-bool StackStage::processEvents() {
+std::pair<bool, ColorTheme> StackStage::processEvents() {
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
 		switch (event.type) {
 		case sf::Event::Closed:
 			window.close();
-			return true;
+			return { true, theme };
 			break;
 		case sf::Event::MouseButtonPressed:
 			if (handleMousePressed(event.mouseButton.x, event.mouseButton.y)) {
-				return true;
+				return { true, theme };
 			}
 			break;
 		case sf::Event::KeyPressed:
@@ -167,7 +167,7 @@ bool StackStage::processEvents() {
 		}
 		operating = false;
 	}
-	return false;
+	return { false, theme };
 }
 
 void StackStage::update(sf::Time deltaT) {
@@ -182,12 +182,13 @@ void StackStage::render() {
 	window.display();
 }
 
-void StackStage::run() {
+ColorTheme StackStage::run() {
 	while (window.isOpen())
 	{
 		while (true) {
-			if (processEvents()) {
-				return;
+			auto curStatus = processEvents();
+			if (curStatus.first) {
+				return curStatus.second;
 			}
 			update(timePerFrame);
 			render();

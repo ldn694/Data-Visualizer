@@ -102,18 +102,18 @@ DoublyLinkedListStage::DoublyLinkedListStage(sf::RenderWindow& window, double ra
 	setDS(&ds);
 }
 
-bool DoublyLinkedListStage::processEvents() {
+std::pair<bool, ColorTheme> DoublyLinkedListStage::processEvents() {
 	sf::Event event;
 	while (window.pollEvent(event))
 	{
 		switch (event.type) {
 		case sf::Event::Closed:
 			window.close();
-			return true;
+			return { true, theme };
 			break;
 		case sf::Event::MouseButtonPressed:
 			if (handleMousePressed(event.mouseButton.x, event.mouseButton.y)) {
-				return true;
+				return { true, theme };
 			}
 			break;
 		case sf::Event::KeyPressed:
@@ -223,7 +223,7 @@ bool DoublyLinkedListStage::processEvents() {
 		}
 		operating = false;
 	}
-	return false;
+	return { false, theme };
 }
 
 void DoublyLinkedListStage::update(sf::Time deltaT) {
@@ -238,12 +238,13 @@ void DoublyLinkedListStage::render() {
 	window.display();
 }
 
-void DoublyLinkedListStage::run() {
+ColorTheme DoublyLinkedListStage::run() {
 	while (window.isOpen())
 	{
 		while (true) {
-			if (processEvents()) {
-				return;
+			auto curStatus = processEvents();
+			if (curStatus.first) {
+				return curStatus.second;
 			}
 			update(timePerFrame);
 			render();

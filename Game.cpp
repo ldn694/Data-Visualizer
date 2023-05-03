@@ -27,37 +27,37 @@ Game::Game(sf::ContextSettings settings)
 
 void Game::runStack() {
 	StackStage stack(window, 20, 5, 4, theme, SinglyDirected, 30);
-	stack.run();
+	theme = stack.run();
 }
 
 void Game::runQueue() {
 	QueueStage queue(window, 20, 5, 4, theme, SinglyDirected, 30);
-	queue.run();
+	theme = queue.run();
 }
 
 void Game::runSLL() {
 	SinglyLinkedListStage sll(window, 20, 5, 4, theme, SinglyDirected, 30);
-	sll.run();
+	theme = sll.run();
 }
 
 void Game::runDLL() {
 	DoublyLinkedListStage dll(window, 20, 5, 4, theme, DoublyDirected, 30);
-	dll.run();
+	theme = dll.run();
 }
 
 void Game::runCLL() {
 	CircularLinkedListStage cll(window, 20, 5, 4, theme, SinglyDirected, 30);
-	cll.run();
+	theme = cll.run();
 }
 
 void Game::runStaticArray() {
 	StaticArrayStage staticArray(window, 20 * sqrt(2), 3, 4, theme, SinglyDirected, 4);
-	staticArray.run();
+	theme = staticArray.run();
 }
 
 void Game::runDynamicArray() {
 	DynamicArrayStage dynamicArray(window, 20 * sqrt(2), 3, 4, theme, SinglyDirected, 4);
-	dynamicArray.run();
+	theme = dynamicArray.run();
 }
 
 void Game::processEvents()
@@ -104,7 +104,7 @@ void Game::update(sf::Time deltaT)
 
 void Game::render()
 {
-	window.clear(WhiteColor);
+	window.clear(theme == LightTheme ? MilkColor : EerieBlackColor);
 	stackBox.draw(window, theme); 
 	queueBox.draw(window, theme);
 	sllBox.draw(window, theme);
@@ -115,25 +115,10 @@ void Game::render()
 	window.display();
 }
 
-std::string ExePath() {
-	TCHAR buffer[MAX_PATH] = { 0 };
-	GetModuleFileName(NULL, buffer, MAX_PATH);
-	std::wstring::size_type pos = std::wstring(buffer).find_last_of(L"\\/");
-	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
-	std::string fileName = converter.to_bytes(std::wstring(buffer).substr(0, pos));
-	return fileName;
-}
-
 void Game::run()
 {
-	//std::string defaultAddress = ExePath();
-	//std::cout << defaultAddress << "\n";
 	while (window.isOpen())
 	{
-		/*std::cout << ("cd " + defaultAddress).c_str() << "\n";
-		system(("cd " + defaultAddress).c_str());
-		system("cd");
-		std::cout << "\n";*/
 		processEvents();
 		update(timePerFrame);
 		render();
