@@ -5,11 +5,11 @@ MyShape::MyShape(std::string filename, double _x, double _y, double _width, doub
 	x(_x), y(_y), width(_width), height(_height), color(_color)
 {
 	assert(texture.loadFromFile(filename));
-	texture.setSmooth(true);
 	sprite.setTexture(texture, true);
 	sprite.setScale(width / sprite.getLocalBounds().width, height / sprite.getLocalBounds().height);
 	sprite.setOrigin(sprite.getLocalBounds().width / 2, sprite.getLocalBounds().height / 2);
 	sprite.setPosition(x, y);
+	std::cout << filename << " " << width << " " << height << "\n";
 }
 
 bool MyShape::isMousePressed(double mouseX, double mouseY) {
