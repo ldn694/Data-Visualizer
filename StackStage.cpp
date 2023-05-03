@@ -183,11 +183,14 @@ void StackStage::render() {
 }
 
 void StackStage::run() {
-	while (true) {
-		if (processEvents()) {
-			return;
+	while (window.isOpen())
+	{
+		while (true) {
+			if (processEvents()) {
+				return;
+			}
+			update(timePerFrame);
+			render();
 		}
-		update(timePerFrame);
-		render();
 	}
 }

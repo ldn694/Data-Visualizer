@@ -190,16 +190,12 @@ void QueueStage::render() {
 }
 
 void QueueStage::run() {
-	sf::Clock mClock;
-	sf::Time timePool = sf::Time::Zero;
 	while (window.isOpen())
 	{
-		timePool += mClock.restart();
-		while (timePool >= timePerFrame) {
+		while (true) {
 			if (processEvents()) {
 				return;
 			}
-			timePool -= timePerFrame;
 			update(timePerFrame);
 			render();
 		}
