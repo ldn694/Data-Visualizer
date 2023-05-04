@@ -214,7 +214,13 @@ void DoublyLinkedList::createRandom(int n, std::vector <int> values, bool sorted
 	dll.clear();
 	mainGraph = defaultGraph;
 	resetAnimation();
-	dll.clear();
+	if (n == 0) {
+		std::vector <Animation> animationList;
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 0, "Created a Doubly Linked List of length 0");
+		animateAllFrame();
+		return;
+	}
 	std::vector <int> nodeList;
 	std::vector <std::pair <int, int> > edgeList;
 	std::vector <sf::Color> color;

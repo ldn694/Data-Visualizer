@@ -258,6 +258,13 @@ void DynamicArray::createRandom(int n, std::vector <int> values, bool sorted) {
 	arr.clear();
 	mainGraph = defaultGraph;
 	resetAnimation();
+	if (n == 0) {
+		std::vector <Animation> animationList;
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 0, "Created a Dynamic Array of length 0");
+		animateAllFrame();
+		return;
+	}
 	std::vector <int> nodeList;
 	std::vector <std::tuple <int, double, double> > nodeInfo;
 	Node defaultNode = defaultGraph.getDefaultNode();

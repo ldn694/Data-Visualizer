@@ -218,7 +218,13 @@ void CircularLinkedList::createRandom(int n, std::vector <int> values, bool sort
 	cll.clear();
 	mainGraph = defaultGraph;
 	resetAnimation();
-	cll.clear();
+	if (n == 0) {
+		std::vector <Animation> animationList;
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 0, "Created a Circular Linked List of length 0");
+		animateAllFrame();
+		return;
+	}
 	std::vector <int> nodeList;
 	std::vector <std::pair <int, int> > edgeList;
 	std::vector <sf::Color> color;

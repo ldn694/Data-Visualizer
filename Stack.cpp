@@ -130,7 +130,13 @@ void Stack::createRandom(int n, std::vector <int> values, bool sorted) {
 	stack.clear();
 	mainGraph = defaultGraph;
 	resetAnimation();
-	stack.clear();
+	if (n == 0) {
+		std::vector <Animation> animationList;
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 0, "Created a stack of length 0");
+		animateAllFrame();
+		return;
+	}
 	std::vector <int> nodeList;
 	std::vector <std::pair <int, int> > edgeList;
 	std::vector <sf::Color> color;

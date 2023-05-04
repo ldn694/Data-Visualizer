@@ -154,7 +154,6 @@ std::pair<bool, ColorTheme> StackStage::processEvents() {
 			if (modeString == "v = ?") {
 				int val = valueTypingBox[0].getProperInt();
 				if (val != -1) {
-					std::cout << val << "\n";
 					ds.push(val);
 				}
 			}
@@ -176,7 +175,7 @@ void StackStage::update(sf::Time deltaT) {
 }
 
 void StackStage::render() {
-	window.clear(theme == LightTheme ? MilkColor: EerieBlackColor);
+	window.clear(theme == LightTheme ? LavenderBushColor : EerieBlackColor);
 	ds.draw(window);
 	draw();
 	window.display();

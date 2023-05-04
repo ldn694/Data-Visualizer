@@ -89,6 +89,10 @@ Node Graph::getDefaultNode() {
 	return defaultNode;
 }
 
+int Graph::getSizeListNode() {
+	return listNode.size();
+}
+
 int Graph::getFakeID() {
 	int x;
 	do {
@@ -1447,6 +1451,9 @@ void Graph::setTheme(ColorTheme preTheme, ColorTheme curTheme) {
 				resType = type;
 				break;
 			}
+		}
+		if (resType == -1) {
+			std::cout << u << " " << node.getX() << " " << node.getY() << " " << (int)node.getFillColor().r << " " << (int)node.getFillColor().g << " " << (int)node.getFillColor().b << "\n";
 		}
 		assert(resType != -1);
 		ColorNode colorHere = colorNode[curTheme][resType];

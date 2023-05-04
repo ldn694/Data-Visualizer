@@ -144,7 +144,13 @@ void Queue::createRandom(int n, std::vector <int> values, bool sorted) {
 	queue.clear();
 	mainGraph = defaultGraph;
 	resetAnimation();
-	queue.clear();
+	if (n == 0) {
+		std::vector <Animation> animationList;
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 0, "Created a queue of length 0");
+		animateAllFrame();
+		return;
+	}
 	std::vector <int> nodeList;
 	std::vector <std::pair <int, int> > edgeList;
 	std::vector <sf::Color> color;

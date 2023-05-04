@@ -18,13 +18,13 @@ Game::Game(sf::ContextSettings settings):
 	themeBox("Images/curved_square.png", WIDTH_RES - widthBox / 8, widthBox / 8, widthBox / 4, widthBox / 4, backButtonNormalFillColor)
 {
 	window.setFramerateLimit(60);
-	stackBox = Box(410, 700, 360, 120, { CommandBoxNormal }, "Stack", font(fontType::Prototype), 30, NO_BORDER, 3);
-	queueBox = Box(830, 700, 360, 120, { CommandBoxNormal }, "Queue", font(fontType::Prototype), 30, NO_BORDER, 3);
+	stackBox = Box(410, 400, 360, 120, { CommandBoxNormal }, "Stack", font(fontType::Prototype), 30, NO_BORDER, 3);
+	queueBox = Box(830, 400, 360, 120, { CommandBoxNormal }, "Queue", font(fontType::Prototype), 30, NO_BORDER, 3);
 	sllBox = Box(200, 550, 360, 120, { CommandBoxNormal }, "Singly Linked List", font(fontType::Prototype), 30, NO_BORDER, 3);
 	dllBox = Box(620, 550, 360, 120, { CommandBoxNormal }, "Doubly Linked List", font(fontType::Prototype), 30, NO_BORDER, 3);
 	cllBox = Box(1040, 550, 360, 120, { CommandBoxNormal }, "Circular Linked List", font(fontType::Prototype), 30, NO_BORDER, 3);
-	staticArrayBox = Box(410, 400, 360, 120, { CommandBoxNormal }, "Static Array", font(fontType::Prototype), 30, NO_BORDER, 3);
-	dynamicArrayBox = Box(830, 400, 360, 120, { CommandBoxNormal }, "Dynamic Array", font(fontType::Prototype), 30, NO_BORDER, 3);
+	staticArrayBox = Box(410, 700, 360, 120, { CommandBoxNormal }, "Static Array", font(fontType::Prototype), 30, NO_BORDER, 3);
+	dynamicArrayBox = Box(830, 700, 360, 120, { CommandBoxNormal }, "Dynamic Array", font(fontType::Prototype), 30, NO_BORDER, 3);
 	theme = LightTheme;
 	projName.setFont(*font(fontType::Prototype));
 	projName.setCharacterSize(70);
@@ -128,7 +128,7 @@ void Game::update(sf::Time deltaT)
 
 void Game::render()
 {
-	window.clear(theme == LightTheme ? MilkColor : EerieBlackColor);
+	window.clear(theme == LightTheme ? LavenderBushColor : EerieBlackColor);
 	sf::Color textColor = theme == LightTheme ? BlackColor : MilkColor;
 	themeBox.draw(window, theme);
 	if (theme == LightTheme) {

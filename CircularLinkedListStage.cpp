@@ -232,7 +232,7 @@ void CircularLinkedListStage::update(sf::Time deltaT) {
 }
 
 void CircularLinkedListStage::render() {
-	window.clear(theme == LightTheme ? MilkColor : EerieBlackColor);
+	window.clear(theme == LightTheme ? LavenderBushColor : EerieBlackColor);
 	ds.draw(window);
 	draw();
 	window.display();

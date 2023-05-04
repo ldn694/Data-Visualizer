@@ -207,9 +207,16 @@ void SinglyLinkedList::createRandom(int n, std::vector <int> values, bool sorted
 	if (!values.empty() && values[0] < 0) {
 		return;
 	}
+	sll.clear();
 	mainGraph = defaultGraph;
 	resetAnimation();
-	sll.clear();
+	if (n == 0) {
+		std::vector <Animation> animationList;
+		doNothing(animationList);
+		addAnimations(animationList, stepTime, 0, "Created a Singly Linked List of length 0");
+		animateAllFrame();
+		return;
+	}
 	std::vector <int> nodeList;
 	std::vector <std::pair <int, int> > edgeList;
 	std::vector <sf::Color> color;

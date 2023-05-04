@@ -16,7 +16,7 @@ DataStructure::DataStructure(double radius, double outlineSize, double lineThick
 	theme(_theme), codes(_codes),
 	xAnnouncement(_xAnnouncement), yAnnouncement(_yAnnouncement), widthAnnouncement(_widthAnnouncement), heightAnnouncement(_heightAnnouncement), announcementFont(_announcementFont),
 	xError(_xError), yError(_yError), widthError(_widthError), heightError(_heightError), errorFont(_errorFont),
-	defaultGraph(Graph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font, numPointCircle))
+	defaultGraph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font, numPointCircle)
 {
 	errorTime = sf::seconds(0.f);
 	isAnimating = false;
@@ -910,7 +910,6 @@ void DataStructure::draw(sf::RenderWindow& window) {
 		tmpRect.setPosition(xAnnouncement, yAnnouncement);
 		tmpRect.setFillColor(announcementFillColor[theme]);
 		window.draw(tmpRect);
-		//std::cout << "HERE! " << (int)announcementTextColor[theme].r << " " << (int)announcementTextColor[theme].g << " " << (int)announcementTextColor[theme].b << "\n";
 		sf::Text announcementText = CompressWords(listFrame[curFrame].announcement, 
 			xAnnouncement, yAnnouncement, widthAnnouncement, heightAnnouncement, 
 			announcementFont, sizeLetterAnnouncement, announcementTextColor[theme]);

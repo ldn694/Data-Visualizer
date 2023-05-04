@@ -232,7 +232,7 @@ void DoublyLinkedListStage::update(sf::Time deltaT) {
 }
 
 void DoublyLinkedListStage::render() {
-	window.clear(theme == LightTheme ? MilkColor : EerieBlackColor);
+	window.clear(theme == LightTheme ? LavenderBushColor : EerieBlackColor);
 	ds.draw(window);
 	draw();
 	window.display();

@@ -82,6 +82,7 @@ public:
 		sf::Color fillColor = WhiteColor, sf::Color outlineColor = BlackColor, sf::Color valueColor = BlackColor, sf::Color variableColor = RedColor,
 		EdgeType _edgeType = Undirected, sf::Font* font = nullptr, int numPointCircle = 30);
 	Node getDefaultNode();
+	int getSizeListNode();
 	void setFont(sf::Font* newFont);
 	void draw(sf::RenderWindow& window);
 	void addNode(int pos, int value, double x, double y);

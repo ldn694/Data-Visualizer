@@ -232,7 +232,7 @@ void SinglyLinkedListStage::update(sf::Time deltaT) {
 }
 
 void SinglyLinkedListStage::render() {
-	window.clear(theme == LightTheme ? MilkColor : EerieBlackColor);
+	window.clear(theme == LightTheme ? LavenderBushColor : EerieBlackColor);
 	ds.draw(window);
 	draw();
 	window.display();
