@@ -32,14 +32,14 @@ DynamicArray::DynamicArray(double radius, double outlineSize, double lineThickne
 			{	//Allocate
 				{
 					"",
-					"int* a = new a[n];",
+					"int* a = new a[n]{};",
 					"size = n;"
 				}
 			},
 			{	//Insert
 				{	//Insert front
 					"",
-					"int* b = new b[++size];",
+					"int* b = new b[++size]{};",
 					"for (int i = 1; i < size; i++) {",
 					"	b[i] = a[i - 1];",
 					"}",
@@ -49,7 +49,7 @@ DynamicArray::DynamicArray(double radius, double outlineSize, double lineThickne
 				},
 				{	//Insert back
 					"",
-					"int* b = new b[++size];",
+					"int* b = new b[++size]{};",
 					"for (int i = 0; i < size - 1; i++) {",
 					"	b[i] = a[i];",
 					"}",
@@ -59,7 +59,7 @@ DynamicArray::DynamicArray(double radius, double outlineSize, double lineThickne
 				},
 				{	//Insert middle
 					"",
-					"int* b = new b[++size];",
+					"int* b = new b[++size]{};",
 					"for (int k = 0; k < i; k++) {",
 					"	b[k] = a[k];",
 					"}",
@@ -75,7 +75,7 @@ DynamicArray::DynamicArray(double radius, double outlineSize, double lineThickne
 				{	//Delete front
 					"",
 					"if (size == 0) return;",
-					"int* b = new b[--size];",
+					"int* b = new b[--size]{};",
 					"for (int i = 0; i < size; i++) {",
 					"	b[i] = a[i + 1];",
 					"}",
@@ -85,7 +85,7 @@ DynamicArray::DynamicArray(double radius, double outlineSize, double lineThickne
 				{	//Delete back
 					"",
 					"if (size == 0) return;",
-					"int* b = new b[--size];",
+					"int* b = new b[--size]{};",
 					"for (int i = 0; i < size; i++) {",
 					"	b[i] = a[i];",
 					"}",
@@ -94,7 +94,7 @@ DynamicArray::DynamicArray(double radius, double outlineSize, double lineThickne
 				},
 				{	//Delete middle
 					"",
-					"int* b = new b[--size];",
+					"int* b = new b[--size]{};",
 					"for (int k = 0; k < i; k++) {",
 					"	b[k] = a[k];",
 					"}",
