@@ -31,6 +31,7 @@ protected:
 
 	TriangleButton prevModeButton, nextModeButton;
 	sf::CircleShape upwardTriangle;
+	bool upwarding;
 
 	std::vector <std::vector <std::vector <std::string> > > valueName;
 	std::vector <std::vector <std::vector <TypingBoxMode> > > typingMode;

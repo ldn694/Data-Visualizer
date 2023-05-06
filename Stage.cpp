@@ -58,6 +58,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	upwardTriangle.setOutlineThickness(0);
 	upwardTriangle.setOrigin(upwardTriangle.getLocalBounds().left + upwardTriangle.getLocalBounds().width / 2, upwardTriangle.getLocalBounds().top + upwardTriangle.getLocalBounds().height / 2);
 	upwardTriangle.setPosition(widthBox - widthBox * 0.1f, HEIGHT_RES - heightBox * 2.5f);
+	upwarding = true;
 
 	numValue.resize(numOperation);
 	assert(valueName.size() == numOperation);
@@ -209,7 +210,17 @@ void Stage::handleMouseMove(double x, double y) {
 	window.setMouseCursor(arrowCursor);
 	ingameSettings.handleMouseMove(x, y, window);
 	for (int i = 0; i < numOperation; i++) {
-		operationBox[i].handleMouseMove(x, y, window);
+		if (i == curOperation) {
+			if (operationBox[i].handleMouseMove(x, y, window)) {
+				upwarding = false;
+			}
+			else {
+				upwarding = true;
+			}
+		}
+		else {
+			operationBox[i].handleMouseMove(x, y, window);
+		}
 	}
 	goBox.handleMouseMove(x, y, window);
 	prevModeButton.handleMouseMove(x, y, window);
@@ -241,10 +252,20 @@ void Stage::draw() {
 	prevModeButton.draw(window, theme);
 	nextModeButton.draw(window, theme);
 	if (theme == LightTheme) {
-		upwardTriangle.setFillColor(BlackColor);
+		if (upwarding) {
+			upwardTriangle.setFillColor(BlackColor);
+		}
+		else {
+			upwardTriangle.setFillColor(WhiteColor);
+		}
 	}
 	else {
-		upwardTriangle.setFillColor(WhiteColor);
+		if (upwarding) {
+			upwardTriangle.setFillColor(WhiteColor);
+		}
+		else {
+			upwardTriangle.setFillColor(BlackColor);
+		}
 	}
 	if (numValue[curOperation][curMode]) {
 		for (int i = 0; i < numValue[curOperation][curMode]; i++) {
