@@ -17,6 +17,7 @@ public:
 		double xWarning, double yWarning, double widthWarning, double heightWarning,
 		sf::Font* font, int maxSize, int minValue, int maxValue);
 	void handleMousePressed(double x, double y);
+	void handleMouseMove(double x, double y, sf::RenderWindow& window);
 	std::vector <int> getListInt();
 	void draw(sf::RenderWindow& window, ColorTheme theme);
 	void setDisplaying(bool val);

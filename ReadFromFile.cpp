@@ -53,6 +53,13 @@ void ReadFromFile::handleMousePressed(double mouseX, double mouseY) {
     ofn.lpstrInitialDir = NULL;
 }
 
+void ReadFromFile::handleMouseMove(double mouseX, double mouseY, sf::RenderWindow& window) {
+    if (mouseX < x || mouseX > x + width || mouseY < y || mouseY > y + height || !isDisplaying) {
+        return;
+    }
+    window.setMouseCursor(handCursor);
+}
+
 void ReadFromFile::draw(sf::RenderWindow& window, ColorTheme theme) {
     if (fileName != "Choose file") {
         setWarning();

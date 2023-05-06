@@ -208,6 +208,7 @@ void Stage::handleMouseMove(double x, double y) {
 	nextModeButton.handleMouseMove(x, y, window);
 	themeBox.handleMouseMove(x, y, window);
 	backButton.handleMouseMove(x, y, window);
+	readFromFile.handleMouseMove(x, y, window);
 }
 
 void Stage::handleMouseReleased(double x, double y) {
