@@ -7,11 +7,12 @@ TriangleButton::TriangleButton(double _x, double _y, double _radius, double _out
 	shape.setPosition(x, y);
 	shape.setRadius(radius);
 	shape.setRotation(rotation);
+	type = TriangleButtonNormal;
 }
 
 void TriangleButton::draw(sf::RenderWindow& window, ColorTheme theme) {
-	shape.setFillColor(colorBox[TriangleButtonNormal][theme].fillColor);
-	shape.setOutlineColor(colorBox[TriangleButtonNormal][theme].outlineColor);
+	shape.setFillColor(colorBox[type][theme].fillColor);
+	shape.setOutlineColor(colorBox[type][theme].outlineColor);
 	window.draw(shape);
 }
 
@@ -28,4 +29,14 @@ bool TriangleButton::isInside(double hereX, double hereY) {
 	x2 += dx; y2 += dy;
 	x3 += dx; y3 += dy;
 	return isInsideTriangle(x1, y1, x2, y2, x3, y3, hereX, hereY);
+}
+
+void TriangleButton::handleMouseMove(double hereX, double hereY, sf::RenderWindow& window) {
+	if (isInside(hereX, hereY)) {
+		type = TriangleButtonSelected;
+		window.setMouseCursor(handCursor);
+	}
+	else {
+		type = TriangleButtonNormal;
+	}
 }

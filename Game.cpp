@@ -17,6 +17,7 @@ Game::Game(sf::ContextSettings settings):
 	darkBulb("Images/empty_bulb.png", WIDTH_RES - widthBox / 8, widthBox / 8, widthBox / 8 / 46 * 30, widthBox / 8, bulbColor),
 	themeBox("Images/curved_square.png", WIDTH_RES - widthBox / 8, widthBox / 8, widthBox / 4, widthBox / 4, backButtonNormalFillColor)
 {
+	window.setMouseCursor(arrowCursor);
 	window.setFramerateLimit(60);
 	stackBox = Box(410, 400, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Stack", font(fontType::Prototype), 30, NO_BORDER, 3);
 	queueBox = Box(830, 400, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Queue", font(fontType::Prototype), 30, NO_BORDER, 3);
@@ -47,48 +48,56 @@ Game::Game(sf::ContextSettings settings):
 }
 
 void Game::runStack() {
+	window.setMouseCursor(waitCursor);
 	StackStage stack(window, 20, 5, 4, theme, SinglyDirected, 30);
 	theme = stack.run();
 }
 
 void Game::runQueue() {
+	window.setMouseCursor(waitCursor);
 	QueueStage queue(window, 20, 5, 4, theme, SinglyDirected, 30);
 	theme = queue.run();
 }
 
 void Game::runSLL() {
+	window.setMouseCursor(waitCursor);
 	SinglyLinkedListStage sll(window, 20, 5, 4, theme, SinglyDirected, 30);
 	theme = sll.run();
 }
 
 void Game::runDLL() {
+	window.setMouseCursor(waitCursor);
 	DoublyLinkedListStage dll(window, 20, 5, 4, theme, DoublyDirected, 30);
 	theme = dll.run();
 }
 
 void Game::runCLL() {
+	window.setMouseCursor(waitCursor);
 	CircularLinkedListStage cll(window, 20, 5, 4, theme, SinglyDirected, 30);
 	theme = cll.run();
 }
 
 void Game::runStaticArray() {
+	window.setMouseCursor(waitCursor);
 	StaticArrayStage staticArray(window, 20 * sqrt(2), 3, 4, theme, SinglyDirected, 4);
 	theme = staticArray.run();
 }
 
 void Game::runDynamicArray() {
+	window.setMouseCursor(waitCursor);
 	DynamicArrayStage dynamicArray(window, 20 * sqrt(2), 3, 4, theme, SinglyDirected, 4);
 	theme = dynamicArray.run();
 }
 
 void Game::handleMouseMove(double x, double y) {
-	stackBox.handleMouseMove(x, y);
-	queueBox.handleMouseMove(x, y);
-	sllBox.handleMouseMove(x, y);
-	dllBox.handleMouseMove(x, y);
-	cllBox.handleMouseMove(x, y);
-	staticArrayBox.handleMouseMove(x, y);
-	dynamicArrayBox.handleMouseMove(x, y);
+	window.setMouseCursor(arrowCursor);
+	stackBox.handleMouseMove(x, y, window);
+	queueBox.handleMouseMove(x, y, window);
+	sllBox.handleMouseMove(x, y, window);
+	dllBox.handleMouseMove(x, y, window);
+	cllBox.handleMouseMove(x, y, window);
+	staticArrayBox.handleMouseMove(x, y, window);
+	dynamicArrayBox.handleMouseMove(x, y, window);
 }
 
 void Game::processEvents()

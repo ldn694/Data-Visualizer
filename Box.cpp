@@ -64,12 +64,13 @@ void Box::setDrawable(bool drawable) {
 	isDrawable = drawable;
 }
 
-void Box::handleMouseMove(double x, double y) {
+void Box::handleMouseMove(double x, double y, sf::RenderWindow& window) {
 	if (colorModes.size() != 2) {
 		return;
 	}
 	if (isInside(x, y)) {
 		curMode = 1;
+		window.setMouseCursor(handCursor);
 	}
 	else {
 		curMode = 0;

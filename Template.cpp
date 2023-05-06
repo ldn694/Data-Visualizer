@@ -66,6 +66,7 @@ void MovePointUpward(double& x1, double& y1, double x2, double y2, double h) {
 	y1 += dy;
 }
 
+sf::Cursor arrowCursor, handCursor, waitCursor;
 std::vector <sf::Font> listFont;
 
 sf::Font* font(fontType id) {

@@ -72,6 +72,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	if (numOperation && numMode[0]) {
 		updateModeBox(0);
 	}
+	window.setMouseCursor(arrowCursor);
 }
 
 void Stage::setDS(DataStructure* newDS) {
@@ -193,11 +194,14 @@ void Stage::handleKeyPressed(int key) {
 }
 
 void Stage::handleMouseMove(double x, double y) {
+	window.setMouseCursor(arrowCursor);
 	ingameSettings.handleMouseMove(x, y);
 	for (int i = 0; i < numOperation; i++) {
-		operationBox[i].handleMouseMove(x, y);
+		operationBox[i].handleMouseMove(x, y, window);
 	}
-	goBox.handleMouseMove(x, y);
+	goBox.handleMouseMove(x, y, window);
+	prevModeButton.handleMouseMove(x, y, window);
+	nextModeButton.handleMouseMove(x, y, window);
 }
 
 void Stage::handleMouseReleased(double x, double y) {
