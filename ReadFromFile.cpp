@@ -81,6 +81,9 @@ void ReadFromFile::draw(sf::RenderWindow& window, ColorTheme theme) {
 }
 
 std::vector <int> ReadFromFile::getListInt() {
+    if (fileName == "Choose file") {
+        return {};
+    }
     std::ifstream fi(address);
     std::vector <int> tmp;
     while (!fi.eof()) {
