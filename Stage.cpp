@@ -12,7 +12,10 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	backButton(0, 0, widthBox / 4, widthBox / 4),
 	readFromFile(widthBox / 2, HEIGHT_RES - heightBox * 3 / 4, widthBox, heightBox / 2,
 				0, HEIGHT_RES - heightBox * 4 - outlineBox * 2, widthBox * 2, heightBox, font(fontType::Prototype), maxSizeData, 0, maxValueData),
-	ds(_ds)
+	ds(_ds), 
+	lightBulb("Images/full_bulb.png", WIDTH_RES - widthBox / 8, widthBox / 8, widthBox / 8 / 46 * 30, widthBox / 8, bulbColor),
+	darkBulb("Images/empty_bulb.png", WIDTH_RES - widthBox / 8, widthBox / 8, widthBox / 8 / 46 * 30, widthBox / 8, bulbColor),
+	themeBox("Images/curved_square.png", WIDTH_RES - widthBox / 8, widthBox / 8, widthBox / 4, widthBox / 4, backButtonNormalFillColor)
 {
 	numOperation = operationName.size();
 	operationBox.resize(numOperation);
@@ -169,6 +172,9 @@ bool Stage::handleMousePressed(double x, double y) {
 		setTheme(ColorTheme(themeCode));
 	}
 	readFromFile.handleMousePressed(x, y);
+	if (themeBox.isMousePressed(x, y)) {
+		setTheme(ColorTheme((theme + 1) % numColorTheme));
+	}
 	return backButton.handleMousePressed(x, y);
 }
 
@@ -194,6 +200,13 @@ void Stage::handleMouseReleased(double x, double y) {
 }
 
 void Stage::draw() {
+	themeBox.draw(window, theme);
+	if (theme == LightTheme) {
+		lightBulb.draw(window, theme);
+	}
+	else {
+		darkBulb.draw(window, theme);
+	}
 	outerGoBox.draw(window, theme);
 	goBox.draw(window, theme);
 	for (int i = 0; i < numOperation; i++) {

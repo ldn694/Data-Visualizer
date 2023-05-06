@@ -43,6 +43,8 @@ protected:
 	IngameSettings ingameSettings;
 	BackButton backButton;
 
+
+	MyShape lightBulb, darkBulb, themeBox;
 	ColorTheme theme;
 	sf::RenderWindow& window;
 public:
