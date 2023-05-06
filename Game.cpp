@@ -18,13 +18,13 @@ Game::Game(sf::ContextSettings settings):
 	themeBox("Images/curved_square.png", WIDTH_RES - widthBox / 8, widthBox / 8, widthBox / 4, widthBox / 4, backButtonNormalFillColor)
 {
 	window.setFramerateLimit(60);
-	stackBox = Box(410, 400, 360, 120, { CommandBoxNormal }, "Stack", font(fontType::Prototype), 30, NO_BORDER, 3);
-	queueBox = Box(830, 400, 360, 120, { CommandBoxNormal }, "Queue", font(fontType::Prototype), 30, NO_BORDER, 3);
-	sllBox = Box(200, 550, 360, 120, { CommandBoxNormal }, "Singly Linked List", font(fontType::Prototype), 30, NO_BORDER, 3);
-	dllBox = Box(620, 550, 360, 120, { CommandBoxNormal }, "Doubly Linked List", font(fontType::Prototype), 30, NO_BORDER, 3);
-	cllBox = Box(1040, 550, 360, 120, { CommandBoxNormal }, "Circular Linked List", font(fontType::Prototype), 30, NO_BORDER, 3);
-	staticArrayBox = Box(410, 700, 360, 120, { CommandBoxNormal }, "Static Array", font(fontType::Prototype), 30, NO_BORDER, 3);
-	dynamicArrayBox = Box(830, 700, 360, 120, { CommandBoxNormal }, "Dynamic Array", font(fontType::Prototype), 30, NO_BORDER, 3);
+	stackBox = Box(410, 400, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Stack", font(fontType::Prototype), 30, NO_BORDER, 3);
+	queueBox = Box(830, 400, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Queue", font(fontType::Prototype), 30, NO_BORDER, 3);
+	sllBox = Box(200, 550, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Singly Linked List", font(fontType::Prototype), 30, NO_BORDER, 3);
+	dllBox = Box(620, 550, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Doubly Linked List", font(fontType::Prototype), 30, NO_BORDER, 3);
+	cllBox = Box(1040, 550, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Circular Linked List", font(fontType::Prototype), 30, NO_BORDER, 3);
+	staticArrayBox = Box(410, 700, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Static Array", font(fontType::Prototype), 30, NO_BORDER, 3);
+	dynamicArrayBox = Box(830, 700, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Dynamic Array", font(fontType::Prototype), 30, NO_BORDER, 3);
 	theme = LightTheme;
 	projName.setFont(*font(fontType::Prototype));
 	projName.setCharacterSize(70);
@@ -81,6 +81,16 @@ void Game::runDynamicArray() {
 	theme = dynamicArray.run();
 }
 
+void Game::handleMouseMove(double x, double y) {
+	stackBox.handleMouseMove(x, y);
+	queueBox.handleMouseMove(x, y);
+	sllBox.handleMouseMove(x, y);
+	dllBox.handleMouseMove(x, y);
+	cllBox.handleMouseMove(x, y);
+	staticArrayBox.handleMouseMove(x, y);
+	dynamicArrayBox.handleMouseMove(x, y);
+}
+
 void Game::processEvents()
 {
 	sf::Event event;
@@ -116,6 +126,10 @@ void Game::processEvents()
 			if (themeBox.isMousePressed(event.mouseButton.x, event.mouseButton.y)) {
 				theme = ColorTheme((theme + 1) % numColorTheme);
 			}
+			handleMouseMove(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+			break;
+		case sf::Event::MouseMoved:
+			handleMouseMove(event.mouseMove.x, event.mouseMove.y);
 			break;
 		}
 	}
@@ -129,7 +143,7 @@ void Game::update(sf::Time deltaT)
 void Game::render()
 {
 	window.clear(theme == LightTheme ? LavenderBushColor : EerieBlackColor);
-	sf::Color textColor = theme == LightTheme ? BlackColor : MilkColor;
+	sf::Color textColor = theme == LightTheme ? BlackColor : WhiteColor;
 	themeBox.draw(window, theme);
 	if (theme == LightTheme) {
 		lightBulb.draw(window, theme);

@@ -32,5 +32,6 @@ public:
 	bool isInside(double x, double y);
 	void toggleColorMode();
 	void setDrawable(bool drawable);
+	void handleMouseMove(double x, double y);
 	void setColorMode(int mode);
 };

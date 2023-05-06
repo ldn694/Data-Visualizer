@@ -64,6 +64,18 @@ void Box::setDrawable(bool drawable) {
 	isDrawable = drawable;
 }
 
+void Box::handleMouseMove(double x, double y) {
+	if (colorModes.size() != 2) {
+		return;
+	}
+	if (isInside(x, y)) {
+		curMode = 1;
+	}
+	else {
+		curMode = 0;
+	}
+}
+
 void Box::draw(sf::RenderWindow& window, ColorTheme theme) {
 	if (!isDrawable) {
 		return;

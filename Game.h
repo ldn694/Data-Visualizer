@@ -12,9 +12,9 @@ public:
 	void run();
 private:
 	void processEvents();
+	void handleMouseMove(double x, double y);
 	void update(sf::Time deltaT);
 	void render();
-	void handlePlayerInput();
 	void runStack();
 	void runQueue();
 	void runSLL();

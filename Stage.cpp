@@ -31,7 +31,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	}
 
 	outerGoBox = Box(widthBox, HEIGHT_RES - heightBox * 3, widthBox, heightBox, { CommandBoxNormal });
-	goBox = Box(widthBox * 1.25f, HEIGHT_RES - heightBox * 2.75f, widthBox / 2.0f, heightBox / 2.0f, { GoBoxNormal },
+	goBox = Box(widthBox * 1.25f, HEIGHT_RES - heightBox * 2.75f, widthBox / 2.0f, heightBox / 2.0f, { GoBoxNormal, GoBoxSelected },
 				"GO", font(fontType::Prototype), 30);
 
 	assert(modeName.size() == numOperation);
@@ -105,10 +105,11 @@ void Stage::updateModeBox(int newMode) {
 }
 
 bool Stage::handleMousePressed(double x, double y) {
+	handleMouseMove(x, y);
 	if (!operationSelecting) {
 		if (operationBox[curOperation].isInside(x, y)) {
 			operationSelecting = true;
-			operationBox[curOperation].setColorMode(CommandBoxSelected);
+			//operationBox[curOperation].setColorMode(CommandBoxSelected);
 			double x1 = 0, y1 = HEIGHT_RES - heightBox * 3;
 			for (int i = 0; i < numOperation; i++) {
 				if (i == curOperation) {
@@ -193,6 +194,10 @@ void Stage::handleKeyPressed(int key) {
 
 void Stage::handleMouseMove(double x, double y) {
 	ingameSettings.handleMouseMove(x, y);
+	for (int i = 0; i < numOperation; i++) {
+		operationBox[i].handleMouseMove(x, y);
+	}
+	goBox.handleMouseMove(x, y);
 }
 
 void Stage::handleMouseReleased(double x, double y) {
