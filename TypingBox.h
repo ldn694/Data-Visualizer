@@ -32,6 +32,7 @@ public:
 	std::vector <int>  getListInt();
 	void update(sf::Time deltaT);
 	void clickOn(double x, double y);
+	bool handleMouseMove(double x, double y, sf::RenderWindow& window);
 	void draw(sf::RenderWindow& window, ColorTheme theme);
 };
 

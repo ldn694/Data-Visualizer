@@ -182,6 +182,14 @@ void TypingBox::clickOn(double hereX, double hereY) {
 	}
 }
 
+bool TypingBox::handleMouseMove(double hereX, double hereY, sf::RenderWindow& window) {
+	if (x <= hereX && hereX <= x + width && y <= hereY && hereY <= y + height) {
+		window.setMouseCursor(textCursor);
+		return true;
+	}
+	return false;
+}
+
 void TypingBox::readKey(int key) {
 	if ((0 <= key && key <= 35) || key == int(sf::Keyboard::Comma)) {
 		insert(key);

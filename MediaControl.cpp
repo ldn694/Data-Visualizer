@@ -44,8 +44,8 @@ void MediaControl::handleMousePressed(double x, double y) {
 	}
 }
 
-void MediaControl::handleMouseMove(double x, double y) {
-	scrubber.handleMouseMove(x, y);
+void MediaControl::handleMouseMove(double x, double y, sf::RenderWindow& window) {
+	scrubber.handleMouseMove(x, y, window);
 }
 
 void MediaControl::handleMouseReleased(double x, double y) {

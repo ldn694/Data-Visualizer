@@ -90,7 +90,7 @@ void Box::draw(sf::RenderWindow& window, ColorTheme theme) {
 }
 
 bool Box::isInside(double x, double y) {
-	return (x1 <= x && x <= x1 + width && y1 <= y && y <= y1 + height);
+	return (x1 < x && x < x1 + width && y1 < y && y < y1 + height);
 }
 
 void Box::toggleColorMode() {

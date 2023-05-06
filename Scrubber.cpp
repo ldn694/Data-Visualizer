@@ -34,12 +34,13 @@ void Scrubber::handleMousePressed(double mouseX, double mouseY) {
 	setNearestFrame(mouseX, mouseY);
 }
 
-void Scrubber::handleMouseMove(double mouseX, double mouseY) {
+void Scrubber::handleMouseMove(double mouseX, double mouseY, sf::RenderWindow& window) {
 	if (mouseX < x || mouseX > x + width || mouseY < y || mouseY > y + height) {
 		isHovering = false;
 	}
 	else {
 		isHovering = true;
+		window.setMouseCursor(handCursor);
 	}
 	if (!isChangingFrame) {
 		return;

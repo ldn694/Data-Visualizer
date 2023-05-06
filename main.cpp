@@ -6,9 +6,10 @@
 
 int main()
 {
-	assert(arrowCursor.loadFromSystem(sf::Cursor::Arrow));
-	assert(handCursor.loadFromSystem(sf::Cursor::Hand));
-	assert(waitCursor.loadFromSystem(sf::Cursor::Wait));
+	arrowCursor.loadFromSystem(sf::Cursor::Arrow);
+	handCursor.loadFromSystem(sf::Cursor::Hand);
+	waitCursor.loadFromSystem(sf::Cursor::Wait);
+	textCursor.loadFromSystem(sf::Cursor::Text);
 	listFont.resize(numFont);
 	for (int i = 0; i < numFont; i++) {
 		if (!listFont[i].loadFromFile(fontName[i])) {

@@ -81,7 +81,7 @@ enum fontType {
 	Arial, Consolas, Prototype
 };
 extern std::vector <sf::Font> listFont;
-extern sf::Cursor arrowCursor, handCursor, waitCursor;
+extern sf::Cursor arrowCursor, handCursor, waitCursor, textCursor;
 sf::Font* font(fontType id);
 
 sf::Text CompressWords(std::string cur, double x, double y, double width, double height, sf::Font* font, double characterSize, sf::Color color); //return cur with \n so that the width of sf::Text is not greater than width

@@ -194,8 +194,13 @@ void Stage::handleKeyPressed(int key) {
 }
 
 void Stage::handleMouseMove(double x, double y) {
+	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
+		if (valueTypingBox[i].handleMouseMove(x, y, window)) {
+			return;
+		}
+	}
 	window.setMouseCursor(arrowCursor);
-	ingameSettings.handleMouseMove(x, y);
+	ingameSettings.handleMouseMove(x, y, window);
 	for (int i = 0; i < numOperation; i++) {
 		operationBox[i].handleMouseMove(x, y, window);
 	}

@@ -11,7 +11,7 @@ public:
 	void setIsAnimating(bool val);
 	void setNearestFrame(double x, double y);
 	void handleMousePressed(double x, double y);
-	void handleMouseMove(double x, double y);
+	void handleMouseMove(double x, double y, sf::RenderWindow& window);
 	void handleMouseReleased(double x, double y);
 	void handleKeyPressed(int key);
 	void setDS(DataStructure* newDS);
