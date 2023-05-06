@@ -53,6 +53,11 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 
 	prevModeButton = TriangleButton(widthBox / 5.0f, HEIGHT_RES - heightBox * 1.5f, 20, 3, -90.f);
 	nextModeButton = TriangleButton(2 * widthBox - widthBox / 5.0f, HEIGHT_RES - heightBox * 1.5f, 20, 3, 90.f);
+	upwardTriangle.setPointCount(3);
+	upwardTriangle.setRadius(10);
+	upwardTriangle.setOutlineThickness(0);
+	upwardTriangle.setOrigin(upwardTriangle.getLocalBounds().left + upwardTriangle.getLocalBounds().width / 2, upwardTriangle.getLocalBounds().top + upwardTriangle.getLocalBounds().height / 2);
+	upwardTriangle.setPosition(widthBox - widthBox * 0.1f, HEIGHT_RES - heightBox * 2.5f);
 
 	numValue.resize(numOperation);
 	assert(valueName.size() == numOperation);
@@ -108,6 +113,7 @@ bool Stage::handleMousePressed(double x, double y) {
 	handleMouseMove(x, y);
 	if (!operationSelecting) {
 		if (operationBox[curOperation].isInside(x, y)) {
+			upwardTriangle.setRotation(180.f);
 			operationSelecting = true;
 			//operationBox[curOperation].setColorMode(CommandBoxSelected);
 			double x1 = 0, y1 = HEIGHT_RES - heightBox * 3;
@@ -123,6 +129,7 @@ bool Stage::handleMousePressed(double x, double y) {
 		}
 	}
 	else {
+		upwardTriangle.setRotation(0.f);
 		bool flag = false;
 		for (int i = 0; i < numOperation; i++) {
 			if (operationBox[i].isInside(x, y)) {
@@ -233,6 +240,12 @@ void Stage::draw() {
 	}
 	prevModeButton.draw(window, theme);
 	nextModeButton.draw(window, theme);
+	if (theme == LightTheme) {
+		upwardTriangle.setFillColor(BlackColor);
+	}
+	else {
+		upwardTriangle.setFillColor(WhiteColor);
+	}
 	if (numValue[curOperation][curMode]) {
 		for (int i = 0; i < numValue[curOperation][curMode]; i++) {
 			valueTypingBox[i].drawAll(window, theme);
@@ -248,6 +261,7 @@ void Stage::draw() {
 	}
 	ingameSettings.draw(window, theme);
 	backButton.draw(window, theme);
+	window.draw(upwardTriangle);
 }
 
 void Stage::stageUpdate(sf::Time deltaT) {

@@ -30,6 +30,7 @@ protected:
 	int curMode;
 
 	TriangleButton prevModeButton, nextModeButton;
+	sf::CircleShape upwardTriangle;
 
 	std::vector <std::vector <std::vector <std::string> > > valueName;
 	std::vector <std::vector <std::vector <TypingBoxMode> > > typingMode;
