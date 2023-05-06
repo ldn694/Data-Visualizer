@@ -72,7 +72,6 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	if (numOperation && numMode[0]) {
 		updateModeBox(0);
 	}
-	window.setMouseCursor(arrowCursor);
 }
 
 void Stage::setDS(DataStructure* newDS) {
@@ -208,6 +207,7 @@ void Stage::handleMouseMove(double x, double y) {
 	prevModeButton.handleMouseMove(x, y, window);
 	nextModeButton.handleMouseMove(x, y, window);
 	themeBox.handleMouseMove(x, y, window);
+	backButton.handleMouseMove(x, y, window);
 }
 
 void Stage::handleMouseReleased(double x, double y) {

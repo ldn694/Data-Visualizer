@@ -12,6 +12,12 @@ bool BackButton::handleMousePressed(double x, double y) {
 	return square.isMousePressed(x, y);
 }
 
+void BackButton::handleMouseMove(double x, double y, sf::RenderWindow& window) {
+	if (square.isMousePressed(x, y)) {
+		window.setMouseCursor(handCursor);
+	}
+}
+
 void BackButton::draw(sf::RenderWindow& window, ColorTheme theme) {
 	square.draw(window, theme);
 	innerSquare.draw(window, theme);

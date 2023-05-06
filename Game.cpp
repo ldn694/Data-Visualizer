@@ -137,7 +137,7 @@ void Game::processEvents()
 				theme = ColorTheme((theme + 1) % numColorTheme);
 			}
 			else {
-				handleMouseMove(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+				handleMouseMove(2000, 2000);
 			}
 			break;
 		case sf::Event::MouseMoved:

@@ -239,15 +239,14 @@ void SinglyLinkedListStage::render() {
 }
 
 ColorTheme SinglyLinkedListStage::run() {
+	window.setMouseCursor(arrowCursor);
 	while (window.isOpen())
 	{
-		while (true) {
-			auto curStatus = processEvents();
-			if (curStatus.first) {
-				return curStatus.second;
-			}
-			update(timePerFrame);
-			render();
+		auto curStatus = processEvents();
+		if (curStatus.first) {
+			return curStatus.second;
 		}
+		update(timePerFrame);
+		render();
 	}
 }
