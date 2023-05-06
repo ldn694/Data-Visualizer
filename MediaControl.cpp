@@ -47,6 +47,10 @@ void MediaControl::handleMousePressed(double x, double y) {
 void MediaControl::handleMouseMove(double x, double y, sf::RenderWindow& window) {
 	scrubber.handleMouseMove(x, y, window);
 	playButton.handleMouseMove(x, y, window);
+	prevButton.handleMouseMove(x, y, window);
+	nextButton.handleMouseMove(x, y, window);
+	beginButton.handleMouseMove(x, y, window);
+	endButton.handleMouseMove(x, y, window);
 }
 
 void MediaControl::handleMouseReleased(double x, double y) {

@@ -51,6 +51,15 @@ bool MultipleChoice::handleMousePressed(double mouseX, double mouseY) {
 	return false;
 }
 
+void MultipleChoice::handleMouseMove(double mouseX, double mouseY, sf::RenderWindow& window) {
+	for (int i = 0; i < choices.size(); i++) {
+		double dist = sqrt((mouseX - circles[i].getPosition().x) * (mouseX - circles[i].getPosition().x) + (mouseY - circles[i].getPosition().y) * (mouseY - circles[i].getPosition().y));
+		if (dist <= circles[i].getRadius()) {
+			window.setMouseCursor(handCursor);
+		}
+	}
+}
+
 int MultipleChoice::getChoice() {
 	return curChoice;
 }

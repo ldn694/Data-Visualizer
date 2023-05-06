@@ -28,6 +28,8 @@ int IngameSettings::handleMousePressed(double x, double y) {
 
 void IngameSettings::handleMouseMove(double x, double y, sf::RenderWindow& window) {
 	mediaControl.handleMouseMove(x, y, window);
+	speedChoices.handleMouseMove(x, y, window);
+	themeChoices.handleMouseMove(x, y, window);
 }
 
 void IngameSettings::handleMouseReleased(double x, double y) {
