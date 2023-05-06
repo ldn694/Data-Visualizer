@@ -40,6 +40,10 @@ void IngameSettings::handleKeyPressed(int key) {
 	mediaControl.handleKeyPressed(key);
 }
 
+void IngameSettings::setThemeChoice(int theme) {
+	themeChoices.setChoice(theme);
+}
+
 void IngameSettings::draw(sf::RenderWindow& window, ColorTheme theme) {
 	Box outerBox(x, y, width, height, { MediaBox });
 	outerBox.draw(window, theme);

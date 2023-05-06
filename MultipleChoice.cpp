@@ -64,6 +64,10 @@ int MultipleChoice::getChoice() {
 	return curChoice;
 }
 
+void MultipleChoice::setChoice(int choice) {
+	curChoice = choice;
+}
+
 void MultipleChoice::draw(sf::RenderWindow& window, ColorTheme theme) {
 	outerBox.draw(window, theme);
 	for (int i = 0; i < choices.size(); i++) {

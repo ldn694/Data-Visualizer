@@ -16,5 +16,6 @@ public:
 	void handleMouseMove(double x, double y, sf::RenderWindow& window);
 	void handleMouseReleased(double x, double y);
 	void handleKeyPressed(int key);
+	void setThemeChoice(int theme);
 	void draw(sf::RenderWindow& window, ColorTheme theme);
 };

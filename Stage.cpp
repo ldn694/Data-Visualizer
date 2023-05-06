@@ -175,6 +175,7 @@ bool Stage::handleMousePressed(double x, double y) {
 	readFromFile.handleMousePressed(x, y);
 	if (themeBox.isMousePressed(x, y)) {
 		setTheme(ColorTheme((theme + 1) % numColorTheme));
+		ingameSettings.setThemeChoice(theme);
 	}
 	return backButton.handleMousePressed(x, y);
 }
