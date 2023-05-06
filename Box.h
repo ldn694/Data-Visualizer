@@ -32,6 +32,6 @@ public:
 	bool isInside(double x, double y);
 	void toggleColorMode();
 	void setDrawable(bool drawable);
-	void handleMouseMove(double x, double y, sf::RenderWindow& window);
+	bool handleMouseMove(double x, double y, sf::RenderWindow& window);
 	void setColorMode(int mode);
 };

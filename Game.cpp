@@ -90,14 +90,15 @@ void Game::runDynamicArray() {
 }
 
 void Game::handleMouseMove(double x, double y) {
+	if (themeBox.handleMouseMove(x, y, window)) return;
+	if (stackBox.handleMouseMove(x, y, window)) return;
+	if (queueBox.handleMouseMove(x, y, window)) return;
+	if (sllBox.handleMouseMove(x, y, window)) return;
+	if (dllBox.handleMouseMove(x, y, window)) return;
+	if (cllBox.handleMouseMove(x, y, window)) return;
+	if (staticArrayBox.handleMouseMove(x, y, window)) return;
+	if (dynamicArrayBox.handleMouseMove(x, y, window)) return;
 	window.setMouseCursor(arrowCursor);
-	stackBox.handleMouseMove(x, y, window);
-	queueBox.handleMouseMove(x, y, window);
-	sllBox.handleMouseMove(x, y, window);
-	dllBox.handleMouseMove(x, y, window);
-	cllBox.handleMouseMove(x, y, window);
-	staticArrayBox.handleMouseMove(x, y, window);
-	dynamicArrayBox.handleMouseMove(x, y, window);
 }
 
 void Game::processEvents()
@@ -135,7 +136,9 @@ void Game::processEvents()
 			if (themeBox.isMousePressed(event.mouseButton.x, event.mouseButton.y)) {
 				theme = ColorTheme((theme + 1) % numColorTheme);
 			}
-			handleMouseMove(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+			else {
+				handleMouseMove(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
+			}
 			break;
 		case sf::Event::MouseMoved:
 			handleMouseMove(event.mouseMove.x, event.mouseMove.y);

@@ -16,10 +16,12 @@ bool MyShape::isMousePressed(double mouseX, double mouseY) {
 	return (x - width / 2 <= mouseX && mouseX <= x + width / 2 && y - height / 2 <= mouseY && mouseY <= y + height / 2);
 }
 
-void MyShape::handleMouseMove(double mouseX, double mouseY, sf::RenderWindow& window) {
+bool MyShape::handleMouseMove(double mouseX, double mouseY, sf::RenderWindow& window) {
 	if (isMousePressed(mouseX, mouseY)) {
 		window.setMouseCursor(handCursor);
+		return true;
 	}
+	return false;
 }
 
 void MyShape::setOrigin(double _x, double _y) {
