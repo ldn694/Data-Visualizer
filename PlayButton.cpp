@@ -28,6 +28,12 @@ void PlayButton::handleMousePressed(double mouseX, double mouseY) {
 	}
 }
 
+void PlayButton::handleMouseMove(double mouseX, double mouseY, sf::RenderWindow& window) {
+	if (circle.isMousePressed(mouseX, mouseY)) {
+		window.setMouseCursor(handCursor);
+	}
+}
+
 void PlayButton::draw(sf::RenderWindow& window, ColorTheme theme) {
 	circle.draw(window, theme);
 	if (!ds->isAnimating) {
