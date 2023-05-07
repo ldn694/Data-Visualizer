@@ -148,6 +148,7 @@ void Queue::createRandom(int n, std::vector <int> values, bool sorted) {
 		std::vector <Animation> animationList;
 		doNothing(animationList);
 		addAnimations(animationList, stepTime, 0, "Created a queue of length 0");
+		setCurOperationName("Create queue of length 0");
 		animateAllFrame();
 		return;
 	}
@@ -192,6 +193,7 @@ void Queue::createRandom(int n, std::vector <int> values, bool sorted) {
 	addVariables(animationList, { 0 }, { "head"});
 	addVariables(animationList, { n - 1 }, { "tail" });
 	addAnimations(animationList, stepTime, 0, "Created a queue of length " + intToString(n));
+	setCurOperationName("Create queue of length " + intToString(n));
 	animateAllFrame();
 }
 
@@ -204,6 +206,7 @@ void Queue::add(int value) {
 		value = rand() % (maxValueData + 1);
 	}
 	int id = getEmptyID();
+	setCurOperationName("Add " + intToString(value) + " into queue");
 	resetAnimation();
 	if (getSize() == 0) {
 		std::vector <Animation> animationList;
@@ -264,6 +267,7 @@ void Queue::add(int value) {
 }
 
 void Queue::remove() {
+	setCurOperationName("Remove element at head of queue");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (getSize() == 0) {
@@ -331,6 +335,7 @@ void Queue::remove() {
 }
 
 void Queue::peekFront() {
+	setCurOperationName("Peek element at head of queue");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (getSize() == 0) {
@@ -358,6 +363,7 @@ void Queue::peekFront() {
 }
 
 void Queue::peekBack() {
+	setCurOperationName("Peek element at tail of queue");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (getSize() == 0) {
@@ -374,17 +380,18 @@ void Queue::peekBack() {
 	addAnimations(animationList, stepTime, 1, "Queue is not empty, proceed to next step");
 
 	animationList.clear();
-	setNodeColor(animationList, { getHeadID() }, theme, highlight);
+	setNodeColor(animationList, { getTailID() }, theme, highlight);
 	addAnimations(animationList, stepTime, 2, "Return value stored at back of queue: " + intToString(queue.back().value));
 
 	animationList.clear();
-	setNodeColor(animationList, { getHeadID() }, theme, normal);
+	setNodeColor(animationList, { getTailID() }, theme, normal);
 	addAnimations(animationList, stepTime, 0, "Re-layout for visualization");
 
 	animateAllFrame();
 }
 
 void Queue::clear() {
+	setCurOperationName("Clear queue");
 	resetAnimation();
 	std::vector <Animation> animationList;
 

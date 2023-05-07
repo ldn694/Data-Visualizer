@@ -58,6 +58,7 @@ struct DataStructure {
 	int numOperation, curStep = 0, curMode = 0, curOperation = 0;
 	int curFrame = 0;
 	sf::RectangleShape codeBoard;
+	sf::Text curOperationName;
 	DataStructure(double radius = 0, double outlineSize = 0, double lineThickness = 0,
 		ColorTheme theme = LightTheme, EdgeType edgeType = Undirected, sf::Font* font = nullptr, int numPointCircle = 30,
 		std::vector < std::vector <std::vector <std::string> > > codes = {}, double x = 0, double y = 0, double width = 0, double height = 0, sf::Font* codeFont = nullptr,
@@ -65,6 +66,7 @@ struct DataStructure {
 		double xError = 0, double yError = 0, double widthError = 0, double heightError = 0, sf::Font* errorFont = nullptr);
 	void resetAnimation();
 	void setError(bool val, std::string newError = "");
+	void setCurOperationName(std::string name);
 	void setTheme(ColorTheme theme);
 	void setSpeed(double newSpeed);
 	void setNodeColor(std::vector <Animation> &animationList, std::vector <int> nodes, ColorTheme theme, ColorNodeType type);

@@ -134,6 +134,7 @@ void Stack::createRandom(int n, std::vector <int> values, bool sorted) {
 		std::vector <Animation> animationList;
 		doNothing(animationList);
 		addAnimations(animationList, stepTime, 0, "Created a stack of length 0");
+		setCurOperationName("Create stack of length 0" );
 		animateAllFrame();
 		return;
 	}
@@ -177,6 +178,7 @@ void Stack::createRandom(int n, std::vector <int> values, bool sorted) {
 	}
 	addVariables(animationList, { 0 }, { "head" });
 	addAnimations(animationList, stepTime, 0, "Created a stack of length " + intToString(n));
+	setCurOperationName("Create stack of length " + intToString(n));
 	animateAllFrame();
 }
 
@@ -188,6 +190,7 @@ void Stack::push(int value) {
 	if (value < 0) {
 		value = rand() % (maxValueData + 1);
 	}
+	setCurOperationName("Push " + intToString(value) + " into stack");
 	int id = getEmptyID();
 	resetAnimation();
 	if (getSize() == 0) {
@@ -251,6 +254,7 @@ void Stack::push(int value) {
 
 void Stack::pop() {
 	resetAnimation();
+	setCurOperationName("Pop element at top of stack");
 	std::vector <Animation> animationList;
 	if (getSize() == 0) {
 		doNothing(animationList);
@@ -306,6 +310,7 @@ void Stack::pop() {
 }
 
 void Stack::peek() {
+	setCurOperationName("Peek element at top of stack");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (getSize() == 0) {
@@ -333,6 +338,7 @@ void Stack::peek() {
 }
 
 void Stack::clear() {
+	setCurOperationName("Clear stack");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	

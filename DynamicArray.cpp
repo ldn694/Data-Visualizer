@@ -217,6 +217,7 @@ void DynamicArray::createTempArray(std::vector <Animation>& animationList, int s
 void DynamicArray::allocate(int n) {
 	arr.clear();
 	mainGraph = defaultGraph;
+	setCurOperationName("Allocate an array of length " + intToString(n));
 	resetAnimation();
 	std::vector <Animation> animationList;
 	std::vector <int> nodeList;
@@ -262,6 +263,7 @@ void DynamicArray::createRandom(int n, std::vector <int> values, bool sorted) {
 		std::vector <Animation> animationList;
 		doNothing(animationList);
 		addAnimations(animationList, stepTime, 0, "Created a Dynamic Array of length 0");
+		setCurOperationName("Create an array of length 0");
 		animateAllFrame();
 		return;
 	}
@@ -295,6 +297,7 @@ void DynamicArray::createRandom(int n, std::vector <int> values, bool sorted) {
 		addVariables(animationList, { i }, { intToString(i) });
 	}
 	addAnimations(animationList, stepTime, 0, "Created a Dynamic array of length " + intToString(n));
+	setCurOperationName("Create an array of length " + intToString(n));
 	animateAllFrame();
 	size = n;
 }
@@ -307,6 +310,7 @@ void DynamicArray::insertFront(int v) {
 	if (v < 0) {
 		v = rand() % (maxValueData + 1);
 	}
+	setCurOperationName("Insert " + intToString(v) + " to the front");
 	resetAnimation();
 
 	std::vector <Animation> animationList;
@@ -389,6 +393,7 @@ void DynamicArray::insertBack(int v) {
 	if (v < 0) {
 		v = rand() % (maxValueData + 1);
 	}
+	setCurOperationName("Insert " + intToString(v) + " to the back");
 	resetAnimation();
 
 	std::vector <Animation> animationList;
@@ -479,6 +484,7 @@ void DynamicArray::insertMiddle(int index, int v) {
 	if (v < 0) {
 		v = rand() % (maxValueData + 1);
 	}
+	setCurOperationName("Insert " + intToString(v) + " to position " + intToString(index));
 	resetAnimation();
 
 	std::vector <Animation> animationList;
@@ -598,6 +604,7 @@ void DynamicArray::insertMiddle(int index, int v) {
 }
 
 void DynamicArray::deleteFront() {
+	setCurOperationName("Delete element at the front");
 	resetAnimation();
 
 	std::vector <Animation> animationList;
@@ -679,6 +686,7 @@ void DynamicArray::deleteFront() {
 }
 
 void DynamicArray::deleteBack() {
+	setCurOperationName("Delete element at the back");
 	resetAnimation();
 
 	std::vector <Animation> animationList;
@@ -772,6 +780,7 @@ void DynamicArray::deleteMiddle(int index) {
 		setError(true, "i must be in [1, " + intToString(size - 1) + "]!");
 		return;
 	}
+	setCurOperationName("Delete element at position " + intToString(index));
 	resetAnimation();
 
 	std::vector <Animation> animationList;
@@ -885,6 +894,7 @@ void DynamicArray::deleteMiddle(int index) {
 }
 
 void DynamicArray::search(int v) {
+	setCurOperationName("Search for value " + intToString(v));
 	resetAnimation();
 	std::vector <Animation> animationList;
 
@@ -964,6 +974,7 @@ void DynamicArray::search(int v) {
 }
 
 void DynamicArray::updateVal(int i, int v) {
+	setCurOperationName("Update " + intToString(i) + "-th element's value to " + intToString(v));
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (i < 0 || i >= size) {
@@ -991,6 +1002,7 @@ void DynamicArray::updateVal(int i, int v) {
 }
 
 void DynamicArray::access(int i) {
+	setCurOperationName("Access " + intToString(i) + "-th element");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (i < 0 || i >= size) {

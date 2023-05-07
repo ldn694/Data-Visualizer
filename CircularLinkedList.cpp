@@ -80,8 +80,8 @@ CircularLinkedList::CircularLinkedList(double radius, double outlineSize, double
 					"}"
 				}
 			},
-			{	//Remove
-				{	//Remove front
+			{	//Delete
+				{	//Delete front
 					"",
 					"if (head == NULL) return;",
 					"Vertex* temp = head;",
@@ -94,7 +94,7 @@ CircularLinkedList::CircularLinkedList(double radius, double outlineSize, double
 					"}",
 					"delete temp;"
 				},
-				{	//Remove back
+				{	//Delete back
 					"",
 					"if (head == NULL) return;",
 					"Vertex* cur = head, aft = cur->next;",
@@ -109,7 +109,7 @@ CircularLinkedList::CircularLinkedList(double radius, double outlineSize, double
 					"delete aft; tail = cur;",
 					"tail->next = head;"
 				},
-				{	//Remove middle
+				{	//Delete middle
 					"",
 					"Vertex* cur = head; int k = 0;",
 					"while (cur != NULL) {",
@@ -221,7 +221,8 @@ void CircularLinkedList::createRandom(int n, std::vector <int> values, bool sort
 	if (n == 0) {
 		std::vector <Animation> animationList;
 		doNothing(animationList);
-		addAnimations(animationList, stepTime, 0, "Created a Circular Linked List of length 0");
+		addAnimations(animationList, stepTime, 0, "Created a Circular Linked List of length 0.");
+		setCurOperationName("Create a list of length 0");
 		animateAllFrame();
 		return;
 	}
@@ -269,11 +270,13 @@ void CircularLinkedList::createRandom(int n, std::vector <int> values, bool sort
 		addCircularEdge(animationList, { {n - 1, 0} }, theme, normal);
 	}
 	addAnimations(animationList, stepTime, 0, "Created a circular linked list of length " + intToString(n));
+	setCurOperationName("Create a list of length " + intToString(n));
 	animateAllFrame();
 }
 
 void CircularLinkedList::search(int v) {
 	resetAnimation();
+	setCurOperationName("Search for value " + intToString(v));
 	std::vector <Animation> animationList;
 
 	if (getSize() == 0) {
@@ -359,6 +362,7 @@ void CircularLinkedList::insertFront(int v) {
 	}
 	Node defaultNode = defaultGraph.getDefaultNode();
 	int id = getEmptyID();
+	setCurOperationName("Insert " + intToString(v) + " to head");
 	resetAnimation();
 	std::vector <Animation> animationList;
 
@@ -443,6 +447,7 @@ void CircularLinkedList::insertBack(int v) {
 	}
 	Node defaultNode = defaultGraph.getDefaultNode();
 	int id = getEmptyID();
+	setCurOperationName("Insert " + intToString(v) + " to tail");
 	resetAnimation();
 	std::vector <Animation> animationList;
 
@@ -538,6 +543,7 @@ void CircularLinkedList::insertMiddle(int i, int v) {
 	int id = getEmptyID();
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
+	setCurOperationName("Insert " + intToString(v) + " to position " + intToString(i));
 	resetAnimation();
 
 	animationList.clear();
@@ -615,9 +621,10 @@ void CircularLinkedList::insertMiddle(int i, int v) {
 	animateAllFrame();
 }
 
-void CircularLinkedList::removeFront() {
+void CircularLinkedList::deleteFront() {
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
+	setCurOperationName("Delete head vertex");
 	resetAnimation();
 
 	if (getSize() == 0) {
@@ -682,9 +689,10 @@ void CircularLinkedList::removeFront() {
 	animateAllFrame();
 }
 
-void CircularLinkedList::removeBack() {
+void CircularLinkedList::deleteBack() {
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
+	setCurOperationName("Delete tail vertex");
 	resetAnimation();
 
 	if (getSize() == 0) {
@@ -779,7 +787,7 @@ void CircularLinkedList::removeBack() {
 	animateAllFrame();
 }
 
-void CircularLinkedList::removeMiddle(int i) {
+void CircularLinkedList::deleteMiddle(int i) {
 	if (getSize() < 3) {
 		setError(true, "There is no position in the middle!");
 		return;
@@ -788,6 +796,7 @@ void CircularLinkedList::removeMiddle(int i) {
 		setError(true, "i must be in [1, " + intToString(getSize() - 2) + "]!");
 		return;
 	}
+	setCurOperationName("Delete " + intToString(i) + "-th vertex");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -863,6 +872,7 @@ void CircularLinkedList::removeMiddle(int i) {
 }
 
 void CircularLinkedList::updateFront(int v) {
+	setCurOperationName("Update head vertex value to " + intToString(v));
 	resetAnimation();
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -893,6 +903,7 @@ void CircularLinkedList::updateFront(int v) {
 }
 
 void CircularLinkedList::updateBack(int v) {
+	setCurOperationName("Update tail vertex value to " + intToString(v));
 	resetAnimation();
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -931,6 +942,7 @@ void CircularLinkedList::updateMiddle(int i, int v) {
 		setError(true, "i must be in [1, " + intToString(getSize() - 2) + "]!");
 		return;
 	}
+	setCurOperationName("Update " + intToString(i) + "-th vertex value to " + intToString(v));
 	resetAnimation();
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -990,6 +1002,7 @@ void CircularLinkedList::updateMiddle(int i, int v) {
 }
 
 void CircularLinkedList::peekFront() {
+	setCurOperationName("Peek head vertex");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (getSize() == 0) {
@@ -1021,6 +1034,7 @@ void CircularLinkedList::peekFront() {
 }
 
 void CircularLinkedList::peekBack() {
+	setCurOperationName("Peek tail vertex");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (getSize() == 0) {

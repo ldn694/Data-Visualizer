@@ -95,6 +95,14 @@ void DataStructure::setError(bool val, std::string newError) {
 	}
 }
 
+void DataStructure::setCurOperationName(std::string name) {
+	curOperationName.setString(name);
+	curOperationName.setFont(*font(fontType::Prototype));
+	curOperationName.setCharacterSize(30);
+	curOperationName.setOrigin(curOperationName.getLocalBounds().left + curOperationName.getLocalBounds().width / 2, curOperationName.getLocalBounds().top + curOperationName.getLocalBounds().height / 2);
+	curOperationName.setPosition(WIDTH_RES / 2, HEIGHT_RES - heightBox * 3.5);
+}
+
 void DataStructure::setTheme(ColorTheme newTheme) {
 	defaultGraph.setTheme(theme, newTheme);
 	curGraph.setTheme(theme, newTheme);
@@ -264,6 +272,12 @@ void DataStructure::setTheme(ColorTheme newTheme) {
 				codeText[i][j][k].setFillColor(codeNormalViewColor[theme]);
 			}
 		}
+	}
+	if (theme == LightTheme) {
+		curOperationName.setFillColor(BlackColor);
+	}
+	else {
+		curOperationName.setFillColor(WhiteColor);
 	}
 }
 
@@ -517,6 +531,7 @@ void DataStructure::doNothing(std::vector <Animation>& animationList) {
 }
 
 void DataStructure::setCurOperation(int val) {
+	setCurOperationName("");
 	errorTime = sf::seconds(0.f);
 	curOperation = val;
 	curMode = 0;
@@ -532,6 +547,7 @@ void DataStructure::setCurOperation(int val) {
 }
 
 void DataStructure::setCurMode(int val) {
+	setCurOperationName("");
 	resetAnimation();
 	errorTime = sf::seconds(0.f);
 	curMode = val;
@@ -886,7 +902,8 @@ void DataStructure::draw(sf::RenderWindow& window) {
 	/*sf::RectangleShape tmpRect = codeBoard;
 	tmpRect.setFillColor(codeNormalBackGroundColor[theme]);
 	window.draw(tmpRect);*/
-		sf::FloatRect codeBoardRect = codeBoard.getGlobalBounds();
+	window.draw(curOperationName);
+	sf::FloatRect codeBoardRect = codeBoard.getGlobalBounds();
 	Box tmpBox(codeBoardRect.left, codeBoardRect.top, codeBoardRect.width, codeBoardRect.height, {CodeOuterBox});
 	tmpBox.draw(window, theme);
 	if (codes[curOperation][curMode][curStep] != "") {

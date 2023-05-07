@@ -27,9 +27,9 @@ public:
 	void insertFront(int v);
 	void insertBack(int v);
 	void insertMiddle(int i, int v);
-	void removeFront();
-	void removeBack();
-	void removeMiddle(int i);
+	void deleteFront();
+	void deleteBack();
+	void deleteMiddle(int i);
 	void updateFront(int v);
 	void updateBack(int v);
 	void updateMiddle(int i, int v);

@@ -93,14 +93,6 @@ void Stage::setDSName(std::string name) {
 	dsName.setPosition(WIDTH_RES / 2, 50);
 }
 
-void Stage::setCurOperationName(std::string name) {
-	curOperationName.setString(name);
-	curOperationName.setFont(*font(fontType::Prototype));
-	curOperationName.setCharacterSize(30);
-	curOperationName.setOrigin(curOperationName.getLocalBounds().left + curOperationName.getLocalBounds().width / 2, curOperationName.getLocalBounds().top + curOperationName.getLocalBounds().height / 2);
-	curOperationName.setPosition(WIDTH_RES / 2, HEIGHT_RES - heightBox * 3.5);
-}
-
 void Stage::updateModeBox(int newMode) {
 	for (int i = 0; i < numMode[curOperation]; i++) {
 		modeBox[curOperation][i].setDrawable(false);
@@ -150,7 +142,6 @@ bool Stage::handleMousePressed(double x, double y) {
 		bool flag = false;
 		for (int i = 0; i < numOperation; i++) {
 			if (operationBox[i].isInside(x, y)) {
-				setCurOperationName("");
 				operationSelecting = false;
 				if (curOperation != i) {
 					for (int j = 0; j < numMode[curOperation]; j++) {
@@ -252,15 +243,12 @@ void Stage::draw() {
 	if (theme == LightTheme) {
 		lightBulb.draw(window, theme);
 		dsName.setFillColor(BlackColor);
-		curOperationName.setFillColor(BlackColor);
 	}
 	else {
 		darkBulb.draw(window, theme);
 		dsName.setFillColor(WhiteColor);
-		curOperationName.setFillColor(WhiteColor);
 	}
 	window.draw(dsName);
-	window.draw(curOperationName);
 	outerGoBox.draw(window, theme);
 	goBox.draw(window, theme);
 	for (int i = 0; i < numOperation; i++) {

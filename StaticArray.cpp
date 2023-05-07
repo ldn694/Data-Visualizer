@@ -179,6 +179,7 @@ void StaticArray::createRandom(int n, std::vector <int> values, bool sorted) {
 		std::vector <Animation> animationList;
 		doNothing(animationList);
 		addAnimations(animationList, stepTime, 0, "Created a Static Array of length 0");
+		setCurOperationName("Create an array of length 0");
 		animateAllFrame();
 		return;
 	}
@@ -212,6 +213,7 @@ void StaticArray::createRandom(int n, std::vector <int> values, bool sorted) {
 		addVariables(animationList, { i }, { intToString(i) });
 	}
 	addAnimations(animationList, stepTime, 0, "Created a static array of length " + intToString(n));
+	setCurOperationName("Create an array of length " + intToString(n));
 	animateAllFrame();
 	size = capa = n;
 }
@@ -224,6 +226,7 @@ void StaticArray::insertFront(int v) {
 	if (v < 0) {
 		v = rand() % (maxValueData + 1);
 	}
+	setCurOperationName("Insert " + intToString(v) + " to the front");
 	resetAnimation();
 
 	std::vector <Animation> animationList;
@@ -316,7 +319,8 @@ void StaticArray::insertBack(int v) {
 	if (v < 0) {
 		v = rand() % (maxValueData + 1);
 	}
-	
+
+	setCurOperationName("Insert " + intToString(v) + " to the back");
 	resetAnimation();
 	std::vector <Animation> animationList;
 
@@ -354,6 +358,8 @@ void StaticArray::insertMiddle(int index, int v) {
 	if (v < 0) {
 		v = rand() % (maxValueData + 1);
 	}
+
+	setCurOperationName("Insert " + intToString(v) + " to position " + intToString(index));
 	resetAnimation();
 
 	std::vector <Animation> animationList;
@@ -439,6 +445,7 @@ void StaticArray::insertMiddle(int index, int v) {
 }
 
 void StaticArray::deleteFront() {
+	setCurOperationName("Delete element at the front");
 	resetAnimation();
 	if (size == 0) {
 		std::vector <Animation> animationList;
@@ -527,6 +534,7 @@ void StaticArray::deleteFront() {
 }
 
 void StaticArray::deleteBack() {
+	setCurOperationName("Delete element at the back");
 	resetAnimation();
 	if (size == 0) {
 		std::vector <Animation> animationList;
@@ -563,6 +571,7 @@ void StaticArray::deleteMiddle(int index) {
 		setError(true, "i must be in [1, " + intToString(size - 1) + "]!");
 		return;
 	}
+	setCurOperationName("Delete element at position " + intToString(index));
 	resetAnimation();
 	std::vector <Animation> animationList;
 
@@ -640,6 +649,7 @@ void StaticArray::deleteMiddle(int index) {
 }
 
 void StaticArray::search(int v) {
+	setCurOperationName("Search for value " + intToString(v));
 	resetAnimation();
 	std::vector <Animation> animationList;
 
@@ -719,6 +729,7 @@ void StaticArray::search(int v) {
 }
 
 void StaticArray::updateVal(int i, int v) {
+	setCurOperationName("Update " + intToString(i) + "-th element's value to " + intToString(v));
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (i < 0 || i >= size) {
@@ -746,6 +757,7 @@ void StaticArray::updateVal(int i, int v) {
 }
 
 void StaticArray::access(int i) {
+	setCurOperationName("Access " + intToString(i) + "-th element");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (i < 0 || i >= size) {

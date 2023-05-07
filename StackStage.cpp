@@ -86,7 +86,6 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 	ds = Stack(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial), numPointCircle);
 	setDS(&ds);
 	setDSName("Stack");
-	setCurOperationName("");
 }
 
 std::pair<bool, ColorTheme> StackStage::processEvents() {
@@ -119,62 +118,51 @@ std::pair<bool, ColorTheme> StackStage::processEvents() {
 		std::string modeString = modeName[curOperation][curMode];
 		if (operationName[curOperation] == "Create") {
 			if (modeString == "Empty") {
-				setCurOperationName("Create empty stack");
 				ds.createRandom(0, {});
 			}
 			if (modeString == "Random") {
-				setCurOperationName("Create random stack");
 				ds.createRandom();
 			}
 			if (modeString == "Random Sorted") {
-				setCurOperationName("Create random sorted stack");
 				ds.createRandom(-1, {}, true);
 			}
 			if (modeString == "Fixed Size") {
 				int val = valueTypingBox[0].getProperInt();
 				if (val != -1) {
-					setCurOperationName("Create stack of size " + intToString(val));
 					ds.createRandom(val);
 				}
 			}
 			if (modeString == "Custom") {
 				std::vector <int> values = valueTypingBox[0].getListInt();
 				if (!values.empty()) {
-					setCurOperationName("Create custom stack");
 					ds.createRandom(values.size(), values);
 				}
 			}
 			if (modeString == "Upload File") {
 				std::vector <int> values = readFromFile.getListInt();
 				if (!values.empty()) {
-					setCurOperationName("Create custom stack");
 					ds.createRandom(values.size(), values);
 				}
 			}
 		}
 		if (operationName[curOperation] == "Pop") {
-			setCurOperationName("Pop element at top of stack");
 			ds.pop();
 		}
 		if (operationName[curOperation] == "Peek") {
-			setCurOperationName("Peek element at top of stack");
 			ds.peek();
 		}
 		if (operationName[curOperation] == "Push") {
 			if (modeString == "v = ?") {
 				int val = valueTypingBox[0].getProperInt();
 				if (val != -1) {
-					setCurOperationName("Push " + intToString(val) + " into stack");
 					ds.push(val);
 				}
 			}
 			else {
-				setCurOperationName("Push random value into stack");
 				ds.push(-1);
 			}
 		}
 		if (operationName[curOperation] == "Clear") {
-			setCurOperationName("Clear stack");
 			ds.clear();
 		}
 		operating = false;

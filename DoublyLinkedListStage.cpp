@@ -4,7 +4,7 @@
 
 DoublyLinkedListStage::DoublyLinkedListStage(sf::RenderWindow& window, double radius, double outlineSize, double lineThickness,
 	ColorTheme theme, EdgeType edgeType, int numPointCircle) :
-	Stage(window, { "Create", "Search", "Insert", "Remove", "Update" },
+	Stage(window, { "Create", "Search", "Insert", "Delete", "Update" },
 		{
 			{"Empty", "Random", "Random Sorted", "Fixed Size", "Manual", "Upload File"},
 			{"v = ?"},
@@ -187,17 +187,17 @@ std::pair<bool, ColorTheme> DoublyLinkedListStage::processEvents() {
 				}
 			}
 		}
-		if (operationName[curOperation] == "Remove") {
+		if (operationName[curOperation] == "Delete") {
 			if (modeString == "i = 0 (head)") {
-				ds.removeFront();
+				ds.deleteFront();
 			}
 			if (modeString == "i = n - 1 (tail)") {
-				ds.removeBack();
+				ds.deleteBack();
 			}
 			if (modeString == "i = 1..n - 2 (middle)") {
 				int val = valueTypingBox[0].getProperInt();
 				if (val != -1) {
-					ds.removeMiddle(val);
+					ds.deleteMiddle(val);
 				}
 			}
 		}

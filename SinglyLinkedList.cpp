@@ -214,6 +214,7 @@ void SinglyLinkedList::createRandom(int n, std::vector <int> values, bool sorted
 		std::vector <Animation> animationList;
 		doNothing(animationList);
 		addAnimations(animationList, stepTime, 0, "Created a Singly Linked List of length 0");
+		setCurOperationName("Create a list of length 0");
 		animateAllFrame();
 		return;
 	}
@@ -258,10 +259,12 @@ void SinglyLinkedList::createRandom(int n, std::vector <int> values, bool sorted
 	addVariables(animationList, { 0 }, { "head" });
 	addVariables(animationList, { n - 1 }, { "tail" });
 	addAnimations(animationList, stepTime, 0, "Created a singly linked list of length " + intToString(n));
+	setCurOperationName("Create a list of length " + intToString(n));
 	animateAllFrame();
 }
 
 void SinglyLinkedList::search(int v) {
+	setCurOperationName("Search for value " + intToString(v));
 	resetAnimation();
 	std::vector <Animation> animationList;
 
@@ -348,6 +351,7 @@ void SinglyLinkedList::insertFront(int v) {
 	}
 	Node defaultNode = defaultGraph.getDefaultNode();
 	int id = getEmptyID();
+	setCurOperationName("Insert " + intToString(v) + " to head");
 	resetAnimation();
 	std::vector <Animation> animationList;
 
@@ -423,6 +427,7 @@ void SinglyLinkedList::insertBack(int v) {
 	int id = getEmptyID();
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
+	setCurOperationName("Insert " + intToString(v) + " to tail");
 	resetAnimation();
 	if (getSize() == 0) {
 		animationList.clear();
@@ -505,6 +510,7 @@ void SinglyLinkedList::insertMiddle(int i, int v) {
 	int id = getEmptyID();
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
+	setCurOperationName("Insert " + intToString(v) + " to position " + intToString(i));
 	resetAnimation();
 
 	animationList.clear();
@@ -582,9 +588,10 @@ void SinglyLinkedList::insertMiddle(int i, int v) {
 	animateAllFrame();
 }
 
-void SinglyLinkedList::removeFront() {
+void SinglyLinkedList::deleteFront() {
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
+	setCurOperationName("Delete head vertex");
 	resetAnimation();
 	
 	if (getSize() == 0) {
@@ -638,9 +645,10 @@ void SinglyLinkedList::removeFront() {
 	animateAllFrame();
 }
 
-void SinglyLinkedList::removeBack() {
+void SinglyLinkedList::deleteBack() {
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
+	setCurOperationName("Delete tail vertex");
 	resetAnimation();
 
 	if (getSize() == 0) {
@@ -734,7 +742,7 @@ void SinglyLinkedList::removeBack() {
 	animateAllFrame();
 }
 
-void SinglyLinkedList::removeMiddle(int i) {
+void SinglyLinkedList::deleteMiddle(int i) {
 	if (getSize() < 3) {
 		setError(true, "There is no position in the middle!");
 		return;
@@ -743,6 +751,7 @@ void SinglyLinkedList::removeMiddle(int i) {
 		setError(true, "i must be in [1, " + intToString(getSize() - 2) + "]!");
 		return;
 	}
+	setCurOperationName("Delete " + intToString(i) + "-th vertex");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -818,6 +827,7 @@ void SinglyLinkedList::removeMiddle(int i) {
 }
 
 void SinglyLinkedList::updateFront(int v) {
+	setCurOperationName("Update head vertex value to " + intToString(v));
 	resetAnimation();
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -848,6 +858,7 @@ void SinglyLinkedList::updateFront(int v) {
 }
 
 void SinglyLinkedList::updateBack(int v) {
+	setCurOperationName("Update tail vertex value to " + intToString(v));
 	resetAnimation();
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -886,6 +897,7 @@ void SinglyLinkedList::updateMiddle(int i, int v) {
 		setError(true, "i must be in [1, " + intToString(getSize() - 2) + "]!");
 		return;
 	}
+	setCurOperationName("Update " + intToString(i) + "-th vertex value to " + intToString(v));
 	resetAnimation();
 	std::vector <Animation> animationList;
 	Node defaultNode = defaultGraph.getDefaultNode();
@@ -945,6 +957,7 @@ void SinglyLinkedList::updateMiddle(int i, int v) {
 }
 
 void SinglyLinkedList::peekFront() {
+	setCurOperationName("Peek head vertex");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (getSize() == 0) {
@@ -976,6 +989,7 @@ void SinglyLinkedList::peekFront() {
 }
 
 void SinglyLinkedList::peekBack() {
+	setCurOperationName("Peek tail vertex");
 	resetAnimation();
 	std::vector <Animation> animationList;
 	if (getSize() == 0) {
