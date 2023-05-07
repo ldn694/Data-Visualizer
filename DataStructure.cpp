@@ -18,6 +18,12 @@ DataStructure::DataStructure(double radius, double outlineSize, double lineThick
 	xError(_xError), yError(_yError), widthError(_widthError), heightError(_heightError), errorFont(_errorFont),
 	defaultGraph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font, numPointCircle)
 {
+	if (theme == LightTheme) {
+		curOperationName.setFillColor(BlackColor);
+	}
+	else {
+		curOperationName.setFillColor(WhiteColor);
+	}
 	displayingDescription = true;
 	skipAnimation = false;
 	errorTime = sf::seconds(0.f);
