@@ -26,7 +26,7 @@ Game::Game(sf::ContextSettings settings):
 	cllBox = Box(1040, 550, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Circular Linked List", font(fontType::Prototype), 30, NO_BORDER, 3);
 	staticArrayBox = Box(410, 700, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Static Array", font(fontType::Prototype), 30, NO_BORDER, 3);
 	dynamicArrayBox = Box(830, 700, 360, 120, { CommandBoxNormal, CommandBoxSelected }, "Dynamic Array", font(fontType::Prototype), 30, NO_BORDER, 3);
-	theme = LightTheme;
+	theme = loadFromFileTheme();
 	projName.setFont(*font(fontType::Prototype));
 	projName.setCharacterSize(70);
 	projName.setString("DATA VISUALIZER");
@@ -99,6 +99,22 @@ void Game::handleMouseMove(double x, double y) {
 	if (staticArrayBox.handleMouseMove(x, y, window)) return;
 	if (dynamicArrayBox.handleMouseMove(x, y, window)) return;
 	window.setMouseCursor(arrowCursor);
+}
+
+ColorTheme Game::loadFromFileTheme() {
+	std::ifstream fi;
+	fi.open("Settings/theme.dat");
+	int temp;
+	fi >> temp;
+	fi.close();
+	return ColorTheme(temp);
+}
+
+void Game::saveFileTheme() {
+	std::ofstream fo;
+	fo.open("Settings/theme.dat");
+	fo << int(theme);
+	fo.close();
 }
 
 void Game::processEvents()
@@ -187,4 +203,5 @@ void Game::run()
 		update(timePerFrame);
 		render();
 	}
+	saveFileTheme();
 }

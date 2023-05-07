@@ -13,6 +13,8 @@ public:
 private:
 	void processEvents();
 	void handleMouseMove(double x, double y);
+	ColorTheme loadFromFileTheme();
+	void saveFileTheme();
 	void update(sf::Time deltaT);
 	void render();
 	void runStack();
