@@ -114,6 +114,7 @@ DynamicArrayStage::DynamicArrayStage(sf::RenderWindow& window, double radius, do
 {
 	ds = DynamicArray(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial), numPointCircle);
 	setDS(&ds);
+	setDSName("Dynamic Array");
 }
 
 std::pair<bool, ColorTheme> DynamicArrayStage::processEvents() {

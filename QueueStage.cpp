@@ -88,6 +88,7 @@ QueueStage::QueueStage(sf::RenderWindow& window, double radius, double outlineSi
 {
 	ds = Queue(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial), numPointCircle);
 	setDS(&ds);
+	setDSName("Queue");
 }
 
 std::pair<bool, ColorTheme> QueueStage::processEvents() {

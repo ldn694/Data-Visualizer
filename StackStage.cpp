@@ -85,6 +85,7 @@ StackStage::StackStage(sf::RenderWindow& window, double radius, double outlineSi
 {
 	ds = Stack(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial), numPointCircle);
 	setDS(&ds);
+	setDSName("Stack");
 }
 
 std::pair<bool, ColorTheme> StackStage::processEvents() {

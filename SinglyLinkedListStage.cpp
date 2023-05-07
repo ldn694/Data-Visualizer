@@ -100,6 +100,7 @@ SinglyLinkedListStage::SinglyLinkedListStage(sf::RenderWindow& window, double ra
 {
 	ds = SinglyLinkedList(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial), numPointCircle);
 	setDS(&ds);
+	setDSName("Singly Linked List");
 }
 
 std::pair<bool, ColorTheme> SinglyLinkedListStage::processEvents() {

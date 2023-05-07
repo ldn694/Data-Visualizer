@@ -100,6 +100,7 @@ CircularLinkedListStage::CircularLinkedListStage(sf::RenderWindow& window, doubl
 {
 	ds = CircularLinkedList(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial), numPointCircle);
 	setDS(&ds);
+	setDSName("Circular Linked List");
 }
 
 std::pair<bool, ColorTheme> CircularLinkedListStage::processEvents() {

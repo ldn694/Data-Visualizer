@@ -100,6 +100,7 @@ DoublyLinkedListStage::DoublyLinkedListStage(sf::RenderWindow& window, double ra
 {
 	ds = DoublyLinkedList(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial), numPointCircle);
 	setDS(&ds);
+	setDSName("Doubly Linked List");
 }
 
 std::pair<bool, ColorTheme> DoublyLinkedListStage::processEvents() {

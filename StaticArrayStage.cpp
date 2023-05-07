@@ -104,6 +104,7 @@ StaticArrayStage::StaticArrayStage(sf::RenderWindow& window, double radius, doub
 {
 	ds = StaticArray(radius, outlineSize, lineThickness, theme, edgeType, font(fontType::Arial), numPointCircle);
 	setDS(&ds);
+	setDSName("Static Array");
 }
 
 std::pair<bool, ColorTheme> StaticArrayStage::processEvents() {

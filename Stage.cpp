@@ -57,7 +57,7 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 	upwardTriangle.setRadius(10);
 	upwardTriangle.setOutlineThickness(0);
 	upwardTriangle.setOrigin(upwardTriangle.getLocalBounds().left + upwardTriangle.getLocalBounds().width / 2, upwardTriangle.getLocalBounds().top + upwardTriangle.getLocalBounds().height / 2);
-	upwardTriangle.setPosition(widthBox - widthBox * 0.1f, HEIGHT_RES - heightBox * 2.5f);
+	upwardTriangle.setPosition(widthBox - widthBox * 0.06f, HEIGHT_RES - heightBox * 2.5f);
 	upwarding = true;
 
 	numValue.resize(numOperation);
@@ -83,6 +83,14 @@ Stage::Stage(sf::RenderWindow& _window, std::vector <std::string> _operationName
 void Stage::setDS(DataStructure* newDS) {
 	ingameSettings.setDS(newDS);
 	ds = newDS;
+}
+
+void Stage::setDSName(std::string name) {
+	dsName.setString(name);
+	dsName.setFont(*font(fontType::Prototype));
+	dsName.setCharacterSize(50);
+	dsName.setOrigin(dsName.getLocalBounds().left + dsName.getLocalBounds().width / 2, dsName.getLocalBounds().top + dsName.getLocalBounds().height / 2);
+	dsName.setPosition(WIDTH_RES / 2, 50);
 }
 
 void Stage::updateModeBox(int newMode) {
@@ -234,10 +242,13 @@ void Stage::draw() {
 	themeBox.draw(window, theme);
 	if (theme == LightTheme) {
 		lightBulb.draw(window, theme);
+		dsName.setFillColor(BlackColor);
 	}
 	else {
 		darkBulb.draw(window, theme);
+		dsName.setFillColor(WhiteColor);
 	}
+	window.draw(dsName);
 	outerGoBox.draw(window, theme);
 	goBox.draw(window, theme);
 	for (int i = 0; i < numOperation; i++) {

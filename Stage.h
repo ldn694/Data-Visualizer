@@ -22,6 +22,8 @@ protected:
 	bool operationSelecting;
 	bool operating;
 
+	sf::Text dsName;
+
 	Box goBox, outerGoBox;
 
 	std::vector <std::vector <std::string> > modeName;
@@ -56,6 +58,7 @@ public:
 		std::vector <std::vector <std::vector <std::pair <int, int> > > > valueBound,
 		ColorTheme theme = LightTheme, DataStructure* ds = nullptr);
 	void setDS(DataStructure* newDS);
+	void setDSName(std::string name);
 	void updateModeBox(int newMode);
 	bool handleMousePressed(double x, double y);
 	void handleMouseMove(double x, double y);
