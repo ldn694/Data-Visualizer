@@ -82,7 +82,7 @@ StaticArray::StaticArray(double radius, double outlineSize, double lineThickness
 				{
 					"",
 					"for (int i = 0; i < size; i++) {",
-					"	if (arr[i] == v) return i;",
+					"	if (a[i] == v) return i;",
 					"}",
 					"return NOT_FOUND;"
 				}
@@ -91,14 +91,14 @@ StaticArray::StaticArray(double radius, double outlineSize, double lineThickness
 				{
 					"",
 					"if (i < 0 || i >= size) return;",
-					"arr[i] = v;"
+					"a[i] = v;"
 				}
 			}, 
 			{	//Access
 				{
 					"",
 					"if (i < 0 || i >= size) return;",
-					"return arr[i];"
+					"return a[i];"
 				}
 			}
 		},
