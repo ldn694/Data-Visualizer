@@ -22,7 +22,7 @@ protected:
 	bool operationSelecting;
 	bool operating;
 
-	sf::Text dsName;
+	sf::Text dsName, curOperationName;
 
 	Box goBox, outerGoBox;
 
@@ -59,6 +59,7 @@ public:
 		ColorTheme theme = LightTheme, DataStructure* ds = nullptr);
 	void setDS(DataStructure* newDS);
 	void setDSName(std::string name);
+	void setCurOperationName(std::string name);
 	void updateModeBox(int newMode);
 	bool handleMousePressed(double x, double y);
 	void handleMouseMove(double x, double y);
