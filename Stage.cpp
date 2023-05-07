@@ -176,14 +176,10 @@ bool Stage::handleMousePressed(double x, double y) {
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
 		valueTypingBox[i].clickOn(x, y);
 	}
-	int themeCode = ingameSettings.handleMousePressed(x, y);
-	if (themeCode != -1) {
-		setTheme(ColorTheme(themeCode));
-	}
+	ingameSettings.handleMousePressed(x, y);
 	readFromFile.handleMousePressed(x, y);
 	if (themeBox.isMousePressed(x, y)) {
 		setTheme(ColorTheme((theme + 1) % numColorTheme));
-		ingameSettings.setThemeChoice(theme);
 	}
 	return backButton.handleMousePressed(x, y);
 }
@@ -289,6 +285,7 @@ void Stage::stageUpdate(sf::Time deltaT) {
 	for (int i = 0; i < numValue[curOperation][curMode]; i++) {
 		valueTypingBox[i].update(deltaT);
 	}
+	ingameSettings.update(deltaT);
 }
 
 void Stage::setTheme(ColorTheme newTheme) {

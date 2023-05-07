@@ -43,7 +43,7 @@ struct DataStructure {
 	Graph defaultGraph, curGraph, mainGraph;
 	std::vector <Frame> listFrame;
 	std::deque <std::tuple<int, sf::Time, sf::Time, bool> > frameQueue;
-	bool isAnimating;
+	bool isAnimating, displayingDescription, skipAnimation;
 	ColorTheme theme;
 	std::vector <std::vector <std::vector <std::string> > > codes;
 	std::vector <std::vector <std::vector <sf::Text> > > codeText;
@@ -101,5 +101,7 @@ struct DataStructure {
 	void animateAllFrame();
 	void updateFrameQueue(sf::Time deltaT);
 	void clearFrameQueue();
+	void toggleDescription(bool state);
+	void toggleSkipAnimation(bool state);
 	void draw(sf::RenderWindow& window);
 };

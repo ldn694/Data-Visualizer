@@ -35,6 +35,7 @@ const sf::Time stepTime = sf::seconds(0.3f);
 const sf::Time delayTime = sf::seconds(0.2f);
 const sf::Time flickeringTime = sf::seconds(0.5f);
 const sf::Time errorDisplayTime = sf::seconds(1.0f);
+const sf::Time switchTime = sf::seconds(0.2f);
 
 const double heightBox = 80;
 const double widthBox = 240;

@@ -18,6 +18,8 @@ DataStructure::DataStructure(double radius, double outlineSize, double lineThick
 	xError(_xError), yError(_yError), widthError(_widthError), heightError(_heightError), errorFont(_errorFont),
 	defaultGraph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font, numPointCircle)
 {
+	displayingDescription = true;
+	skipAnimation = false;
 	errorTime = sf::seconds(0.f);
 	isAnimating = false;
 	mainGraph = defaultGraph;
@@ -840,6 +842,9 @@ void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Tim
 	listFrame.push_back({ tmpGraph, {}, sf::seconds(0.f), line, announcement});
 	curGraph = tmpGraph;
 	mainGraph = tmpGraph;
+	if (skipAnimation) {
+		resetAnimation();
+	}
 }
 
 void DataStructure::setIsAnimating(bool val) {
@@ -881,7 +886,7 @@ void DataStructure::draw(sf::RenderWindow& window) {
 	/*sf::RectangleShape tmpRect = codeBoard;
 	tmpRect.setFillColor(codeNormalBackGroundColor[theme]);
 	window.draw(tmpRect);*/
-	sf::FloatRect codeBoardRect = codeBoard.getGlobalBounds();
+		sf::FloatRect codeBoardRect = codeBoard.getGlobalBounds();
 	Box tmpBox(codeBoardRect.left, codeBoardRect.top, codeBoardRect.width, codeBoardRect.height, {CodeOuterBox});
 	tmpBox.draw(window, theme);
 	if (codes[curOperation][curMode][curStep] != "") {
@@ -905,7 +910,7 @@ void DataStructure::draw(sf::RenderWindow& window) {
 			codeText[curOperation][curMode][i].setFillColor(codeNormalViewColor[theme]);
 		}
 	}
-	if (!listFrame.empty()) {
+	if (!listFrame.empty() && displayingDescription) {
 		sf::RectangleShape tmpRect(sf::Vector2f(widthAnnouncement, heightAnnouncement));
 		tmpRect.setPosition(xAnnouncement, yAnnouncement);
 		tmpRect.setFillColor(announcementFillColor[theme]);
@@ -962,4 +967,12 @@ void DataStructure::updateFrameQueue(sf::Time deltaT) {
 
 void DataStructure::clearFrameQueue() {
 	frameQueue.clear();
+}
+
+void DataStructure::toggleDescription(bool state) {
+	displayingDescription = state;
+}
+
+void DataStructure::toggleSkipAnimation(bool state) {
+	skipAnimation = state;
 }
