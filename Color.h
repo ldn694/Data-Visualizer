@@ -61,12 +61,12 @@ const ColorNode colorNode[numColorTheme][numColorNodeType] =
 		ColorNode(LavenderBushColor, SilverColor, SilverColor, RedColor)
 	} ,
 	{
-		ColorNode(EerieBlackColor, WhiteColor, WhiteColor, OrangeColor),
-		ColorNode(YellowColor, YellowColor, EerieBlackColor, OrangeColor),
-		ColorNode(EerieBlackColor, YellowColor, YellowColor, OrangeColor),
-		ColorNode(GreenColor, GreenColor, EerieBlackColor, OrangeColor),
-		ColorNode(BlueColor, BlueColor, LavenderBushColor, OrangeColor),
-		ColorNode(EerieBlackColor, DimGrayColor, DimGrayColor, OrangeColor)
+		ColorNode(EerieBlackColor, WhiteColor, WhiteColor, WhiteColor),
+		ColorNode(MediumSlateBlueColor, MediumSlateBlueColor, EerieBlackColor, WhiteColor),
+		ColorNode(EerieBlackColor, MediumSlateBlueColor, MediumSlateBlueColor, WhiteColor),
+		ColorNode(VistaBlueColor, VistaBlueColor, EerieBlackColor, WhiteColor),
+		ColorNode(OrangeColor, OrangeColor, LavenderBushColor, WhiteColor),
+		ColorNode(EerieBlackColor, DimGrayColor, DimGrayColor, WhiteColor)
 	}
 };
 
