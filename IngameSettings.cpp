@@ -32,6 +32,8 @@ void IngameSettings::handleMousePressed(double x, double y) {
 void IngameSettings::handleMouseMove(double x, double y, sf::RenderWindow& window) {
 	mediaControl.handleMouseMove(x, y, window);
 	speedChoices.handleMouseMove(x, y, window);
+	descriptionSwitch.handleMouseMove(x, y, window);
+	skipAnimationSwitch.handleMouseMove(x, y, window);
 }
 
 void IngameSettings::handleMouseReleased(double x, double y) {

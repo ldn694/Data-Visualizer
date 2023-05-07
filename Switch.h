@@ -18,5 +18,6 @@ public:
 	void draw(sf::RenderWindow& window, ColorTheme theme);
 	bool isInside(double x, double y);
 	bool handleMousePressed(double x, double y);
+	void handleMouseMove(double x, double y, sf::RenderWindow& window);
 	void update(sf::Time deltaT);
 };

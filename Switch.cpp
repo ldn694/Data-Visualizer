@@ -52,6 +52,13 @@ bool Switch::handleMousePressed(double mouseX, double mouseY) {
 	return true;
 }
 
+void Switch::handleMouseMove(double mouseX, double mouseY, sf::RenderWindow& window) {
+	if (!isInside(mouseX, mouseY)) {
+		return;
+	}
+	window.setMouseCursor(handCursor);
+}
+
 void Switch::update(sf::Time deltaT) {
 	sf::Time passedTime = min(deltaT, remainTime);
 	if (passedTime < epsilonTime) {
