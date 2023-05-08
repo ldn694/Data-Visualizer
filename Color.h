@@ -151,7 +151,7 @@ const sf::Color warningTextColor[numColorTheme] = { BlackColor, WhiteColor };
 
 const sf::Color bulbColor[numColorTheme] = { LavenderBushColor, LavenderBushColor };
 
-const sf::Color errorTextColor[numColorTheme] = { RedColor, UranianBlueColor };
+const sf::Color errorTextColor[numColorTheme] = { RedColor, VistaBlueColor };
 
 const sf::Color switchZipperOnColor[numColorTheme] = { BrightPinkColor, EerieBlackColor };
 const sf::Color switchZipperOffColor[numColorTheme] = { TeaRoseColor, VistaBlueColor };
