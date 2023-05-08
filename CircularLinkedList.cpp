@@ -235,7 +235,7 @@ void CircularLinkedList::createRandom(int n, std::vector <int> values, bool sort
 	double y = HEIGHT_RES / 3;
 	std::vector <int> valueList;
 	for (int i = 0; i < n; i++) {
-		int value = (values.empty() ? rand() % 100 + 1 : values[i]);
+		int value = (values.empty() ? rand() % 100 : values[i]);
 		valueList.push_back(value);
 	}
 	if (sorted) {
