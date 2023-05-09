@@ -41,7 +41,7 @@ const double heightBox = 80;
 const double widthBox = 240;
 const double outlineBox = 3;
 const double speedList[] = { 0.25, 0.5, 1.0, 2.0, 4.0 };
-const double sizeLetterAnnouncement = 20;
+const double sizeLetterDescription = 20;
 const double sizeLetterError = 20;
 
 const int maxLetter = 4;

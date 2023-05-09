@@ -143,8 +143,8 @@ const sf::Color choicesInnerCircleColor[numColorTheme] = { TeaRoseColor, Uranian
 const sf::Color backButtonNormalOutlineColor[numColorTheme] = { LavenderBushColor, EerieBlackColor };
 const sf::Color backButtonNormalFillColor[numColorTheme] = { LightRedColor, RoyalPurpleColor };
 
-const sf::Color announcementFillColor[numColorTheme] = { BrightPinkColor , VistaBlueColor };
-const sf::Color announcementTextColor[numColorTheme] = { WhiteColor, EerieBlackColor };
+const sf::Color descriptionFillColor[numColorTheme] = { BrightPinkColor , VistaBlueColor };
+const sf::Color descriptionTextColor[numColorTheme] = { WhiteColor, EerieBlackColor };
 
 const sf::Color warningFillColor[numColorTheme] = { TeaRoseColor , MediumSlateBlueColor };
 const sf::Color warningTextColor[numColorTheme] = { BlackColor, WhiteColor };

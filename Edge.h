@@ -29,7 +29,6 @@ private:
 	TrianglePointer forwardPointer;
 	double thickness;
 	EdgeType type;
-	sf::Time remainTime;
 public:
 	Edge(double x1 = 0, double y1 = 0, double x2 = 0, double y2 = 0, double thickness = 0,
 		sf::Color _color = BlackColor, EdgeType _type = Undirected,

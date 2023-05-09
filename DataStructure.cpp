@@ -11,10 +11,10 @@
 DataStructure::DataStructure(double radius, double outlineSize, double lineThickness,
 	ColorTheme _theme, EdgeType idEdgeType, sf::Font* font, int numPointCircle,
 	std::vector <std::vector <std::vector <std::string> > > _codes, double x, double y, double width, double height, sf::Font* codeFont,
-	double _xAnnouncement, double _yAnnouncement, double _widthAnnouncement, double _heightAnnouncement, sf::Font* _announcementFont,
+	double _xDescription, double _yDescription, double _widthDescription, double _heightDescription, sf::Font* _descriptionFont,
 	double _xError, double _yError, double _widthError, double _heightError, sf::Font* _errorFont) :
 	theme(_theme), codes(_codes),
-	xAnnouncement(_xAnnouncement), yAnnouncement(_yAnnouncement), widthAnnouncement(_widthAnnouncement), heightAnnouncement(_heightAnnouncement), announcementFont(_announcementFont),
+	xDescription(_xDescription), yDescription(_yDescription), widthDescription(_widthDescription), heightDescription(_heightDescription), descriptionFont(_descriptionFont),
 	xError(_xError), yError(_yError), widthError(_widthError), heightError(_heightError), errorFont(_errorFont),
 	defaultGraph(radius, outlineSize, lineThickness, colorNode[_theme][normal].fillColor, colorNode[_theme][normal].outlineColor, colorNode[_theme][normal].valueColor, colorNode[_theme][normal].variableColor, idEdgeType, font, numPointCircle)
 {
@@ -853,7 +853,7 @@ void DataStructure::updateAnimation(Graph& graph, Animation animation, sf::Time 
 	}
 }
 
-void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Time time, int line, std::string announcement) {
+void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Time time, int line, std::string description) {
 	sort(animationList.begin(), animationList.end(), cmpAnimation);
 	Graph tmpGraph = listFrame.back().graph;
 	for (Animation& animation : animationList) {
@@ -861,7 +861,7 @@ void DataStructure::addAnimations(std::vector <Animation> animationList, sf::Tim
 	}
 	listFrame.back().nextStep = animationList;
 	listFrame.back().time = time;
-	listFrame.push_back({ tmpGraph, {}, sf::seconds(0.f), line, announcement});
+	listFrame.push_back({ tmpGraph, {}, sf::seconds(0.f), line, description });
 	curGraph = tmpGraph;
 	mainGraph = tmpGraph;
 	if (skipAnimation) {
@@ -934,19 +934,19 @@ void DataStructure::draw(sf::RenderWindow& window) {
 		}
 	}
 	if (!listFrame.empty() && displayingDescription) {
-		sf::RectangleShape tmpRect(sf::Vector2f(widthAnnouncement, heightAnnouncement));
-		tmpRect.setPosition(xAnnouncement, yAnnouncement);
-		tmpRect.setFillColor(announcementFillColor[theme]);
+		sf::RectangleShape tmpRect(sf::Vector2f(widthDescription, heightDescription));
+		tmpRect.setPosition(xDescription, yDescription);
+		tmpRect.setFillColor(descriptionFillColor[theme]);
 		window.draw(tmpRect);
-		sf::Text announcementText = CompressWords(listFrame[curFrame].announcement, 
-			xAnnouncement, yAnnouncement, widthAnnouncement, heightAnnouncement, 
-			announcementFont, sizeLetterAnnouncement, announcementTextColor[theme]);
-		window.draw(announcementText);
+		sf::Text descriptionText = CompressWords(listFrame[curFrame].description,
+			xDescription, yDescription, widthDescription, heightDescription,
+			descriptionFont, sizeLetterDescription, descriptionTextColor[theme]);
+		window.draw(descriptionText);
 	}
 	if (errorTime >= epsilonTime) {
 		sf::Text errorText = CompressWords(error,
 			xError, yError, widthError, heightError,
-			announcementFont, sizeLetterError, errorTextColor[theme]);
+			descriptionFont, sizeLetterError, errorTextColor[theme]);
 		window.draw(errorText);
 	}
 }
