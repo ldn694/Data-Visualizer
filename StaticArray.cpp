@@ -434,7 +434,7 @@ void StaticArray::insertMiddle(int index, int v) {
 	setNodeColor(animationList, { getID(index) }, theme, highlight);
 	setNodeValue(animationList, { getID(index) }, { v });
 	addAnimations(animationList, stepTime, 5, "a[" + intToString(k) + "] is now assigned to " + intToString(v) + " (inserted element).");
-	arr[0].value = v;
+	arr[index].value = v;
 
 	animationList.clear();
 	setNodeColor(animationList, { getID(index) }, theme, normal);
